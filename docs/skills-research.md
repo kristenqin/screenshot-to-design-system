@@ -444,6 +444,56 @@ Notes:
 - This skill is especially relevant because the project is becoming a document-driven engineering system.
 - See [Document Engineering Workflow](document-engineering-workflow.md).
 
+### 14. context-retrospective
+
+Source:
+
+- <https://skills.sh/jwynia/agent-skills/context-retrospective>
+
+Installed locally:
+
+- `/Users/qyx/.codex/skills/context-retrospective`
+
+What it does:
+
+- analyzes agent-user interaction transcripts
+- identifies context gaps, navigation issues, boundary violations, task-context alignment problems, relationship deficiencies, and guidance improvements
+- turns recurring friction into context and workflow updates
+
+Use in this project:
+
+- run retrospectives after substantial workflow-building sessions
+- identify why collaboration felt high-friction
+- decide which docs, task policies, or skill requirements need to change
+
+Fit:
+
+- High
+
+Notes:
+
+- Applied in [Workflow Retrospective](workflow-retrospective.md).
+- This skill is especially useful because the project depends on clean context handoff between human and AI sessions.
+
+### 15. self-improvement
+
+Source:
+
+- <https://skills.sh/pskoett/self-improving-agent/self-improvement>
+
+Status:
+
+- Considered but not adopted.
+
+Reason:
+
+- Initial installation attempt failed.
+- The local `SKILL.md` was not reviewed, so it should not be treated as active project process.
+
+Potential use:
+
+- Maintain long-term learning from corrections and repeated mistakes if reviewed successfully later.
+
 ## Recommended Adoption Order
 
 1. `project-planner` from `hieutrtr/ai1-skills`
@@ -457,6 +507,7 @@ Notes:
 9. `brainstorming`
 10. `gsd`, only if the project needs heavier phase management
 11. `commit-work`, once the project is managed as a Git repository
+12. `context-retrospective`, after substantial sessions or workflow friction
 
 ## Practical Workflow for This Project
 
@@ -468,6 +519,7 @@ Current research docs
   -> verification-before-completion gates each completed stage
   -> task board tracks current work inside the project
   -> commit-work discipline keeps documentation changes reviewable
+  -> context-retrospective converts friction into process improvements
 ```
 
 ## Recommendation

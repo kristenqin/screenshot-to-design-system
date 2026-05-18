@@ -150,11 +150,11 @@ Output artifacts:
 
 Deviations:
 
-- Commit has not been created yet at the time this log entry is added.
+- None after completion.
 
 Verification:
 
-- Pending final diff review and commit.
+- Diff was reviewed and committed in `3a210ef docs(workflow): add auditable skill usage process`.
 
 ## 2026-05-18 - `session-handoff`
 
@@ -193,4 +193,41 @@ Deviations:
 
 Verification:
 
-- Pending final diff review and commit.
+- Diff was reviewed and committed in `a2079ed docs(workflow): add session handoff startup protocol`.
+
+## 2026-05-18 - `context-retrospective`
+
+Task:
+
+- Reflect on workflow friction from prior collaboration and upgrade the project workflow.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/context-retrospective/SKILL.md`
+
+Reason:
+
+- Identify context gaps, navigation issues, task-context alignment problems, and guidance improvements from the collaboration history.
+
+Workflow steps followed:
+
+- Read local `SKILL.md`.
+- Classified friction into context gaps, navigation problems, audit gaps, task alignment issues, and guidance issues.
+- Identified root cause themes.
+- Converted retrospective findings into operating rules and project updates.
+- Recorded candidate skills and adoption status.
+
+Output artifacts:
+
+- [Workflow Retrospective](workflow-retrospective.md)
+- [Chinese Workflow Retrospective](zh-CN/workflow-retrospective.md)
+- Updated [Task Board](../TASKS.md)
+
+Deviations:
+
+- The full transcript is not stored in the repo, so the retrospective uses the current conversation context and project artifacts instead of a standalone transcript file.
+- `self-improvement` was considered but not adopted because installation failed and the local skill was not reviewed.
+
+Verification:
+
+- Diff review and commit are handled as part of this workflow-retrospective change.

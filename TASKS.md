@@ -34,6 +34,7 @@ The next concrete implementation task is:
 | T-013 | Decide whether to initialize this documentation project as a standalone Git repo | HITL | `commit-work` | None | [Document Engineering Workflow](docs/document-engineering-workflow.md) |
 | T-014 | Maintain skill usage policy and audit log | AFK | `commit-work` | None | [Skill Usage Policy](docs/skill-usage-policy.md) |
 | T-015 | Maintain session startup and handoff docs | AFK | `session-handoff`, `commit-work` | None | [Session Continuity](docs/session-continuity.md) |
+| T-016 | Run workflow retrospectives after major interaction blocks | AFK | `context-retrospective`, `commit-work` | None | [Workflow Retrospective](docs/workflow-retrospective.md) |
 
 ## Backlog
 
@@ -63,6 +64,7 @@ The next concrete implementation task is:
 | D-008 | Define Git-style documentation workflow | [Document Engineering Workflow](docs/document-engineering-workflow.md) |
 | D-009 | Define auditable skill usage workflow | [Skill Usage Policy](docs/skill-usage-policy.md) |
 | D-010 | Define new-session startup and handoff workflow | [Session Continuity](docs/session-continuity.md) |
+| D-011 | Analyze workflow friction and define upgrade protocol | [Workflow Retrospective](docs/workflow-retrospective.md) |
 
 ## Operating Rules
 
@@ -74,3 +76,4 @@ The next concrete implementation task is:
 - Treat documentation changes like code changes: keep them scoped, review diffs, update bilingual companions, and record why the change exists.
 - When a task lists a required skill, record actual usage in [Skill Usage Log](docs/skill-usage-log.md), including any deviations.
 - When ending a meaningful work session, update [.codex/handoffs/current.md](.codex/handoffs/current.md) so a new session can resume quickly.
+- After several rounds of workflow-building or a high-friction interaction, run a retrospective and convert at least one insight into a project change.

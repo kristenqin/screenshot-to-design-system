@@ -20,6 +20,8 @@ The project is now a standalone Git repository on branch `main`.
 
 It contains a bilingual documentation system for a screenshot-to-design-system product workflow. The docs cover product framing, PRD, issue breakdown, project management, document engineering, skill usage auditing, and session continuity.
 
+The project now also includes a workflow retrospective loop for analyzing collaboration friction and converting it into concrete process improvements.
+
 ## Latest Commits
 
 ```text
@@ -37,6 +39,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - [Skill Usage Log](../../docs/skill-usage-log.md)
 - [Document Engineering Workflow](../../docs/document-engineering-workflow.md)
 - [Session Continuity](../../docs/session-continuity.md)
+- [Workflow Retrospective](../../docs/workflow-retrospective.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -46,6 +49,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - Required skill usage must be logged.
 - Documentation changes should follow Git-style review and Conventional Commit discipline.
 - New sessions should start from `START_HERE.md` and this handoff file instead of relying on previous chat history.
+- Major workflow friction should trigger a retrospective and at least one concrete project update.
 
 ## Current Tasks
 
@@ -97,4 +101,3 @@ git status --short
 git branch --show-current
 git log --oneline -5
 ```
-

@@ -61,6 +61,7 @@ Language:
 - [Task Board](TASKS.md)
 - [Start Here](START_HERE.md)
 - [Session Continuity](docs/session-continuity.md)
+- [Workflow Retrospective](docs/workflow-retrospective.md)
 - [Workflow Overview](docs/workflow-overview.md)
 - [Existing Tools and Algorithms](docs/existing-tools-and-algorithms.md)
 - [Component Clustering Strategy](docs/component-clustering-strategy.md)

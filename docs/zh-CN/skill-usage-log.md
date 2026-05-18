@@ -108,11 +108,11 @@ Skill 来源：
 
 偏离：
 
-- 当前日志创建时尚未完成提交。
+- 完成后无偏离。
 
 验证：
 
-- 待最终 diff review 和 commit。
+- 已完成 diff review，并提交为 `3a210ef docs(workflow): add auditable skill usage process`。
 
 ## 2026-05-18 - `session-handoff`
 
@@ -146,4 +146,36 @@ Skill 来源：
 
 验证：
 
-- 待最终 diff review 和 commit。
+- 已完成 diff review，并提交为 `a2079ed docs(workflow): add session handoff startup protocol`。
+
+## 2026-05-18 - `context-retrospective`
+
+任务：
+
+- 复盘前面协作中的流程摩擦，并升级项目工作流。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/context-retrospective/SKILL.md`
+
+遵循步骤：
+
+- 读取本地 `SKILL.md`。
+- 将摩擦归类为上下文缺口、导航问题、审计缺口、任务对齐问题和指导规则问题。
+- 识别根因主题。
+- 把复盘结论转成新的操作规则和项目文档。
+- 记录候选 skill 和采用状态。
+
+输出：
+
+- [工作流复盘](workflow-retrospective.md)
+- [任务面板](tasks.md)
+
+偏离：
+
+- 项目里没有完整聊天 transcript 文件，所以本次复盘基于当前对话上下文和项目 artifacts。
+- `self-improvement` 只作为候选，没有采用，因为安装失败且没有读取本地 skill。
+
+验证：
+
+- 本次 workflow-retrospective 变更会完成 diff review 和 commit。
