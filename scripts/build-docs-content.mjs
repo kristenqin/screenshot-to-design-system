@@ -29,7 +29,8 @@ const docs = [
   { source: "docs/docs-site.md", section: "Workflow", lang: "en", order: 46 },
   { source: "docs/information-architecture.md", section: "Workflow", lang: "en", order: 47 },
   { source: "docs/concept-map-research.md", section: "Workflow", lang: "en", order: 48 },
-  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 49 },
+  { source: "docs/module-governance-first.md", section: "Workflow", lang: "en", order: 49 },
+  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 50 },
 
   { source: "docs/zh-CN/index.md", section: "中文入口", lang: "zh-CN", order: 100 },
   { source: "docs/zh-CN/readme.md", section: "中文项目", lang: "zh-CN", order: 101 },
@@ -53,7 +54,8 @@ const docs = [
   { source: "docs/zh-CN/docs-site.md", section: "中文工作流", lang: "zh-CN", order: 136 },
   { source: "docs/zh-CN/information-architecture.md", section: "中文工作流", lang: "zh-CN", order: 137 },
   { source: "docs/zh-CN/concept-map-research.md", section: "中文工作流", lang: "zh-CN", order: 138 },
-  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 139 }
+  { source: "docs/zh-CN/module-governance-first.md", section: "中文工作流", lang: "zh-CN", order: 139 },
+  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 140 }
 ];
 
 const readingPaths = {
@@ -80,6 +82,7 @@ const readingPaths = {
   "docs/docs-site.md": ["operate"],
   "docs/information-architecture.md": ["operate", "audit"],
   "docs/concept-map-research.md": ["research", "operate"],
+  "docs/module-governance-first.md": ["plan", "operate", "research"],
   "docs/skills-research.md": ["research", "audit"],
 
   "docs/zh-CN/index.md": ["resume", "orient", "zh"],
@@ -104,6 +107,7 @@ const readingPaths = {
   "docs/zh-CN/docs-site.md": ["operate", "zh"],
   "docs/zh-CN/information-architecture.md": ["operate", "audit", "zh"],
   "docs/zh-CN/concept-map-research.md": ["research", "operate", "zh"],
+  "docs/zh-CN/module-governance-first.md": ["plan", "operate", "research", "zh"],
   "docs/zh-CN/skills-research.md": ["research", "audit", "zh"]
 };
 

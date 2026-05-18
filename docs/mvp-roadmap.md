@@ -1,5 +1,19 @@
 # MVP Roadmap
 
+## Roadmap Reframe
+
+This roadmap should now be read through [Module Governance First](module-governance-first.md).
+
+The project should not optimize for the fastest broad end-to-end MVP if the modules underneath it are still vague. The preferred path is:
+
+```text
+module readiness first
+  -> tracer-bullet integration
+  -> product MVP
+```
+
+That means each phase below should promote one or more modules through explicit readiness levels before the whole screenshot-to-design workflow is treated as a product MVP.
+
 ## MVP Objective
 
 Build a pragmatic prototype that proves the core loop:
@@ -9,6 +23,11 @@ Build a pragmatic prototype that proves the core loop:
 The MVP should avoid replacing mature modules such as the current Doubao wireframe generation step.
 
 ## Phase 1: Static Screenshot Parsing
+
+Module target:
+
+- Promote `Screenshot intake` from M1 to M2.
+- Promote `UI AST parsing` from M1 to M3.
 
 Inputs:
 
@@ -27,8 +46,13 @@ Success criteria:
 - text regions are mostly detected
 - major containers and controls are detected
 - output is saved as structured JSON
+- UI AST schema is explicit enough for later modules to consume
 
 ## Phase 2: Component Candidate Discovery
+
+Module target:
+
+- Promote `Component clustering` from M1 to M3.
 
 Inputs:
 
@@ -47,8 +71,13 @@ Success criteria:
 - repeated buttons, list rows, table rows, and cards are grouped
 - noise elements are not aggressively forced into clusters
 - candidates are inspectable and explainable
+- cluster output has a documented candidate contract
 
 ## Phase 3: Design Token Extraction
+
+Module target:
+
+- Promote `Design token extraction` from M1 to M3.
 
 Outputs:
 
@@ -62,8 +91,14 @@ Success criteria:
 - tokens are visually plausible
 - major brand/action colors are captured
 - typography scale is close even if exact font is unknown
+- token output follows a stable schema
 
 ## Phase 4: Reconstruct One Page
+
+Module target:
+
+- Promote `Reconstruction output` from M0 to M3.
+- Promote `Diff verification` from M1 to M3.
 
 Outputs:
 
@@ -76,8 +111,13 @@ Success criteria:
 - layout is visually close
 - repeated components reuse shared definitions
 - diff output identifies obvious mismatches
+- reconstruction can be traced back to UI AST, component candidates, and tokens
 
 ## Phase 5: Iterative Refinement
+
+Module target:
+
+- Promote the first integrated flow to M6 only after the participating modules expose their failures clearly.
 
 Use feedback signals:
 
@@ -110,4 +150,3 @@ Success criteria:
 - custom wireframe generation model
 - universal support for every app type
 - perfect semantic interpretation of business logic
-

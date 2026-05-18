@@ -28,12 +28,14 @@ The docs site navigation now uses task-based reading paths in addition to langua
 
 The docs site now includes a Concept Map view. The build script generates a graph from reading-path membership, bilingual companion docs, and Markdown links. The browser view lets users inspect document nodes and relationship edges directly.
 
+The project now follows a module-governance-first planning model: mature module boundaries, contracts, verification, and readiness levels should precede a broad product MVP.
+
 ## Latest Commits
 
 ```text
+docs(workflow): add module-governance-first model
 feat(docs): add concept map navigation
 516cce8 feat(docs): add reading-path navigation
-5271cbd feat(docs): add local browser documentation site
 ```
 
 ## Important Files
@@ -50,6 +52,7 @@ feat(docs): add concept map navigation
 - [Docs Site](../../docs/docs-site.md)
 - [Information Architecture](../../docs/information-architecture.md)
 - [Concept Map Research](../../docs/concept-map-research.md)
+- [Module Governance First](../../docs/module-governance-first.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -64,13 +67,14 @@ feat(docs): add concept map navigation
 - Documentation navigation should prioritize reader tasks before file categories.
 - Documentation can be represented as a graph: documents are concept nodes and relationships are edges.
 - Graph rendering should stay zero-dependency until the project needs Cytoscape.js, Sigma.js, or another dedicated graph library.
+- Product MVP should be composed from modules that have explicit readiness levels.
 
 ## Current Tasks
 
 Likely next task:
 
 ```text
-T-003: Write implementation plan for UI AST run
+T-020: Promote UI AST parsing from M1 to M3
 ```
 
 Required skill:
@@ -82,6 +86,7 @@ project-planner
 Related docs:
 
 - [Task Board](../../TASKS.md)
+- [Module Governance First](../../docs/module-governance-first.md)
 - [Project Management Workflow](../../docs/project-management.md)
 - [Issue Breakdown Draft](../../docs/issue-breakdown-draft.md)
 
@@ -90,7 +95,7 @@ Related docs:
 1. Read [START_HERE.md](../../START_HERE.md).
 2. Read [TASKS.md](../../TASKS.md).
 3. Install or read the `project-planner` skill before starting T-003.
-4. Create an implementation plan for `Create the First Validated UI AST Run`.
+4. Create an implementation plan for promoting `UI AST parsing` from M1 to M3.
 5. Record skill usage in [Skill Usage Log](../../docs/skill-usage-log.md).
 6. Update this handoff after completing the plan.
 
@@ -119,7 +124,7 @@ Click `Concept map` in the top bar to inspect the document graph.
 Last known clean Git state after commit:
 
 ```text
-feat(docs): add concept map navigation
+docs(workflow): add module-governance-first model
 ```
 
 New session should still run:

@@ -38,6 +38,7 @@ The next concrete implementation task is:
 | T-017 | Maintain local browser documentation site | AFK | `browser`, `commit-work` | None | [Docs Site](docs/docs-site.md) |
 | T-018 | Maintain documentation information architecture | AFK | `information-architecture`, `context-retrospective`, `commit-work` | None | [Information Architecture](docs/information-architecture.md) |
 | T-019 | Maintain documentation concept map and relationship graph | AFK | `information-architecture`, `browser`, `commit-work` | None | [Concept Map Research](docs/concept-map-research.md) |
+| T-020 | Promote UI AST parsing from M1 to M3 | AFK | `project-planner`, `verification-before-completion`, `commit-work` | T-001 approval preferred | [Module Governance First](docs/module-governance-first.md) |
 
 ## Backlog
 
@@ -71,6 +72,7 @@ The next concrete implementation task is:
 | D-012 | Add local browser documentation site | [Docs Site](docs/docs-site.md) |
 | D-013 | Add reading-path navigation and IA audit | [Information Architecture](docs/information-architecture.md) |
 | D-014 | Add concept map research and graph navigation | [Concept Map Research](docs/concept-map-research.md) |
+| D-015 | Add module-governance-first planning model | [Module Governance First](docs/module-governance-first.md) |
 
 ## Operating Rules
 
@@ -83,3 +85,4 @@ The next concrete implementation task is:
 - When a task lists a required skill, record actual usage in [Skill Usage Log](docs/skill-usage-log.md), including any deviations.
 - When ending a meaningful work session, update [.codex/handoffs/current.md](.codex/handoffs/current.md) so a new session can resume quickly.
 - After several rounds of workflow-building or a high-friction interaction, run a retrospective and convert at least one insight into a project change.
+- Do not treat the product MVP as ready until the participating modules have explicit boundaries, contracts, verification, and readiness levels.

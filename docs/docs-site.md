@@ -83,7 +83,7 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 47 documentation files appear in navigation
+- 49 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
 - Concept Map view renders document nodes and relationship edges
 - Chinese language filter shows Chinese docs

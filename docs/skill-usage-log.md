@@ -358,3 +358,40 @@ Verification:
 
 - `npm run build` prepared 47 documentation files and generated graph edges.
 - Browser verification confirms the Concept Map view renders visible nodes and edges.
+
+## 2026-05-18 - `information-architecture`
+
+Task:
+
+- Research reusable module-governance resources and apply them to the project roadmap.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The user wanted to reuse existing mature practices instead of inventing a module-first workflow from scratch.
+
+Workflow steps followed:
+
+- Read local `SKILL.md`.
+- Surveyed reusable external frameworks: bounded contexts, Team Topologies, C4, ADRs, Diátaxis, SLOs, TRL, MVA, MVC, and tracer bullets.
+- Converted those frameworks into a project-specific module passport and readiness model.
+- Updated the MVP roadmap so module readiness comes before product MVP.
+
+Output artifacts:
+
+- [Module Governance First](module-governance-first.md)
+- [Chinese Module Governance First](zh-CN/module-governance-first.md)
+- Updated [MVP Roadmap](mvp-roadmap.md)
+- Updated [Task Board](../TASKS.md)
+
+Deviations:
+
+- No user study or external team interview was run.
+- The adopted model is a lightweight synthesis of established ideas, not a claim that any single framework fully solves the project.
+
+Verification:
+
+- `npm run build` prepared 49 documentation files and 287 graph edges.

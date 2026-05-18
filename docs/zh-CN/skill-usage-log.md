@@ -303,3 +303,39 @@ Skill 来源：
 
 - `npm run build` 成功准备 47 份文档并生成 graph edges。
 - 浏览器验证确认 Concept Map 视图可以渲染节点和连线。
+
+## 2026-05-18 - `information-architecture`
+
+任务：
+
+- 调研可复用的模块治理资源，并落实到项目路线图。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 用户希望复用已有成熟实践，而不是从零发明一套 module-first 工作流。
+
+遵循步骤：
+
+- 读取本地 `SKILL.md`。
+- 调研可复用外部框架：bounded contexts、Team Topologies、C4、ADR、Diátaxis、SLO、TRL、MVA、MVC、tracer bullets。
+- 将这些框架转成项目自己的 module passport 和 readiness model。
+- 更新 MVP 路线图，把 module readiness 放在 product MVP 前面。
+
+输出：
+
+- [模块治理优先](module-governance-first.md)
+- [MVP 路线图](mvp-roadmap.md)
+- [任务面板](tasks.md)
+
+偏离：
+
+- 没有做用户研究或外部团队访谈。
+- 当前采用的是对成熟思想的轻量综合，不声称某一个框架可以单独解决整个项目问题。
+
+验证：
+
+- `npm run build` 成功准备 49 份文档和 287 条 graph edges。

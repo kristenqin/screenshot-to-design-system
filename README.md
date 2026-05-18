@@ -59,6 +59,7 @@ Language:
 - Skill usage policy and audit log live in [Skill Usage Policy](docs/skill-usage-policy.md) and [Skill Usage Log](docs/skill-usage-log.md).
 - Local browser docs site instructions live in [Docs Site](docs/docs-site.md).
 - Concept map research and graph navigation decisions live in [Concept Map Research](docs/concept-map-research.md).
+- Module-first planning rules live in [Module Governance First](docs/module-governance-first.md).
 
 - [Task Board](TASKS.md)
 - [Start Here](START_HERE.md)
@@ -67,6 +68,7 @@ Language:
 - [Docs Site](docs/docs-site.md)
 - [Information Architecture](docs/information-architecture.md)
 - [Concept Map Research](docs/concept-map-research.md)
+- [Module Governance First](docs/module-governance-first.md)
 - [Workflow Overview](docs/workflow-overview.md)
 - [Existing Tools and Algorithms](docs/existing-tools-and-algorithms.md)
 - [Component Clustering Strategy](docs/component-clustering-strategy.md)
