@@ -10,6 +10,7 @@ The site is intentionally lightweight:
 - no install step required beyond Node.js
 - generated content is copied from the canonical Markdown docs
 - English and Chinese docs are both available
+- concept map graph data is generated from Markdown links and docs metadata
 - generated files are ignored by Git
 
 ## Run Locally
@@ -69,6 +70,7 @@ package.json
 - Right-side table of contents on wide screens
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
+- Concept Map view for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 
 ## Verification
 
@@ -81,8 +83,9 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 45 documentation files appear in navigation
+- 47 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
+- Concept Map view renders document nodes and relationship edges
 - Chinese language filter shows Chinese docs
 - Chinese docs index opens correctly
 - table of contents is generated for headings

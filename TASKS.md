@@ -37,6 +37,7 @@ The next concrete implementation task is:
 | T-016 | Run workflow retrospectives after major interaction blocks | AFK | `context-retrospective`, `commit-work` | None | [Workflow Retrospective](docs/workflow-retrospective.md) |
 | T-017 | Maintain local browser documentation site | AFK | `browser`, `commit-work` | None | [Docs Site](docs/docs-site.md) |
 | T-018 | Maintain documentation information architecture | AFK | `information-architecture`, `context-retrospective`, `commit-work` | None | [Information Architecture](docs/information-architecture.md) |
+| T-019 | Maintain documentation concept map and relationship graph | AFK | `information-architecture`, `browser`, `commit-work` | None | [Concept Map Research](docs/concept-map-research.md) |
 
 ## Backlog
 
@@ -69,6 +70,7 @@ The next concrete implementation task is:
 | D-011 | Analyze workflow friction and define upgrade protocol | [Workflow Retrospective](docs/workflow-retrospective.md) |
 | D-012 | Add local browser documentation site | [Docs Site](docs/docs-site.md) |
 | D-013 | Add reading-path navigation and IA audit | [Information Architecture](docs/information-architecture.md) |
+| D-014 | Add concept map research and graph navigation | [Concept Map Research](docs/concept-map-research.md) |
 
 ## Operating Rules
 

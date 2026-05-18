@@ -264,3 +264,42 @@ Skill 来源：
   - Plan 路径收敛到 14 份文档。
   - 中文路径收敛到 22 份文档，并自动切换中文语言筛选。
   - Information Architecture 已出现在导航中。
+
+## 2026-05-18 - `information-architecture`
+
+任务：
+
+- 调研并实现文档系统的 Concept Map 模型。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 用户希望文档不只是浅层树结构，而是更像概念之间相互连接的图。
+
+遵循步骤：
+
+- 读取本地 `SKILL.md`。
+- 将每份文档重新定义为概念节点。
+- 为阅读路径、中英 companion、Markdown 引用定义关系边。
+- 调研 graph / concept map 相关工具。
+- 在文档站中加入零依赖 Concept Map 视图。
+
+输出：
+
+- [概念图调研](concept-map-research.md)
+- `scripts/build-docs-content.mjs`
+- `src/main.js`
+- `src/styles.css`
+
+偏离：
+
+- 暂时没有引入 Cytoscape.js 或 Sigma.js 等依赖。
+- 当前图视图是保守的项目内原型，因为文档图规模还不大。
+
+验证：
+
+- `npm run build` 成功准备 47 份文档并生成 graph edges。
+- 浏览器验证确认 Concept Map 视图可以渲染节点和连线。

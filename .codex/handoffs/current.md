@@ -26,11 +26,14 @@ The project now includes a zero-dependency local browser documentation site for 
 
 The docs site navigation now uses task-based reading paths in addition to language and section filters.
 
+The docs site now includes a Concept Map view. The build script generates a graph from reading-path membership, bilingual companion docs, and Markdown links. The browser view lets users inspect document nodes and relationship edges directly.
+
 ## Latest Commits
 
 ```text
-3a210ef docs(workflow): add auditable skill usage process
-a52c37a docs(project): initialize screenshot-to-design-system documentation
+feat(docs): add concept map navigation
+516cce8 feat(docs): add reading-path navigation
+5271cbd feat(docs): add local browser documentation site
 ```
 
 ## Important Files
@@ -46,6 +49,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - [Workflow Retrospective](../../docs/workflow-retrospective.md)
 - [Docs Site](../../docs/docs-site.md)
 - [Information Architecture](../../docs/information-architecture.md)
+- [Concept Map Research](../../docs/concept-map-research.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -58,6 +62,8 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - Major workflow friction should trigger a retrospective and at least one concrete project update.
 - The docs site is a reading layer; canonical content remains in Markdown files.
 - Documentation navigation should prioritize reader tasks before file categories.
+- Documentation can be represented as a graph: documents are concept nodes and relationships are edges.
+- Graph rendering should stay zero-dependency until the project needs Cytoscape.js, Sigma.js, or another dedicated graph library.
 
 ## Current Tasks
 
@@ -100,6 +106,8 @@ Then open:
 http://127.0.0.1:4173
 ```
 
+Click `Concept map` in the top bar to inspect the document graph.
+
 ## Blockers
 
 - No blocker for continuing documentation planning.
@@ -111,7 +119,7 @@ http://127.0.0.1:4173
 Last known clean Git state after commit:
 
 ```text
-3a210ef docs(workflow): add auditable skill usage process
+feat(docs): add concept map navigation
 ```
 
 New session should still run:

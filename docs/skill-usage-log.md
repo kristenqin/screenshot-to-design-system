@@ -318,3 +318,43 @@ Verification:
   - Plan path narrows to 14 documents.
   - Chinese path narrows to 22 documents and activates the Chinese language filter.
   - Information Architecture appears in navigation.
+
+## 2026-05-18 - `information-architecture`
+
+Task:
+
+- Research and implement a concept-map model for the documentation system.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The user wanted the docs to behave less like a shallow tree and more like a graph of related concepts.
+
+Workflow steps followed:
+
+- Read local `SKILL.md`.
+- Reframed each document as a concept node.
+- Defined relationship edges for reading-path membership, bilingual companions, and Markdown references.
+- Surveyed graph and concept-map tools.
+- Added a zero-dependency concept map view to the docs site.
+
+Output artifacts:
+
+- [Concept Map Research](concept-map-research.md)
+- [Chinese Concept Map Research](zh-CN/concept-map-research.md)
+- Updated docs manifest graph generation in `scripts/build-docs-content.mjs`
+- Updated concept map UI in `src/main.js`
+- Updated graph styles in `src/styles.css`
+
+Deviations:
+
+- No dependency such as Cytoscape.js or Sigma.js was adopted yet.
+- The current graph view is a conservative in-project prototype because the docs graph is still small.
+
+Verification:
+
+- `npm run build` prepared 47 documentation files and generated graph edges.
+- Browser verification confirms the Concept Map view renders visible nodes and edges.

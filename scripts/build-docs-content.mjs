@@ -28,7 +28,8 @@ const docs = [
   { source: "docs/workflow-retrospective.md", section: "Workflow", lang: "en", order: 45 },
   { source: "docs/docs-site.md", section: "Workflow", lang: "en", order: 46 },
   { source: "docs/information-architecture.md", section: "Workflow", lang: "en", order: 47 },
-  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 48 },
+  { source: "docs/concept-map-research.md", section: "Workflow", lang: "en", order: 48 },
+  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 49 },
 
   { source: "docs/zh-CN/index.md", section: "中文入口", lang: "zh-CN", order: 100 },
   { source: "docs/zh-CN/readme.md", section: "中文项目", lang: "zh-CN", order: 101 },
@@ -51,7 +52,8 @@ const docs = [
   { source: "docs/zh-CN/workflow-retrospective.md", section: "中文工作流", lang: "zh-CN", order: 135 },
   { source: "docs/zh-CN/docs-site.md", section: "中文工作流", lang: "zh-CN", order: 136 },
   { source: "docs/zh-CN/information-architecture.md", section: "中文工作流", lang: "zh-CN", order: 137 },
-  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 138 }
+  { source: "docs/zh-CN/concept-map-research.md", section: "中文工作流", lang: "zh-CN", order: 138 },
+  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 139 }
 ];
 
 const readingPaths = {
@@ -77,6 +79,7 @@ const readingPaths = {
   "docs/workflow-retrospective.md": ["operate", "audit"],
   "docs/docs-site.md": ["operate"],
   "docs/information-architecture.md": ["operate", "audit"],
+  "docs/concept-map-research.md": ["research", "operate"],
   "docs/skills-research.md": ["research", "audit"],
 
   "docs/zh-CN/index.md": ["resume", "orient", "zh"],
@@ -100,8 +103,20 @@ const readingPaths = {
   "docs/zh-CN/workflow-retrospective.md": ["operate", "audit", "zh"],
   "docs/zh-CN/docs-site.md": ["operate", "zh"],
   "docs/zh-CN/information-architecture.md": ["operate", "audit", "zh"],
+  "docs/zh-CN/concept-map-research.md": ["research", "operate", "zh"],
   "docs/zh-CN/skills-research.md": ["research", "audit", "zh"]
 };
+
+const readingPathLabels = [
+  { id: "all", label: "All", hint: "Everything" },
+  { id: "resume", label: "Resume", hint: "Start or continue" },
+  { id: "orient", label: "Understand", hint: "Product intent" },
+  { id: "plan", label: "Plan", hint: "Next work" },
+  { id: "research", label: "Research", hint: "Evidence" },
+  { id: "operate", label: "Operate", hint: "Rules" },
+  { id: "audit", label: "Audit", hint: "History" },
+  { id: "zh", label: "中文", hint: "中文把控" }
+];
 
 function titleFromMarkdown(markdown, fallback) {
   const heading = markdown.match(/^#\s+(.+)$/m);
@@ -121,14 +136,60 @@ function summaryFromMarkdown(markdown) {
   return cleaned?.slice(0, 180) ?? "";
 }
 
+function normalizeRelativeDoc(baseSource, href) {
+  if (!href || href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:")) {
+    return null;
+  }
+  const clean = href.replace(/^(\.\/)+/, "");
+  const withoutHash = clean.split("#")[0];
+  if (!withoutHash.endsWith(".md")) return null;
+  if (withoutHash.startsWith("/")) return withoutHash.slice(1);
+  const baseParts = baseSource.split("/");
+  baseParts.pop();
+  const parts = [...baseParts, ...withoutHash.split("/")];
+  const resolved = [];
+  for (const part of parts) {
+    if (!part || part === ".") continue;
+    if (part === "..") resolved.pop();
+    else resolved.push(part);
+  }
+  return resolved.join("/");
+}
+
+function extractLinks(markdown, source) {
+  const links = new Set();
+  for (const match of markdown.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)) {
+    const resolved = normalizeRelativeDoc(source, match[1]);
+    if (resolved) links.add(resolved);
+  }
+  return [...links];
+}
+
+function companionFor(source) {
+  if (source === "README.md") return "docs/zh-CN/readme.md";
+  if (source === "TASKS.md") return "docs/zh-CN/tasks.md";
+  if (source.startsWith("docs/") && !source.startsWith("docs/zh-CN/")) {
+    return source.replace(/^docs\//, "docs/zh-CN/");
+  }
+  if (source.startsWith("docs/zh-CN/")) {
+    const base = source.replace(/^docs\/zh-CN\//, "docs/");
+    if (base === "docs/readme.md") return "README.md";
+    if (base === "docs/tasks.md") return "TASKS.md";
+    return base;
+  }
+  return null;
+}
+
 await rm(contentDir, { recursive: true, force: true });
 await mkdir(contentDir, { recursive: true });
 
 const manifest = [];
+const markdownBySource = new Map();
 
 for (const doc of docs) {
   const sourcePath = join(root, doc.source);
   const markdown = await readFile(sourcePath, "utf8");
+  markdownBySource.set(doc.source, markdown);
   const targetPath = join(contentDir, doc.source);
   await mkdir(dirname(targetPath), { recursive: true });
   await writeFile(targetPath, markdown);
@@ -144,6 +205,59 @@ for (const doc of docs) {
 
 manifest.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 
-await writeFile(join(publicDir, "docs-manifest.json"), `${JSON.stringify({ generatedAt: new Date().toISOString(), docs: manifest }, null, 2)}\n`);
+const docSourceSet = new Set(manifest.map((doc) => doc.source));
+const pathNodes = readingPathLabels
+  .filter((path) => path.id !== "all")
+  .map((path) => ({
+    id: `path:${path.id}`,
+    label: path.label,
+    kind: "path",
+    hint: path.hint
+  }));
 
-console.log(`Prepared ${manifest.length} documentation files.`);
+const docNodes = manifest.map((doc) => ({
+  id: doc.source,
+  label: doc.title,
+  kind: "doc",
+  lang: doc.lang,
+  section: doc.section,
+  paths: doc.paths
+}));
+
+const edges = [];
+const edgeKeys = new Set();
+
+function addEdge(source, target, type, label) {
+  if (!source || !target || source === target) return;
+  const key = `${source}->${target}:${type}`;
+  if (edgeKeys.has(key)) return;
+  edgeKeys.add(key);
+  edges.push({ source, target, type, label });
+}
+
+for (const doc of manifest) {
+  for (const path of doc.paths ?? []) {
+    if (path === "zh") continue;
+    addEdge(`path:${path}`, doc.source, "path", "organizes");
+  }
+
+  const companion = companionFor(doc.source);
+  if (companion && docSourceSet.has(companion) && doc.source < companion) {
+    addEdge(doc.source, companion, "companion", "companion");
+  }
+
+  for (const link of extractLinks(markdownBySource.get(doc.source) ?? "", doc.source)) {
+    if (docSourceSet.has(link)) {
+      addEdge(doc.source, link, "references", "references");
+    }
+  }
+}
+
+const graph = {
+  nodes: [...pathNodes, ...docNodes],
+  edges
+};
+
+await writeFile(join(publicDir, "docs-manifest.json"), `${JSON.stringify({ generatedAt: new Date().toISOString(), docs: manifest, graph }, null, 2)}\n`);
+
+console.log(`Prepared ${manifest.length} documentation files and ${graph.edges.length} graph edges.`);
