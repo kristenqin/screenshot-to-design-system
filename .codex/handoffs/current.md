@@ -30,12 +30,14 @@ The docs site now includes a Concept Map view. The build script generates a grap
 
 The project now follows a module-governance-first planning model: mature module boundaries, contracts, verification, and readiness levels should precede a broad product MVP.
 
+The documentation system itself now has a module passport. It is treated as the first governed module, currently M4 with a target of M5 reusable.
+
 ## Latest Commits
 
 ```text
+docs(workflow): apply governance to documentation module
 docs(workflow): add module-governance-first model
 feat(docs): add concept map navigation
-516cce8 feat(docs): add reading-path navigation
 ```
 
 ## Important Files
@@ -53,6 +55,7 @@ feat(docs): add concept map navigation
 - [Information Architecture](../../docs/information-architecture.md)
 - [Concept Map Research](../../docs/concept-map-research.md)
 - [Module Governance First](../../docs/module-governance-first.md)
+- [Documentation System Module Passport](../../docs/module-passports/documentation-system.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -68,6 +71,7 @@ feat(docs): add concept map navigation
 - Documentation can be represented as a graph: documents are concept nodes and relationships are edges.
 - Graph rendering should stay zero-dependency until the project needs Cytoscape.js, Sigma.js, or another dedicated graph library.
 - Product MVP should be composed from modules that have explicit readiness levels.
+- The documentation system is a governed module, not only a place where governance is written down.
 
 ## Current Tasks
 
@@ -86,6 +90,7 @@ project-planner
 Related docs:
 
 - [Task Board](../../TASKS.md)
+- [Documentation System Module Passport](../../docs/module-passports/documentation-system.md)
 - [Module Governance First](../../docs/module-governance-first.md)
 - [Project Management Workflow](../../docs/project-management.md)
 - [Issue Breakdown Draft](../../docs/issue-breakdown-draft.md)
@@ -124,7 +129,7 @@ Click `Concept map` in the top bar to inspect the document graph.
 Last known clean Git state after commit:
 
 ```text
-docs(workflow): add module-governance-first model
+docs(workflow): apply governance to documentation module
 ```
 
 New session should still run:

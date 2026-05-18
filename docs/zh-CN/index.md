@@ -25,6 +25,7 @@
 - [信息架构](information-architecture.md)
 - [概念图调研](concept-map-research.md)
 - [模块治理优先](module-governance-first.md)
+- [文档系统 Module Passport](module-passports/documentation-system.md)
 - [MVP 路线图](mvp-roadmap.md)
 - [下一步任务](next-tasks.md)
 - [Skills 调研](skills-research.md)

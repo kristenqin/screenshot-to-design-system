@@ -395,3 +395,40 @@ Deviations:
 Verification:
 
 - `npm run build` prepared 49 documentation files and 287 graph edges.
+
+## 2026-05-18 - `information-architecture`
+
+Task:
+
+- Apply the module-governance-first model to the documentation system itself.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The user correctly observed that the prior change defined a governance principle but did not apply it to the docs module that already exists.
+
+Workflow steps followed:
+
+- Treated the documentation system as the first governed module.
+- Created a module passport for its boundary, contract, verification, failure modes, and replaceability.
+- Linked the passport from the documentation-system docs, module-governance docs, README, Chinese index, and task board.
+- Added a promotion task for moving the documentation system from M4 to M5.
+
+Output artifacts:
+
+- [Documentation System Module Passport](module-passports/documentation-system.md)
+- [Chinese Documentation System Module Passport](zh-CN/module-passports/documentation-system.md)
+- Updated [Documentation System](documentation-system.md)
+- Updated [Module Governance First](module-governance-first.md)
+- Updated [Task Board](../TASKS.md)
+
+Deviations:
+
+- This pass defines the passport and promotion gate, but does not yet add automated coverage checks.
+
+Verification:
+
+- `npm run build` should include the module passport docs in the browser site and concept map.

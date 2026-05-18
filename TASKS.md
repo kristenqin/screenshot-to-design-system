@@ -39,6 +39,7 @@ The next concrete implementation task is:
 | T-018 | Maintain documentation information architecture | AFK | `information-architecture`, `context-retrospective`, `commit-work` | None | [Information Architecture](docs/information-architecture.md) |
 | T-019 | Maintain documentation concept map and relationship graph | AFK | `information-architecture`, `browser`, `commit-work` | None | [Concept Map Research](docs/concept-map-research.md) |
 | T-020 | Promote UI AST parsing from M1 to M3 | AFK | `project-planner`, `verification-before-completion`, `commit-work` | T-001 approval preferred | [Module Governance First](docs/module-governance-first.md) |
+| T-021 | Promote documentation system from M4 to M5 | AFK | `information-architecture`, `commit-work` | None | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
 
 ## Backlog
 
@@ -73,6 +74,7 @@ The next concrete implementation task is:
 | D-013 | Add reading-path navigation and IA audit | [Information Architecture](docs/information-architecture.md) |
 | D-014 | Add concept map research and graph navigation | [Concept Map Research](docs/concept-map-research.md) |
 | D-015 | Add module-governance-first planning model | [Module Governance First](docs/module-governance-first.md) |
+| D-016 | Apply module governance to documentation system | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
 
 ## Operating Rules
 

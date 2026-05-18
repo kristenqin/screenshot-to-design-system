@@ -339,3 +339,39 @@ Skill 来源：
 验证：
 
 - `npm run build` 成功准备 49 份文档和 287 条 graph edges。
+
+## 2026-05-18 - `information-architecture`
+
+任务：
+
+- 将 module-governance-first 模型应用到文档系统本身。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 用户指出上一轮只是定义了治理原则，但没有把它应用到已经存在的文档模块上。
+
+遵循步骤：
+
+- 将文档系统视为第一个被治理的模块。
+- 为它创建 module passport，明确边界、contract、verification、failure modes 和 replaceability。
+- 将 passport 链接到文档系统说明、模块治理文档、README、中文入口和任务面板。
+- 增加将文档系统从 M4 推进到 M5 的任务。
+
+输出：
+
+- [文档系统 Module Passport](module-passports/documentation-system.md)
+- [文档系统](documentation-system.md)
+- [模块治理优先](module-governance-first.md)
+- [任务面板](tasks.md)
+
+偏离：
+
+- 本轮定义了 passport 和晋级门槛，但还没有加入自动化覆盖率检查。
+
+验证：
+
+- `npm run build` 应包含 module passport 文档，并更新浏览器站点和 Concept Map。

@@ -20,6 +20,8 @@
 - 质量把控
 - 决策 review
 
+文档系统本身也是一个需要治理的模块。它的 module passport 位于 [文档系统 Module Passport](module-passports/documentation-system.md)。
+
 ## 结构
 
 ```text
@@ -70,3 +72,30 @@ docs/zh-CN/tasks.md
 - 如果暂时无法完整翻译，至少补充中文决策摘要并标明缺口
 - 保持语言版本之间的链接可见
 
+## 模块治理
+
+当前成熟度：
+
+```text
+M4 - Verified
+```
+
+目标成熟度：
+
+```text
+M5 - Reusable
+```
+
+文档系统也要按模块标准判断，而不是只看文件是否存在。
+
+最低模块检查：
+
+- 重要文档在浏览器站点中可发现
+- 影响项目方向的重要文档有中文 companion
+- `TASKS.md` 反映当前执行状态
+- `.codex/handoffs/current.md` 可以让新 session 恢复上下文
+- skill 影响工作时有日志记录
+- Concept Map 仍能渲染文档关系
+- 文档变更后 `npm run build` 成功
+
+下一道晋级门槛是让文档系统可以被复用到其他项目，而不只是服务当前项目。

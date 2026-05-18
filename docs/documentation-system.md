@@ -8,6 +8,8 @@ English is optimized for agent execution, skill workflows, issue generation, sch
 
 Chinese is optimized for product understanding, decision review, quality control, and human alignment.
 
+This documentation system is itself a governed module. Its module passport lives at [Documentation System Module Passport](module-passports/documentation-system.md).
+
 ## Structure
 
 ```text
@@ -73,3 +75,30 @@ Preferred style:
 
 The first bilingual pass covers every current project document with a Chinese companion document.
 
+## Module Governance
+
+Current readiness:
+
+```text
+M4 - Verified
+```
+
+Target readiness:
+
+```text
+M5 - Reusable
+```
+
+The documentation system should be judged by module standards, not only by whether the files exist.
+
+Minimum module checks:
+
+- important docs are discoverable in the browser site
+- important docs have Chinese companions when they affect project direction
+- `TASKS.md` reflects the current execution state
+- `.codex/handoffs/current.md` can restart a new session
+- skill usage is logged when a skill shaped the work
+- Concept Map still renders document relationships
+- `npm run build` succeeds after documentation changes
+
+The next promotion gate is to make the documentation system reusable in another project, not merely useful inside this one.

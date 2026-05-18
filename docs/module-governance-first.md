@@ -81,7 +81,7 @@ The product MVP should not depend on modules that are still M0/M1 unless the int
 | Design token extraction | M1 | Research exists, but color/type/spacing extraction needs fixtures. | Define token schema and validation samples. |
 | Reconstruction output | M0 | Output targets are still optional: Figma, HTML, or React. | Choose first output target for a narrow slice. |
 | Diff verification | M1 | Feedback signals are identified. | Define first visual/OCR/bbox diff report contract. |
-| Documentation system | M4 | Browser docs, bilingual docs, handoff, skill audit, and concept map are working. | Add module passports and readiness tracking. |
+| Documentation system | M4 | Browser docs, bilingual docs, handoff, skill audit, concept map, and [module passport](module-passports/documentation-system.md) are working. | Create reusable passport template and automated consistency checks. |
 
 ## How This Changes the Roadmap
 

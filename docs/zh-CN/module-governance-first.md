@@ -81,7 +81,7 @@ module boundary
 | Design token extraction | M1 | 已有研究，但颜色/字体/间距提取需要样本验证。 | 定义 token schema 和验证样本。 |
 | Reconstruction output | M0 | 输出目标仍在 Figma、HTML、React 之间摇摆。 | 为窄切片选择第一个输出目标。 |
 | Diff verification | M1 | 已识别反馈信号。 | 定义第一个 visual/OCR/bbox diff report contract。 |
-| Documentation system | M4 | 浏览器文档站、双语文档、handoff、skill audit、concept map 已工作。 | 增加 module passports 和 readiness tracking。 |
+| Documentation system | M4 | 浏览器文档站、双语文档、handoff、skill audit、concept map 和 [module passport](module-passports/documentation-system.md) 已工作。 | 创建可复用 passport template 和自动化一致性检查。 |
 
 ## 对路线图的影响
 
