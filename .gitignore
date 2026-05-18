@@ -11,3 +11,5 @@ __pycache__/
 dist/
 build/
 coverage/
+public/content/
+public/docs-manifest.json

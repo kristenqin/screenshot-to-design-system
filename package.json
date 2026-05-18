@@ -1,0 +1,12 @@
+{
+  "name": "screenshot-to-design-system-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:docs": "node scripts/build-docs-content.mjs",
+    "dev": "npm run prepare:docs && node scripts/dev-server.mjs",
+    "build": "npm run prepare:docs",
+    "preview": "node scripts/dev-server.mjs"
+  }
+}

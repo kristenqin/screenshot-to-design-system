@@ -179,3 +179,45 @@ Skill 来源：
 验证：
 
 - 本次 workflow-retrospective 变更会完成 diff review 和 commit。
+
+## 2026-05-18 - `browser`
+
+任务：
+
+- 为项目文档构建并验证本地浏览器文档站。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户希望用浏览器阅读逐渐扩大的文档系统。
+
+遵循步骤：
+
+- 读取 Browser skill。
+- 构建本地文档站。
+- 启动本地 dev server。
+- 在浏览器中打开 `http://127.0.0.1:4173`。
+- 验证默认页面、导航数量、中文筛选、中文入口和页面目录。
+
+输出：
+
+- [文档站](docs-site.md)
+- `index.html`
+- `src/main.js`
+- `src/styles.css`
+- `scripts/build-docs-content.mjs`
+- `scripts/dev-server.mjs`
+- `package.json`
+
+偏离：
+
+- `npm install` 长时间无输出，所以没有采用外部前端依赖。
+- 改为零依赖本地 server 和轻量 Markdown renderer。
+
+验证：
+
+- `npm run build` 成功准备 43 份文档。
+- 浏览器验证确认文档站可渲染，中文导航可用。

@@ -231,3 +231,46 @@ Deviations:
 Verification:
 
 - Diff review and commit are handled as part of this workflow-retrospective change.
+
+## 2026-05-18 - `browser`
+
+Task:
+
+- Build and verify a local browser documentation site for the project docs.
+
+Skill source:
+
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The user wanted a browser-readable deployment for the growing documentation system.
+
+Workflow steps followed:
+
+- Read the Browser skill.
+- Built a local docs site.
+- Started the local dev server.
+- Opened `http://127.0.0.1:4173` in the in-app browser.
+- Verified default page, navigation count, Chinese filter, Chinese index, and table of contents.
+
+Output artifacts:
+
+- [Docs Site](docs-site.md)
+- [Chinese Docs Site](zh-CN/docs-site.md)
+- `index.html`
+- `src/main.js`
+- `src/styles.css`
+- `scripts/build-docs-content.mjs`
+- `scripts/dev-server.mjs`
+- `package.json`
+
+Deviations:
+
+- Avoided external frontend dependencies because `npm install` stalled.
+- Implemented a zero-dependency local server and lightweight Markdown renderer instead.
+
+Verification:
+
+- `npm run build` prepared 43 documentation files.
+- Browser verification confirmed the docs site renders and Chinese navigation works.

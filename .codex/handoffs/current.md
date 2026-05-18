@@ -22,6 +22,8 @@ It contains a bilingual documentation system for a screenshot-to-design-system p
 
 The project now also includes a workflow retrospective loop for analyzing collaboration friction and converting it into concrete process improvements.
 
+The project now includes a zero-dependency local browser documentation site for reading the Markdown system at `http://127.0.0.1:4173`.
+
 ## Latest Commits
 
 ```text
@@ -40,6 +42,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - [Document Engineering Workflow](../../docs/document-engineering-workflow.md)
 - [Session Continuity](../../docs/session-continuity.md)
 - [Workflow Retrospective](../../docs/workflow-retrospective.md)
+- [Docs Site](../../docs/docs-site.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -50,6 +53,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - Documentation changes should follow Git-style review and Conventional Commit discipline.
 - New sessions should start from `START_HERE.md` and this handoff file instead of relying on previous chat history.
 - Major workflow friction should trigger a retrospective and at least one concrete project update.
+- The docs site is a reading layer; canonical content remains in Markdown files.
 
 ## Current Tasks
 
@@ -79,6 +83,18 @@ Related docs:
 4. Create an implementation plan for `Create the First Validated UI AST Run`.
 5. Record skill usage in [Skill Usage Log](../../docs/skill-usage-log.md).
 6. Update this handoff after completing the plan.
+
+To browse docs locally:
+
+```bash
+npm run dev
+```
+
+Then open:
+
+```text
+http://127.0.0.1:4173
+```
 
 ## Blockers
 

@@ -35,6 +35,7 @@ The next concrete implementation task is:
 | T-014 | Maintain skill usage policy and audit log | AFK | `commit-work` | None | [Skill Usage Policy](docs/skill-usage-policy.md) |
 | T-015 | Maintain session startup and handoff docs | AFK | `session-handoff`, `commit-work` | None | [Session Continuity](docs/session-continuity.md) |
 | T-016 | Run workflow retrospectives after major interaction blocks | AFK | `context-retrospective`, `commit-work` | None | [Workflow Retrospective](docs/workflow-retrospective.md) |
+| T-017 | Maintain local browser documentation site | AFK | `browser`, `commit-work` | None | [Docs Site](docs/docs-site.md) |
 
 ## Backlog
 
@@ -65,6 +66,7 @@ The next concrete implementation task is:
 | D-009 | Define auditable skill usage workflow | [Skill Usage Policy](docs/skill-usage-policy.md) |
 | D-010 | Define new-session startup and handoff workflow | [Session Continuity](docs/session-continuity.md) |
 | D-011 | Analyze workflow friction and define upgrade protocol | [Workflow Retrospective](docs/workflow-retrospective.md) |
+| D-012 | Add local browser documentation site | [Docs Site](docs/docs-site.md) |
 
 ## Operating Rules
 
