@@ -24,6 +24,8 @@ The project now also includes a workflow retrospective loop for analyzing collab
 
 The project now includes a zero-dependency local browser documentation site for reading the Markdown system at `http://127.0.0.1:4173`.
 
+The docs site navigation now uses task-based reading paths in addition to language and section filters.
+
 ## Latest Commits
 
 ```text
@@ -43,6 +45,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - [Session Continuity](../../docs/session-continuity.md)
 - [Workflow Retrospective](../../docs/workflow-retrospective.md)
 - [Docs Site](../../docs/docs-site.md)
+- [Information Architecture](../../docs/information-architecture.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
 ## Decisions Made
@@ -54,6 +57,7 @@ a52c37a docs(project): initialize screenshot-to-design-system documentation
 - New sessions should start from `START_HERE.md` and this handoff file instead of relying on previous chat history.
 - Major workflow friction should trigger a retrospective and at least one concrete project update.
 - The docs site is a reading layer; canonical content remains in Markdown files.
+- Documentation navigation should prioritize reader tasks before file categories.
 
 ## Current Tasks
 

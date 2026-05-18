@@ -219,5 +219,48 @@ Skill 来源：
 
 验证：
 
-- `npm run build` 成功准备 43 份文档。
+- IA 更新后，`npm run build` 成功准备 45 份文档。
 - 浏览器验证确认文档站可渲染，中文导航可用。
+
+## 2026-05-18 - `information-architecture`
+
+任务：
+
+- 审计并改进文档站导航结构。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 用户反馈左侧导航感觉内容混在一起，结构不够舒适。
+
+遵循步骤：
+
+- 读取本地 `SKILL.md`。
+- 审计当前导航结构。
+- 将问题归因为导航过平、心智模型不匹配、缺少 hub-and-spoke、产品/流程/审计内容混合。
+- 为文档增加 reading path 元数据。
+- 更新文档站导航，支持按任务路径阅读。
+- 添加中英文 IA 文档。
+
+输出：
+
+- [信息架构](information-architecture.md)
+- `src/main.js`
+- `src/styles.css`
+
+偏离：
+
+- 尚未做真实用户 card sorting 或 tree testing。
+- 本次 IA 更新基于专家复盘和用户反馈。
+
+验证：
+
+- `npm run build` 成功准备 45 份文档。
+- 浏览器验证确认：
+  - All 路径显示 45 份文档。
+  - Plan 路径收敛到 14 份文档。
+  - 中文路径收敛到 22 份文档，并自动切换中文语言筛选。
+  - Information Architecture 已出现在导航中。

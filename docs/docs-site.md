@@ -81,7 +81,8 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 43 documentation files appear in navigation
+- 45 documentation files appear in navigation
+- Reading-path filters reduce the navigation to task-focused sets
 - Chinese language filter shows Chinese docs
 - Chinese docs index opens correctly
 - table of contents is generated for headings

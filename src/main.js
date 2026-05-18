@@ -5,8 +5,20 @@ const state = {
   active: null,
   search: "",
   lang: "all",
+  path: "all",
   headings: []
 };
+
+const readingPathLabels = [
+  { id: "all", label: "All", hint: "Everything" },
+  { id: "resume", label: "Resume", hint: "Start or continue" },
+  { id: "orient", label: "Understand", hint: "Product intent" },
+  { id: "plan", label: "Plan", hint: "Next work" },
+  { id: "research", label: "Research", hint: "Evidence" },
+  { id: "operate", label: "Operate", hint: "Rules" },
+  { id: "audit", label: "Audit", hint: "History" },
+  { id: "zh", label: "中文", hint: "中文把控" }
+];
 
 function docId(source) {
   return source.replace(/^\.\//, "");
@@ -53,8 +65,9 @@ function filteredDocs() {
   const query = state.search.trim().toLowerCase();
   return state.manifest.filter((doc) => {
     const matchesLang = state.lang === "all" || doc.lang === state.lang;
-    const haystack = `${doc.title} ${doc.summary} ${doc.source} ${doc.section}`.toLowerCase();
-    return matchesLang && (!query || haystack.includes(query));
+    const matchesPath = state.path === "all" || doc.paths?.includes(state.path);
+    const haystack = `${doc.title} ${doc.summary} ${doc.source} ${doc.section} ${(doc.paths ?? []).join(" ")}`.toLowerCase();
+    return matchesLang && matchesPath && (!query || haystack.includes(query));
   });
 }
 
@@ -71,6 +84,12 @@ function renderShell() {
         <div class="controls">
           <label class="search-label" for="doc-search">Search docs</label>
           <input id="doc-search" class="search" type="search" placeholder="Search title, path, summary" value="${escapeHtml(state.search)}" />
+          <div class="path-group" aria-label="Reading paths">
+            <p class="filter-title">Reading path</p>
+            <div class="path-grid">
+              ${readingPathLabels.map(pathButton).join("")}
+            </div>
+          </div>
           <div class="segments" aria-label="Language filter">
             ${segmentButton("all", "All")}
             ${segmentButton("en", "EN")}
@@ -106,6 +125,14 @@ function renderShell() {
     });
   });
 
+  document.querySelectorAll("[data-path]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.path = button.dataset.path;
+      if (state.path === "zh") state.lang = "zh-CN";
+      renderNav();
+    });
+  });
+
   document.querySelector("#sidebar-toggle").addEventListener("click", () => {
     document.body.classList.toggle("nav-collapsed");
   });
@@ -116,16 +143,36 @@ function segmentButton(value, label) {
   return `<button class="segment ${active}" type="button" data-lang="${value}">${label}</button>`;
 }
 
+function pathButton(item) {
+  const active = state.path === item.id ? "active" : "";
+  return `
+    <button class="path-card ${active}" type="button" data-path="${item.id}">
+      <span>${escapeHtml(item.label)}</span>
+      <small>${escapeHtml(item.hint)}</small>
+    </button>
+  `;
+}
+
 function renderNav() {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.classList.toggle("active", button.dataset.lang === state.lang);
+  });
+  document.querySelectorAll("[data-path]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.path === state.path);
   });
 
   const nav = document.querySelector(".nav");
   const docs = filteredDocs();
   const groups = groupDocs(docs);
 
-  nav.innerHTML = Object.entries(groups)
+  const countLabel = `${docs.length} document${docs.length === 1 ? "" : "s"}`;
+
+  nav.innerHTML = `
+    <div class="nav-summary">
+      <strong>${escapeHtml(activePathLabel())}</strong>
+      <span>${countLabel}</span>
+    </div>
+    ${Object.entries(groups)
     .map(([section, sectionDocs]) => `
       <section class="nav-section">
         <h2>${escapeHtml(section)}</h2>
@@ -133,11 +180,13 @@ function renderNav() {
           <button class="nav-item ${state.active?.source === doc.source ? "active" : ""}" type="button" data-source="${escapeHtml(doc.source)}">
             <span>${escapeHtml(doc.title)}</span>
             <small>${escapeHtml(doc.source)}</small>
+            <em>${escapeHtml(pathNames(doc.paths).join(" / "))}</em>
           </button>
         `).join("")}
       </section>
     `)
-    .join("");
+    .join("")}
+  `;
 
   nav.querySelectorAll("[data-source]").forEach((button) => {
     button.addEventListener("click", () => loadDoc(button.dataset.source));
@@ -189,6 +238,16 @@ function renderMeta(doc) {
   const sourceLink = document.querySelector("#source-link");
   sourceLink.href = doc.source;
   sourceLink.textContent = "Open source";
+}
+
+function activePathLabel() {
+  return readingPathLabels.find((item) => item.id === state.path)?.label ?? "All";
+}
+
+function pathNames(paths = []) {
+  return paths
+    .map((path) => readingPathLabels.find((item) => item.id === path)?.label)
+    .filter(Boolean);
 }
 
 function renderToc() {

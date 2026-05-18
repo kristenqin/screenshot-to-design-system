@@ -1,0 +1,109 @@
+# Information Architecture
+
+## Purpose
+
+This document audits the documentation site's structure and defines a clearer information architecture.
+
+It applies the `information-architecture` skill:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+## Problem
+
+The documentation site had a usable but uncomfortable structure.
+
+The sidebar grouped documents by broad buckets:
+
+- Start
+- Project
+- Planning
+- Research
+- Workflow
+- Chinese equivalents
+
+This was technically organized, but it still felt like all documents were mixed together.
+
+## Root Cause
+
+The navigation was organized by document origin and broad file type, not by user task.
+
+A reader usually arrives with one of these questions:
+
+- How do I resume this project?
+- What is this product?
+- What should I do next?
+- What research supports the plan?
+- What rules govern the workflow?
+- What evidence or audit trail exists?
+
+The old navigation made the reader translate those questions into file categories.
+
+## IA Diagnosis
+
+### Flat Navigation Problem
+
+The site exposed 40+ documents in one broad sidebar.
+
+This created too many visible choices and made all docs feel equally important.
+
+### Weak Mental Model Alignment
+
+Labels like "Workflow" and "Planning" are reasonable internally, but they do not fully match the user's intent in the moment.
+
+The user is not always looking for a planning doc. They may be trying to resume, understand, decide, execute, or audit.
+
+### Missing Hub-and-Spoke Structure
+
+The site had individual docs, but not enough reader paths or hub pages.
+
+The reader needed a better high-level route before diving into detail.
+
+### Mixed Operational and Product Docs
+
+Product docs, process docs, logs, handoffs, and Chinese companion docs appeared in the same visual weight.
+
+This made the navigation feel dense even though the content itself was useful.
+
+## New Taxonomy
+
+The docs site now uses reading paths as a faceted layer above document sections.
+
+### Reading Paths
+
+| Path | User question | Typical docs |
+| --- | --- | --- |
+| Resume | Where do I start right now? | Start Here, Handoff, Tasks |
+| Understand | What is this project? | README, PRD, Workflow Overview |
+| Plan | What should happen next? | Tasks, Issue Breakdown, Roadmap |
+| Research | What evidence supports this? | Tools, Clustering, Tokens |
+| Operate | What rules govern work? | Documentation System, Skill Policy, Session Continuity |
+| Audit | What happened and why? | Skill Logs, Retrospectives, Handoff |
+| 中文 | Chinese-facing product control | Chinese companion docs |
+
+## Implementation Decision
+
+The sidebar should support both:
+
+- reading path filters
+- language filters
+
+Document sections remain available, but they are secondary to the user's current task.
+
+## Success Criteria
+
+The improved navigation should make it easier to answer:
+
+- I am opening a new session. What should I read first?
+- I want to understand the product. Where do I start?
+- I want to execute the next task. Which docs matter?
+- I want to review whether the workflow is trustworthy. Where is the audit trail?
+- I want Chinese context. How do I narrow to that layer?
+
+## Future Improvements
+
+- Add a dedicated hub page for each reading path.
+- Add breadcrumbs for source document relationships.
+- Add visible document metadata such as `canonical`, `companion`, `audit`, `handoff`.
+- Add lightweight tree testing tasks for navigation validation.
+- Add search result snippets from document body, not only title and summary.
+

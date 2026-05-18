@@ -272,5 +272,49 @@ Deviations:
 
 Verification:
 
-- `npm run build` prepared 43 documentation files.
+- `npm run build` prepared 45 documentation files after the IA update.
 - Browser verification confirmed the docs site renders and Chinese navigation works.
+
+## 2026-05-18 - `information-architecture`
+
+Task:
+
+- Audit and improve the documentation site's navigation structure.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The user reported that the sidebar felt mixed together and structurally uncomfortable.
+
+Workflow steps followed:
+
+- Read local `SKILL.md`.
+- Audited the current navigation structure.
+- Diagnosed the issue as flat navigation, weak mental-model alignment, missing hub-and-spoke structure, and mixed product/process/audit content.
+- Added reading-path metadata to docs.
+- Updated the docs site navigation to support task-based reading paths.
+- Added bilingual IA documentation.
+
+Output artifacts:
+
+- [Information Architecture](information-architecture.md)
+- [Chinese Information Architecture](zh-CN/information-architecture.md)
+- Updated docs site navigation in `src/main.js`
+- Updated docs site styles in `src/styles.css`
+
+Deviations:
+
+- No real-user card sort or tree test was run yet.
+- The IA update uses expert review and the user's stated discomfort as input.
+
+Verification:
+
+- `npm run build` prepared 45 documentation files.
+- Browser verification confirmed:
+  - All path shows 45 documents.
+  - Plan path narrows to 14 documents.
+  - Chinese path narrows to 22 documents and activates the Chinese language filter.
+  - Information Architecture appears in navigation.

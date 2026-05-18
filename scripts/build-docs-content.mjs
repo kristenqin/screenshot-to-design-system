@@ -27,7 +27,8 @@ const docs = [
   { source: "docs/session-continuity.md", section: "Workflow", lang: "en", order: 44 },
   { source: "docs/workflow-retrospective.md", section: "Workflow", lang: "en", order: 45 },
   { source: "docs/docs-site.md", section: "Workflow", lang: "en", order: 46 },
-  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 47 },
+  { source: "docs/information-architecture.md", section: "Workflow", lang: "en", order: 47 },
+  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 48 },
 
   { source: "docs/zh-CN/index.md", section: "中文入口", lang: "zh-CN", order: 100 },
   { source: "docs/zh-CN/readme.md", section: "中文项目", lang: "zh-CN", order: 101 },
@@ -49,8 +50,58 @@ const docs = [
   { source: "docs/zh-CN/session-continuity.md", section: "中文工作流", lang: "zh-CN", order: 134 },
   { source: "docs/zh-CN/workflow-retrospective.md", section: "中文工作流", lang: "zh-CN", order: 135 },
   { source: "docs/zh-CN/docs-site.md", section: "中文工作流", lang: "zh-CN", order: 136 },
-  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 137 }
+  { source: "docs/zh-CN/information-architecture.md", section: "中文工作流", lang: "zh-CN", order: 137 },
+  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 138 }
 ];
+
+const readingPaths = {
+  "START_HERE.md": ["resume", "orient"],
+  ".codex/handoffs/current.md": ["resume", "audit"],
+  "README.md": ["orient"],
+  "TASKS.md": ["resume", "plan"],
+  "docs/prd.md": ["orient", "plan"],
+  "docs/issue-breakdown-draft.md": ["plan"],
+  "docs/project-management.md": ["plan", "operate"],
+  "docs/mvp-roadmap.md": ["plan"],
+  "docs/next-tasks.md": ["resume", "plan"],
+  "docs/workflow-overview.md": ["orient", "research"],
+  "docs/existing-tools-and-algorithms.md": ["research"],
+  "docs/component-clustering-strategy.md": ["research"],
+  "docs/design-token-extraction.md": ["research"],
+  "docs/open-questions.md": ["research", "plan"],
+  "docs/documentation-system.md": ["operate"],
+  "docs/document-engineering-workflow.md": ["operate"],
+  "docs/skill-usage-policy.md": ["operate", "audit"],
+  "docs/skill-usage-log.md": ["audit"],
+  "docs/session-continuity.md": ["resume", "operate"],
+  "docs/workflow-retrospective.md": ["operate", "audit"],
+  "docs/docs-site.md": ["operate"],
+  "docs/information-architecture.md": ["operate", "audit"],
+  "docs/skills-research.md": ["research", "audit"],
+
+  "docs/zh-CN/index.md": ["resume", "orient", "zh"],
+  "docs/zh-CN/readme.md": ["orient", "zh"],
+  "docs/zh-CN/tasks.md": ["resume", "plan", "zh"],
+  "docs/zh-CN/prd.md": ["orient", "plan", "zh"],
+  "docs/zh-CN/issue-breakdown-draft.md": ["plan", "zh"],
+  "docs/zh-CN/project-management.md": ["plan", "operate", "zh"],
+  "docs/zh-CN/mvp-roadmap.md": ["plan", "zh"],
+  "docs/zh-CN/next-tasks.md": ["resume", "plan", "zh"],
+  "docs/zh-CN/workflow-overview.md": ["orient", "research", "zh"],
+  "docs/zh-CN/existing-tools-and-algorithms.md": ["research", "zh"],
+  "docs/zh-CN/component-clustering-strategy.md": ["research", "zh"],
+  "docs/zh-CN/design-token-extraction.md": ["research", "zh"],
+  "docs/zh-CN/open-questions.md": ["research", "plan", "zh"],
+  "docs/zh-CN/documentation-system.md": ["operate", "zh"],
+  "docs/zh-CN/document-engineering-workflow.md": ["operate", "zh"],
+  "docs/zh-CN/skill-usage-policy.md": ["operate", "audit", "zh"],
+  "docs/zh-CN/skill-usage-log.md": ["audit", "zh"],
+  "docs/zh-CN/session-continuity.md": ["resume", "operate", "zh"],
+  "docs/zh-CN/workflow-retrospective.md": ["operate", "audit", "zh"],
+  "docs/zh-CN/docs-site.md": ["operate", "zh"],
+  "docs/zh-CN/information-architecture.md": ["operate", "audit", "zh"],
+  "docs/zh-CN/skills-research.md": ["research", "audit", "zh"]
+};
 
 function titleFromMarkdown(markdown, fallback) {
   const heading = markdown.match(/^#\s+(.+)$/m);
@@ -86,6 +137,7 @@ for (const doc of docs) {
     ...doc,
     title: titleFromMarkdown(markdown, doc.source),
     summary: summaryFromMarkdown(markdown),
+    paths: readingPaths[doc.source] ?? ["reference"],
     contentPath: posix.join("/content", doc.source.split("/").map(encodeURIComponent).join("/"))
   });
 }
