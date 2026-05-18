@@ -156,3 +156,41 @@ Verification:
 
 - Pending final diff review and commit.
 
+## 2026-05-18 - `session-handoff`
+
+Task:
+
+- Define a startup and handoff protocol for switching into this project from a fresh Codex session.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/session-handoff/SKILL.md`
+
+Reason:
+
+- Reduce context recovery cost when opening a new session pointed at this project path.
+
+Workflow steps followed:
+
+- Read local `SKILL.md`.
+- Adapted the handoff concept to a stable project-local handoff file.
+- Created a startup checklist.
+- Created a current handoff file.
+- Added new-session bootstrap prompt.
+- Added bilingual companion documentation.
+
+Output artifacts:
+
+- [START_HERE.md](../START_HERE.md)
+- [Session Continuity](session-continuity.md)
+- [Current Handoff](../.codex/handoffs/current.md)
+- [Chinese Session Continuity](zh-CN/session-continuity.md)
+
+Deviations:
+
+- Did not use the upstream `.claude/handoffs/` timestamped file structure.
+- This project uses `.codex/handoffs/current.md` as a stable entry point because new sessions need one predictable file to read.
+
+Verification:
+
+- Pending final diff review and commit.

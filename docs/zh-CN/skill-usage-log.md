@@ -114,3 +114,36 @@ Skill 来源：
 
 - 待最终 diff review 和 commit。
 
+## 2026-05-18 - `session-handoff`
+
+任务：
+
+- 为新 Codex session 切换到本项目建立启动和 handoff 流程。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/session-handoff/SKILL.md`
+
+遵循步骤：
+
+- 读取本地 `SKILL.md`。
+- 借鉴 handoff 概念。
+- 创建固定启动入口。
+- 创建当前 handoff 文件。
+- 添加新 session 启动提示词。
+- 添加中英文文档。
+
+输出：
+
+- [START_HERE.md](../../START_HERE.md)
+- [Session 连续性](session-continuity.md)
+- [.codex/handoffs/current.md](../../.codex/handoffs/current.md)
+
+偏离：
+
+- 没有采用上游 `.claude/handoffs/` 时间戳文件结构。
+- 本项目使用 `.codex/handoffs/current.md` 作为固定入口，降低新 session 恢复成本。
+
+验证：
+
+- 待最终 diff review 和 commit。

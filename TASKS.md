@@ -33,6 +33,7 @@ The next concrete implementation task is:
 | T-003 | Write implementation plan for UI AST run | AFK | `project-planner` | T-001 | [Project Management Workflow](docs/project-management.md) |
 | T-013 | Decide whether to initialize this documentation project as a standalone Git repo | HITL | `commit-work` | None | [Document Engineering Workflow](docs/document-engineering-workflow.md) |
 | T-014 | Maintain skill usage policy and audit log | AFK | `commit-work` | None | [Skill Usage Policy](docs/skill-usage-policy.md) |
+| T-015 | Maintain session startup and handoff docs | AFK | `session-handoff`, `commit-work` | None | [Session Continuity](docs/session-continuity.md) |
 
 ## Backlog
 
@@ -61,6 +62,7 @@ The next concrete implementation task is:
 | D-007 | Research Skills.sh project-management skills | [Project Management Workflow](docs/project-management.md) |
 | D-008 | Define Git-style documentation workflow | [Document Engineering Workflow](docs/document-engineering-workflow.md) |
 | D-009 | Define auditable skill usage workflow | [Skill Usage Policy](docs/skill-usage-policy.md) |
+| D-010 | Define new-session startup and handoff workflow | [Session Continuity](docs/session-continuity.md) |
 
 ## Operating Rules
 
@@ -71,3 +73,4 @@ The next concrete implementation task is:
 - Do not promote component candidates into final components without review until the pipeline proves reliable.
 - Treat documentation changes like code changes: keep them scoped, review diffs, update bilingual companions, and record why the change exists.
 - When a task lists a required skill, record actual usage in [Skill Usage Log](docs/skill-usage-log.md), including any deviations.
+- When ending a meaningful work session, update [.codex/handoffs/current.md](.codex/handoffs/current.md) so a new session can resume quickly.

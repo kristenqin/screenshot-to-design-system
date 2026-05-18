@@ -44,6 +44,12 @@ User screenshots
 
 ## Documents
 
+New session startup:
+
+- Start here: [START_HERE.md](START_HERE.md)
+- Current handoff: [.codex/handoffs/current.md](.codex/handoffs/current.md)
+- Session continuity workflow: [Session Continuity](docs/session-continuity.md)
+
 Language:
 
 - English source docs live at the project root and `docs/`.
@@ -53,6 +59,8 @@ Language:
 - Skill usage policy and audit log live in [Skill Usage Policy](docs/skill-usage-policy.md) and [Skill Usage Log](docs/skill-usage-log.md).
 
 - [Task Board](TASKS.md)
+- [Start Here](START_HERE.md)
+- [Session Continuity](docs/session-continuity.md)
 - [Workflow Overview](docs/workflow-overview.md)
 - [Existing Tools and Algorithms](docs/existing-tools-and-algorithms.md)
 - [Component Clustering Strategy](docs/component-clustering-strategy.md)
