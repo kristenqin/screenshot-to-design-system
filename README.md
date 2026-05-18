@@ -50,6 +50,7 @@ Language:
 - Chinese companion docs live in [docs/zh-CN](docs/zh-CN/index.md).
 - Documentation system rules live in [Documentation System](docs/documentation-system.md).
 - Git-style documentation workflow lives in [Document Engineering Workflow](docs/document-engineering-workflow.md).
+- Skill usage policy and audit log live in [Skill Usage Policy](docs/skill-usage-policy.md) and [Skill Usage Log](docs/skill-usage-log.md).
 
 - [Task Board](TASKS.md)
 - [Workflow Overview](docs/workflow-overview.md)
@@ -60,6 +61,8 @@ Language:
 - [Issue Breakdown Draft](docs/issue-breakdown-draft.md)
 - [Project Management Workflow](docs/project-management.md)
 - [Document Engineering Workflow](docs/document-engineering-workflow.md)
+- [Skill Usage Policy](docs/skill-usage-policy.md)
+- [Skill Usage Log](docs/skill-usage-log.md)
 - [MVP Roadmap](docs/mvp-roadmap.md)
 - [Next Tasks](docs/next-tasks.md)
 - [Skills Research](docs/skills-research.md)

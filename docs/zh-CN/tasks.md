@@ -12,11 +12,12 @@
 
 ## Next
 
-| ID | 任务 | 类型 | 依赖 | 来源 |
-| --- | --- | --- | --- | --- |
-| T-001 | 确认或调整 issue 垂直切片拆分 | HITL | 无 | [Issue 拆分草案](issue-breakdown-draft.md) |
-| T-002 | 创建第一个 validated UI AST run | AFK | 建议先完成 T-001 | [Issue 1](issue-breakdown-draft.md) |
-| T-003 | 为 UI AST run 写实施计划 | AFK | T-001 | [项目管理工作流](project-management.md) |
+| ID | 任务 | 类型 | Required Skill | 依赖 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| T-001 | 确认或调整 issue 垂直切片拆分 | HITL | `to-issues` | 无 | [Issue 拆分草案](issue-breakdown-draft.md) |
+| T-002 | 创建第一个 validated UI AST run | AFK | `project-planner`, `verification-before-completion` | 建议先完成 T-001 | [Issue 1](issue-breakdown-draft.md) |
+| T-003 | 为 UI AST run 写实施计划 | AFK | `project-planner` | T-001 | [项目管理工作流](project-management.md) |
+| T-014 | 维护 skill 使用规范和审计日志 | AFK | `commit-work` | 无 | [Skill 使用规范](skill-usage-policy.md) |
 
 ## Backlog
 
@@ -39,6 +40,7 @@
 - 使用 `to-prd` 生成 PRD
 - 使用 `to-issues` 生成 issue 拆分草案
 - 调研 Skills.sh 项目管理 skills
+- 建立 skill 使用可审计机制
 
 ## 规则
 
@@ -46,4 +48,4 @@
 - 开始或完成任务时更新任务状态。
 - 复杂任务的详细计划放到 `docs/plans/`。
 - MVP 阶段继续把豆包线稿生图当作外部黑盒能力。
-
+- 如果任务声明了 Required Skill，必须在 [Skill 使用日志](skill-usage-log.md) 中记录实际使用证据。

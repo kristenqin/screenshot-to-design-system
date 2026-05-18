@@ -17,6 +17,8 @@
 - [项目管理工作流](project-management.md)
 - [文档系统](documentation-system.md)
 - [文档工程工作流](document-engineering-workflow.md)
+- [Skill 使用规范](skill-usage-policy.md)
+- [Skill 使用日志](skill-usage-log.md)
 - [MVP 路线图](mvp-roadmap.md)
 - [下一步任务](next-tasks.md)
 - [Skills 调研](skills-research.md)
