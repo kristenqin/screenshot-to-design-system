@@ -584,7 +584,8 @@ const structureSubgroups = {
       sources: [
         "docs/concept-map-research.md",
         "docs/obsidian-graph-open-source-research.md",
-        "docs/mind-map-library-evaluation.md"
+        "docs/mind-map-library-evaluation.md",
+        "docs/navigation-map-research.md"
       ]
     },
     {
@@ -635,7 +636,8 @@ const structureSubgroups = {
       sources: [
         "docs/zh-CN/concept-map-research.md",
         "docs/zh-CN/obsidian-graph-open-source-research.md",
-        "docs/zh-CN/mind-map-library-evaluation.md"
+        "docs/zh-CN/mind-map-library-evaluation.md",
+        "docs/zh-CN/navigation-map-research.md"
       ]
     },
     {
@@ -691,6 +693,7 @@ const structureDocLabels = {
   "docs/concept-map-research.md": "Concept Map",
   "docs/obsidian-graph-open-source-research.md": "Obsidian",
   "docs/mind-map-library-evaluation.md": "Mind Map",
+  "docs/navigation-map-research.md": "Map Nav",
   "docs/module-governance-first.md": "Module First",
   "docs/reuse-first-discovery-gate.md": "Reuse Gate",
   "docs/module-passports/documentation-system.md": "Docs Passport",
@@ -712,6 +715,7 @@ const structureDocLabels = {
   "docs/zh-CN/concept-map-research.md": "概念图",
   "docs/zh-CN/obsidian-graph-open-source-research.md": "Obsidian",
   "docs/zh-CN/mind-map-library-evaluation.md": "思维导图",
+  "docs/zh-CN/navigation-map-research.md": "地图导航",
   "docs/zh-CN/module-governance-first.md": "模块优先",
   "docs/zh-CN/reuse-first-discovery-gate.md": "复用门禁",
   "docs/zh-CN/module-passports/documentation-system.md": "文档 Passport",

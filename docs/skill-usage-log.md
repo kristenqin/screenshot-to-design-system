@@ -823,3 +823,41 @@ Verification:
   - Chinese navigation groups render as 入口, 项目, 规划, 研究, 文档运营, and 模块 Passport.
   - Chinese Structure Tree renders 28 docs and 45 tree nodes.
   - 中文入口, 中文项目, 中文规划, 中文研究, 中文工作流, and 中文模块 Passport no longer appear as visible nodes or navigation groups in the Chinese view.
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture`
+
+Task:
+
+- Document the research for using the Structure Tree mind map as the docs-site navigation model.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The navigation research affects long-term docs-site architecture and should be retained as a project asset instead of only living in chat.
+
+Workflow steps followed:
+
+- Compared Mind Elixir, Markmap, jsTree, Fancytree, React Flow, and the browser History API.
+- Evaluated whether the Structure Tree should replace the traditional sidebar immediately or first become a primary map navigator.
+- Recommended Mind Elixir plus a thin Navigation Adapter plus the browser History API.
+- Added bilingual research docs and registered them in the docs manifest.
+- Connected the research docs to the Structure Views topic in the Structure Tree.
+
+Output artifacts:
+
+- Added [Navigation Map Research](navigation-map-research.md)
+- Added [Chinese Navigation Map Research](zh-CN/navigation-map-research.md)
+- Updated `.agents/DECISIONS/structure-map.md`
+- Updated `scripts/build-docs-content.mjs`
+- Updated `src/main.js`
+
+Decision:
+
+- Do not introduce a new primary navigation library yet.
+- Reuse Mind Elixir for the visual mind-map shell.
+- Use the browser History API for back, forward, and reloadable URL state.
+- Build only the project-specific Navigation Adapter.

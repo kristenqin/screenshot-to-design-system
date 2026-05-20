@@ -32,6 +32,19 @@ The renderer is no longer the bottleneck. The tree content now follows a deeper 
 - Dense Workflow sections are split into topic groups instead of exposing 14 document leaves at one level.
 - Document leaves use short concept labels in the tree; full titles remain available as metadata.
 
+## Navigation Direction
+
+See [Navigation Map Research](../../docs/navigation-map-research.md).
+
+The Structure Tree should become the primary navigation model before the traditional sidebar is removed.
+
+Recommended architecture:
+
+- reuse Mind Elixir for the visual mind-map navigation shell
+- use a thin Navigation Adapter for document-specific routing semantics
+- use the browser History API for back, forward, and reloadable URL state
+- keep the sidebar/list as fallback until the map navigator is proven stable
+
 ## Deferred
 - Editable node operations.
 - Collapsing/expanding branches.

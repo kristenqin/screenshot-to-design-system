@@ -765,3 +765,41 @@ Skill 来源：
   - 中文视图下导航分组显示为入口、项目、规划、研究、文档运营、模块 Passport。
   - 中文 Structure Tree 显示 28 份文档和 45 个树节点。
   - 中文入口、中文项目、中文规划、中文研究、中文工作流、中文模块 Passport 不再作为可见节点或导航分组出现。
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture`
+
+任务：
+
+- 将“使用 Structure Tree 思维导图作为文档站导航模型”的调研沉淀为文档资产。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 这次导航调研会影响文档站长期架构，不应该只停留在聊天上下文中。
+
+遵循步骤：
+
+- 对比 Mind Elixir、Markmap、jsTree、Fancytree、React Flow 和浏览器 History API。
+- 评估是否应立刻删除传统 sidebar，还是先让 Structure Tree 成为主 map navigator。
+- 推荐 Mind Elixir + Navigation Adapter + Browser History API。
+- 新增中英文调研文档，并接入 docs manifest。
+- 将调研文档挂到 Structure Tree 的 Structure Views / 结构视图 topic 下。
+
+输出：
+
+- 新增 [导航地图调研](navigation-map-research.md)
+- 新增 [英文 Navigation Map Research](../navigation-map-research.md)
+- 更新 `.agents/DECISIONS/structure-map.md`
+- 更新 `scripts/build-docs-content.mjs`
+- 更新 `src/main.js`
+
+决策：
+
+- 暂时不引入新的主导航库。
+- 继续复用 Mind Elixir 作为视觉 mind-map 壳。
+- 使用浏览器 History API 处理前进、后退和可恢复 URL 状态。
+- 只实现项目特有的 Navigation Adapter。
