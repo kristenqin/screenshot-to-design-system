@@ -122,3 +122,38 @@ The docs site should borrow this interaction model:
 - The right panel carries the details, so the graph canvas can stay visually quiet.
 
 This makes the graph closer to a coupling and relationship inspection tool, rather than a diagram that attempts to label every document at once.
+
+## Obsidian-Style Interaction Applied
+
+The current docs site applies the Obsidian interaction model through reusable Cytoscape.js behavior rather than a new custom renderer.
+
+Discovery gate:
+
+- Problem: make the knowledge graph readable and controllable in the same spirit as Obsidian Graph View.
+- Existing options checked: Obsidian Graph View as a product reference, Cytoscape.js as the already-adopted renderer, Sigma.js as a future large-graph option.
+- Recommended path: keep Cytoscape.js and add Obsidian-style controls around it.
+- Why not self-build: force-directed rendering, pan/zoom, selection, and graph traversal are already handled by Cytoscape.
+- Verification: browser checks should confirm global/local mode, local depth, graph settings, and node/edge counts.
+- Reversibility: controls are plain state and can be replaced without changing the Markdown manifest.
+
+Implemented interaction controls:
+
+- `Scope`: Chinese decision graph, English execution graph, or all-audit graph.
+- `View`: global graph or local graph around the active document.
+- `Local depth`: 1, 2, or 3 hops from the active document.
+- `Graph settings`: labels, arrows, bilingual links, path links, node size, link thickness, repel force, and link distance.
+
+Default behavior now keeps the graph quieter:
+
+- Document reference links are visible by default.
+- Bilingual links are available but hidden by default.
+- Reading-path links are available but hidden by default.
+- Labels are hidden by default and can be enabled when the user wants a more literal map.
+
+This gives the user an Obsidian-like exploration loop:
+
+1. Start from the global graph.
+2. Switch to a language scope for decision or execution work.
+3. Switch to local graph when inspecting one document's neighborhood.
+4. Increase local depth only when the neighborhood is too narrow.
+5. Turn on labels, arrows, path links, or bilingual links only when needed.

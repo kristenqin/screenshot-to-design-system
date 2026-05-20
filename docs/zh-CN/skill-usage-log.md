@@ -459,3 +459,46 @@ Skill 来源：
 
 - `npm run build` 成功准备 53 份文档和 344 条 graph edges。
 - 浏览器验证确认侧边栏显示 53 份文档，中文复用优先门禁页面可以打开，并显示触发条件、必须遵循的顺序和项目应用示例。
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+任务：
+
+- 将 Obsidian 风格交互应用到文档知识图谱。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户希望知识图谱交互更接近 Obsidian，可以查看局部图，并能控制视觉密度。
+
+遵循步骤：
+
+- 先运行复用优先发现门禁。
+- 保留 Cytoscape.js 作为可复用图渲染器，没有重新自研渲染器。
+- 将 Obsidian Graph View 作为产品参考，重点借鉴 global/local graph、filters、display controls、force controls 和 local depth。
+- 在现有 manifest graph 外层增加交互控制。
+- 在本地浏览器文档站完成验证。
+
+输出：
+
+- 更新 [概念图调研](concept-map-research.md)
+- 更新 [文档站](docs-site.md)
+- 更新 `src/main.js`
+- 更新 `src/styles.css`
+
+偏离：
+
+- 没有新增图渲染依赖，因为 Cytoscape.js 已经覆盖本次需要的渲染和遍历能力。
+
+验证：
+
+- `npm run build` 成功准备 53 份文档和 344 条 graph edges。
+- 浏览器验证确认：
+  - global graph 渲染 53 个节点和 227 条主要引用边
+  - local graph 在 depth 1 时收敛到 8 个节点和 20 条边
+  - graph settings 暴露 4 个 toggle 和 4 个 slider
+  - label toggle 可以改变节点标签透明度

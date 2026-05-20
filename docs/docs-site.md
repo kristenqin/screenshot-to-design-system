@@ -77,6 +77,7 @@ package-lock.json
 - Concept Map scope switcher: Chinese decision graph, English execution graph, and full audit graph
 - Low-value relationship types are visually downweighted so strong document references are easier to inspect
 - Obsidian-inspired graph rendering: circular nodes, hidden default labels, hover/selection neighborhoods, and quieter canvas density
+- Obsidian-style graph controls: global/local view, local depth, labels, arrows, bilingual links, path links, node size, link thickness, repel force, and link distance
 
 ## Verification
 
@@ -89,10 +90,12 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 51 documentation files appear in navigation
+- 53 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
-- Concept Map view renders with Cytoscape canvas, 57 nodes, and 321 relationship edges
+- Concept Map view renders with Cytoscape canvas; the default global graph shows 53 document nodes and 227 primary reference edges
+- Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently
+- Graph settings expose 4 toggles and 4 sliders
 - Chinese language filter shows Chinese docs
 - Chinese docs index opens correctly
 - table of contents is generated for headings

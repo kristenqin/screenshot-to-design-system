@@ -59,16 +59,19 @@ public/vendor/
 - Concept Map scope 切换：中文决策图、English execution graph、全量审计图
 - 低价值关系会被视觉降权，让强文档引用更容易检查
 - 借鉴 Obsidian 的图谱渲染：圆形节点、默认隐藏标签、hover/selection 邻域，以及更安静的画布密度
+- 借鉴 Obsidian 的图谱控制：global/local view、local depth、labels、arrows、bilingual links、path links、node size、link thickness、repel force、link distance
 
 ## 已验证
 
 已在本地浏览器验证：
 
 - 默认打开 `START_HERE.md`
-- 导航里有 51 份文档
+- 导航里有 53 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
-- Concept Map 视图可以用 Cytoscape canvas 渲染 57 个节点和 321 条关系边
+- Concept Map 视图可以用 Cytoscape canvas 渲染；默认 global graph 显示 53 个文档节点和 227 条主要引用边
+- Local graph mode 在 depth 1 时可将当前文档邻域收敛到 8 个节点和 20 条边
 - 中文和英文 graph scope 可以独立切换
+- Graph settings 暴露 4 个 toggle 和 4 个 slider
 - 中文筛选可用
 - 中文文档入口可打开
 - 页面目录可生成

@@ -10,7 +10,20 @@ const state = {
   lang: "all",
   path: "all",
   view: "doc",
-  headings: []
+  headings: [],
+  graphSettings: {
+    mode: "global",
+    depth: 1,
+    showLabels: false,
+    showArrows: false,
+    showPathEdges: false,
+    showCompanions: false,
+    nodeScale: 1,
+    linkScale: 1,
+    repel: 1.25,
+    distance: 1.2
+  },
+  graphSettingsOpen: false
 };
 
 const readingPathLabels = [
@@ -304,13 +317,44 @@ async function renderConceptMap() {
         <p class="eyebrow">Concept Map</p>
         <h1>Document Relationship Graph</h1>
       </div>
-      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Drag nodes, zoom the canvas, or select a node to inspect its neighborhood.</p>
+      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Drag nodes, zoom the canvas, select a node to inspect its neighborhood, or double-click to open it.</p>
     </section>
-    <div class="graph-controls" aria-label="Graph scope">
-      ${graphScopeButton("zh-CN", "中文决策图", "Decision")}
-      ${graphScopeButton("en", "English execution", "Agent")}
-      ${graphScopeButton("all", "All audit", "Coverage")}
+    <div class="graph-controls" aria-label="Graph controls">
+      <div class="graph-control-group">
+        <p class="filter-title">Scope</p>
+        <div class="graph-button-grid">
+          ${graphScopeButton("zh-CN", "中文决策图", "Decision")}
+          ${graphScopeButton("en", "English execution", "Agent")}
+          ${graphScopeButton("all", "All audit", "Coverage")}
+        </div>
+      </div>
+      <div class="graph-control-group">
+        <p class="filter-title">View</p>
+        <div class="graph-button-grid compact">
+          ${graphModeButton("global", "Global", "All visible")}
+          ${graphModeButton("local", "Local", `Depth ${state.graphSettings.depth}`)}
+        </div>
+      </div>
+      <div class="graph-control-group">
+        <p class="filter-title">Local depth</p>
+        <div class="graph-depth-group" aria-label="Local graph depth">
+          ${[1, 2, 3].map(depthButton).join("")}
+        </div>
+      </div>
     </div>
+    <details class="graph-settings" ${state.graphSettingsOpen ? "open" : ""}>
+      <summary>Graph settings</summary>
+      <div class="graph-settings-grid">
+        ${graphToggle("showLabels", "Labels")}
+        ${graphToggle("showArrows", "Arrows")}
+        ${graphToggle("showCompanions", "Bilingual links")}
+        ${graphToggle("showPathEdges", "Path links")}
+        ${graphSlider("nodeScale", "Node size", 0.7, 1.8, 0.1)}
+        ${graphSlider("linkScale", "Link thickness", 0.6, 2, 0.1)}
+        ${graphSlider("repel", "Repel force", 0.7, 2.2, 0.1)}
+        ${graphSlider("distance", "Link distance", 0.7, 2.2, 0.1)}
+      </div>
+    </details>
     <div class="graph-legend" aria-label="Relationship legend">
       <span><i class="legend-dot references"></i>Primary reference</span>
       <span><i class="legend-dot companion"></i>Language companion</span>
@@ -338,6 +382,41 @@ function graphScopeButton(value, label, hint) {
   `;
 }
 
+function graphModeButton(value, label, hint) {
+  const active = state.graphSettings.mode === value ? "active" : "";
+  return `
+    <button class="graph-scope ${active}" type="button" data-graph-mode="${value}">
+      <span>${escapeHtml(label)}</span>
+      <small>${escapeHtml(hint)}</small>
+    </button>
+  `;
+}
+
+function depthButton(depth) {
+  const active = state.graphSettings.depth === depth ? "active" : "";
+  return `<button class="graph-depth ${active}" type="button" data-graph-depth="${depth}">${depth}</button>`;
+}
+
+function graphToggle(key, label) {
+  const checked = state.graphSettings[key] ? "checked" : "";
+  return `
+    <label class="graph-toggle">
+      <input type="checkbox" data-graph-setting="${key}" ${checked} />
+      <span>${escapeHtml(label)}</span>
+    </label>
+  `;
+}
+
+function graphSlider(key, label, min, max, step) {
+  const value = state.graphSettings[key];
+  return `
+    <label class="graph-slider">
+      <span>${escapeHtml(label)}</span>
+      <input type="range" min="${min}" max="${max}" step="${step}" value="${value}" data-graph-setting="${key}" />
+    </label>
+  `;
+}
+
 function bindGraphScopeControls() {
   document.querySelectorAll("[data-graph-scope]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -345,6 +424,30 @@ function bindGraphScopeControls() {
       renderNav();
       renderConceptMap().catch(showGraphError);
     });
+  });
+  document.querySelectorAll("[data-graph-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.graphSettings.mode = button.dataset.graphMode;
+      renderConceptMap().catch(showGraphError);
+    });
+  });
+  document.querySelectorAll("[data-graph-depth]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.graphSettings.depth = Number(button.dataset.graphDepth);
+      state.graphSettings.mode = "local";
+      renderConceptMap().catch(showGraphError);
+    });
+  });
+  document.querySelectorAll("[data-graph-setting]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const key = input.dataset.graphSetting;
+      state.graphSettings[key] = input.type === "checkbox" ? input.checked : Number(input.value);
+      state.graphSettingsOpen = true;
+      renderConceptMap().catch(showGraphError);
+    });
+  });
+  document.querySelector(".graph-settings")?.addEventListener("toggle", (event) => {
+    state.graphSettingsOpen = event.currentTarget.open;
   });
 }
 
@@ -408,8 +511,8 @@ async function mountCytoscapeGraph(graph) {
       padding: 76,
       nodeOverlap: 24,
       componentSpacing: 120,
-      nodeRepulsion: 24000,
-      idealEdgeLength: (edge) => edge.data("type") === "references" ? 220 : 260,
+      nodeRepulsion: 24000 * state.graphSettings.repel,
+      idealEdgeLength: (edge) => (edge.data("type") === "references" ? 220 : 260) * state.graphSettings.distance,
       edgeElasticity: (edge) => edge.data("type") === "references" ? 0.18 : 0.08,
       nestingFactor: 1.15,
       gravity: 0.08,
@@ -471,7 +574,7 @@ function graphDegreeByNode(graph) {
 
 function graphNodeSize(node, degree) {
   const base = node.kind === "path" ? 18 : 11;
-  return Math.round(base + Math.min(20, degree * 1.35));
+  return Math.round((base + Math.min(20, degree * 1.35)) * state.graphSettings.nodeScale);
 }
 
 function edgeWeight(edge) {
@@ -509,7 +612,7 @@ function graphStyles() {
         "text-halign": "center",
         "text-margin-y": -11,
         "text-max-width": 92,
-        "text-opacity": 0,
+        "text-opacity": state.graphSettings.showLabels ? 0.82 : 0,
         "text-valign": "top",
         "text-wrap": "wrap",
         "width": "data(size)"
@@ -540,19 +643,20 @@ function graphStyles() {
         "line-color": "#9aacbf",
         "opacity": 0.28,
         "target-arrow-color": "#9aacbf",
-        "target-arrow-shape": "none",
-        "width": 0.9
+        "target-arrow-shape": state.graphSettings.showArrows ? "triangle" : "none",
+        "width": 0.9 * state.graphSettings.linkScale
       }
     },
     {
       selector: "edge.path",
       style: {
+        "display": state.graphSettings.showPathEdges ? "element" : "none",
         "label": "",
         "line-color": "#1769aa",
         "target-arrow-color": "#1769aa",
-        "width": 0.45,
+        "width": 0.45 * state.graphSettings.linkScale,
         "opacity": 0.05,
-        "target-arrow-shape": "none"
+        "target-arrow-shape": state.graphSettings.showArrows ? "triangle" : "none"
       }
     },
     {
@@ -561,7 +665,7 @@ function graphStyles() {
         "line-color": "#9a6a2f",
         "line-style": "dashed",
         "target-arrow-color": "#9a6a2f",
-        "width": 0.7,
+        "width": 0.7 * state.graphSettings.linkScale,
         "opacity": 0.12
       }
     },
@@ -570,14 +674,14 @@ function graphStyles() {
       style: {
         "line-color": "#65727e",
         "target-arrow-color": "#65727e",
-        "width": 1.25,
+        "width": 1.25 * state.graphSettings.linkScale,
         "opacity": 0.36
       }
     },
     {
       selector: "edge.ambient",
       style: {
-        "display": state.lang === "all" ? "element" : "none"
+        "display": "element"
       }
     },
     {
@@ -597,14 +701,14 @@ function graphStyles() {
       selector: ".preview",
       style: {
         "opacity": 1,
-        "text-opacity": 0
+        "text-opacity": state.graphSettings.showLabels ? 1 : 0
       }
     },
     {
       selector: ".neighborhood",
       style: {
         "opacity": 1,
-        "text-opacity": 0
+        "text-opacity": state.graphSettings.showLabels ? 1 : 0
       }
     },
     {
@@ -623,7 +727,7 @@ function graphStyles() {
       style: {
         "opacity": 1,
         "target-arrow-shape": "triangle",
-        "width": 2.4
+        "width": 2.4 * state.graphSettings.linkScale
       }
     }
   ];
@@ -642,17 +746,61 @@ function visibleGraph() {
   const docIds = new Set(docs.map((doc) => doc.source));
   const pathIds = new Set();
 
-  for (const doc of docs) {
-    for (const path of doc.paths ?? []) {
-      if (path !== "zh") pathIds.add(`path:${path}`);
+  if (state.graphSettings.showPathEdges) {
+    for (const doc of docs) {
+      for (const path of doc.paths ?? []) {
+        if (path !== "zh") pathIds.add(`path:${path}`);
+      }
     }
   }
 
   const visibleIds = new Set([...docIds, ...pathIds]);
-  const nodes = state.graph.nodes.filter((node) => visibleIds.has(node.id));
-  const edges = state.graph.edges.filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target));
+  let nodes = state.graph.nodes.filter((node) => visibleIds.has(node.id));
+  let edges = state.graph.edges.filter((edge) => {
+    if (!visibleIds.has(edge.source) || !visibleIds.has(edge.target)) return false;
+    if (edge.type === "path" && !state.graphSettings.showPathEdges) return false;
+    if (edge.type === "companion" && !state.graphSettings.showCompanions) return false;
+    return true;
+  });
+
+  if (state.graphSettings.mode === "local") {
+    const local = localGraph(nodes, edges);
+    nodes = local.nodes;
+    edges = local.edges;
+  }
 
   return { nodes, edges, docCount: docs.length };
+}
+
+function localGraph(nodes, edges) {
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const root = state.active?.source && nodeIds.has(state.active.source)
+    ? state.active.source
+    : nodes.find((node) => node.kind === "doc")?.id;
+  if (!root) return { nodes, edges };
+
+  const adjacency = new Map(nodes.map((node) => [node.id, new Set()]));
+  for (const edge of edges) {
+    adjacency.get(edge.source)?.add(edge.target);
+    adjacency.get(edge.target)?.add(edge.source);
+  }
+
+  const kept = new Set([root]);
+  const queue = [{ id: root, depth: 0 }];
+  while (queue.length) {
+    const current = queue.shift();
+    if (current.depth >= state.graphSettings.depth) continue;
+    for (const next of adjacency.get(current.id) ?? []) {
+      if (kept.has(next)) continue;
+      kept.add(next);
+      queue.push({ id: next, depth: current.depth + 1 });
+    }
+  }
+
+  return {
+    nodes: nodes.filter((node) => kept.has(node.id)),
+    edges: edges.filter((edge) => kept.has(edge.source) && kept.has(edge.target))
+  };
 }
 
 function renderGraphToc(graph, selectedNode = null, selectedEdge = null) {

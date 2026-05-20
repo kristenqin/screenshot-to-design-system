@@ -517,3 +517,46 @@ Verification:
 
 - `npm run build` prepared 53 documentation files and 344 graph edges.
 - Browser verification confirmed the sidebar lists 53 documents and the Chinese reuse-first gate renders with its trigger conditions, required sequence, and project-specific examples.
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+Task:
+
+- Apply an Obsidian-style interaction model to the documentation knowledge graph.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The user wanted the knowledge graph interaction to feel closer to Obsidian, with local graph inspection and controllable visual density.
+
+Workflow steps followed:
+
+- Ran the reuse-first discovery gate.
+- Kept Cytoscape.js as the reusable graph renderer instead of building a custom renderer.
+- Used Obsidian Graph View as the product reference for global/local graph, filters, display controls, force controls, and local depth.
+- Added graph controls around the existing manifest-driven graph.
+- Verified the interaction in the local browser docs site.
+
+Output artifacts:
+
+- Updated [Concept Map Research](concept-map-research.md)
+- Updated [Docs Site](docs-site.md)
+- Updated `src/main.js`
+- Updated `src/styles.css`
+
+Deviations:
+
+- No new graph dependency was added because Cytoscape.js already covers the needed rendering and traversal behavior.
+
+Verification:
+
+- `npm run build` prepared 53 documentation files and 344 graph edges.
+- Browser verification confirmed:
+  - global graph renders 53 nodes and 227 primary reference edges
+  - local graph at depth 1 narrows to 8 nodes and 20 edges
+  - graph settings expose 4 toggles and 4 sliders
+  - label toggle changes node label opacity
