@@ -504,42 +504,57 @@ function bindMapModeControls() {
 const structureBuckets = [
   {
     id: "start",
-    label: "Start and Resume",
-    hint: "Where a new session regains context",
+    label: "Entry",
+    hint: "Start or resume project context",
     sections: ["Start", "中文入口"]
   },
   {
     id: "definition",
-    label: "Product Definition",
-    hint: "What the project is trying to become",
+    label: "Product",
+    hint: "Problem, scope, and delivery plan",
     sections: ["Project", "Planning", "中文项目", "中文规划"]
   },
   {
     id: "research",
-    label: "Research and Decisions",
-    hint: "Evidence, options, and unresolved questions",
+    label: "Evidence",
+    hint: "Research inputs and technical decisions",
     sections: ["Research", "中文研究"]
   },
   {
     id: "operations",
-    label: "Document Operations",
-    hint: "How the documentation system is governed",
+    label: "Operating Model",
+    hint: "How AI collaboration and docs are governed",
     sections: ["Workflow", "中文工作流"]
   },
   {
     id: "modules",
-    label: "Reusable Modules",
-    hint: "Independent capabilities that can be governed separately",
+    label: "Modules",
+    hint: "Reusable capabilities with independent ownership",
     sections: ["Module Passports", "中文模块 Passport"]
   }
 ];
+
+const structureSectionLabels = {
+  Start: "Session Entry",
+  Project: "Product Context",
+  Planning: "Work Plan",
+  Research: "Technical Research",
+  Workflow: "Documentation Ops",
+  "Module Passports": "Module Passport",
+  中文入口: "中文入口",
+  中文项目: "中文项目",
+  中文规划: "中文规划",
+  中文研究: "中文研究",
+  中文工作流: "文档运营",
+  "中文模块 Passport": "模块 Passport"
+};
 
 const structureSubgroups = {
   Workflow: [
     {
       id: "system",
-      label: "Docs System",
-      hint: "Reader-facing documentation experience",
+      label: "Reading System",
+      hint: "Docs site, navigation, and IA",
       sources: [
         "docs/documentation-system.md",
         "docs/docs-site.md",
@@ -548,8 +563,8 @@ const structureSubgroups = {
     },
     {
       id: "map",
-      label: "Map Experience",
-      hint: "Graph and tree interaction decisions",
+      label: "Structure Views",
+      hint: "Tree, graph, and map rendering decisions",
       sources: [
         "docs/concept-map-research.md",
         "docs/obsidian-graph-open-source-research.md",
@@ -558,8 +573,8 @@ const structureSubgroups = {
     },
     {
       id: "collaboration",
-      label: "Collaboration",
-      hint: "Session, skill, and operating habits",
+      label: "Agent Workflow",
+      hint: "Session, skill, and execution habits",
       sources: [
         "docs/document-engineering-workflow.md",
         "docs/skill-usage-policy.md",
@@ -568,8 +583,8 @@ const structureSubgroups = {
     },
     {
       id: "governance",
-      label: "Governance",
-      hint: "Quality gates and reusable operating rules",
+      label: "Reuse Rules",
+      hint: "Discovery gates and module governance",
       sources: [
         "docs/module-governance-first.md",
         "docs/reuse-first-discovery-gate.md",
@@ -578,8 +593,8 @@ const structureSubgroups = {
     },
     {
       id: "audit",
-      label: "History",
-      hint: "Execution log and retrospective record",
+      label: "Audit Trail",
+      hint: "Logs and retrospectives",
       sources: [
         "docs/skill-usage-log.md",
         "docs/workflow-retrospective.md"
@@ -589,8 +604,8 @@ const structureSubgroups = {
   "中文工作流": [
     {
       id: "system",
-      label: "文档系统",
-      hint: "面向阅读的文档体验",
+      label: "阅读系统",
+      hint: "文档站、导航和信息架构",
       sources: [
         "docs/zh-CN/documentation-system.md",
         "docs/zh-CN/docs-site.md",
@@ -599,8 +614,8 @@ const structureSubgroups = {
     },
     {
       id: "map",
-      label: "图谱体验",
-      hint: "图和树的交互决策",
+      label: "结构视图",
+      hint: "树、图和概念图渲染决策",
       sources: [
         "docs/zh-CN/concept-map-research.md",
         "docs/zh-CN/obsidian-graph-open-source-research.md",
@@ -609,7 +624,7 @@ const structureSubgroups = {
     },
     {
       id: "collaboration",
-      label: "协作机制",
+      label: "Agent 工作流",
       hint: "Session、Skill 和执行习惯",
       sources: [
         "docs/zh-CN/document-engineering-workflow.md",
@@ -619,8 +634,8 @@ const structureSubgroups = {
     },
     {
       id: "governance",
-      label: "治理机制",
-      hint: "质量门禁和复用规则",
+      label: "复用规则",
+      hint: "发现门禁和模块治理",
       sources: [
         "docs/zh-CN/module-governance-first.md",
         "docs/zh-CN/reuse-first-discovery-gate.md",
@@ -629,7 +644,7 @@ const structureSubgroups = {
     },
     {
       id: "audit",
-      label: "执行记录",
+      label: "审计线索",
       hint: "日志和复盘",
       sources: [
         "docs/zh-CN/skill-usage-log.md",
@@ -707,7 +722,7 @@ function buildStructureTree() {
 
   return {
     id: "root",
-    label: "Screenshot to Design System",
+    label: "Design Recovery",
     hint: activePathLabel(),
     kind: "root",
     docCount: docs.length,
@@ -731,7 +746,7 @@ function structureSectionNode(bucket, section, docs) {
   const groups = structureSubgroups[section];
   return {
     id: `section:${bucket.id}:${section}`,
-    label: section,
+    label: structureSectionLabels[section] ?? section,
     hint: `${docs.length} docs`,
     kind: "section",
     docCount: docs.length,

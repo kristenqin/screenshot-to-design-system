@@ -679,14 +679,16 @@ Skill 来源：
 
 原因：
 
-- 用户认为渲染形式已经可用，接下来应治理节点内容，让树更像概念地图，而不是文件清单。
+- 用户认为渲染形式已经可用，接下来应治理整棵树的节点命名，让 root、module、section、topic 和 document 五层命名保持一致。
 
 遵循步骤：
 
 - 审计现有树：Workflow / 中文工作流各有 14 个文档叶子，超过每层 5-9 个可扫描选项的建议。
 - 将高密度 section 从四层结构升级为五层结构：项目 -> 模块 -> section -> topic -> 文档。
-- 为 Workflow 增加 Docs System、Map Experience、Collaboration、Governance、History。
-- 为中文工作流增加文档系统、图谱体验、协作机制、治理机制、执行记录。
+- 将 root 和 module 层改成更短的决策标签：Design Recovery、Entry、Product、Evidence、Operating Model、Modules。
+- 将文件来源 section 显示成任务域，例如 Session Entry、Product Context、Work Plan、Technical Research、Documentation Ops、Module Passport。
+- 为 Workflow 增加 Reading System、Structure Views、Agent Workflow、Reuse Rules、Audit Trail。
+- 为中文工作流增加阅读系统、结构视图、Agent 工作流、复用规则、审计线索。
 - 将部分文档叶子改成更短的概念标签，完整标题保留在节点 metadata 中。
 
 输出：
@@ -705,4 +707,36 @@ Skill 来源：
   - 全量 Structure Tree 通过 Mind Elixir 渲染，包含 57 份文档和 85 个树节点
   - Workflow / 中文工作流共拆出 10 个 topic group
   - 中文筛选后包含 28 份文档和 45 个树节点
-  - 中文工作流可见文档系统、图谱体验、协作机制、治理机制和执行记录
+  - 中文工作流可见阅读系统、结构视图、Agent 工作流、复用规则和审计线索
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+任务：
+
+- 将 Structure Tree 的命名治理范围从文档叶子扩展到整棵树。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 上一轮主要改善了文档叶子，但整棵树仍然混用了产品阶段、原始文件分组和操作意图。用户要求评估并调整所有节点名称。
+
+遵循步骤：
+
+- 将 root、module、section、topic 和 document 五层节点名称作为一套系统审计。
+- 将 root 和 module 层改成 Design Recovery、Entry、Product、Evidence、Operating Model、Modules。
+- 为 manifest 原始 section 增加展示标签，让 section 更像任务域。
+- 将 Workflow topic 改成 Reading System、Structure Views、Agent Workflow、Reuse Rules、Audit Trail。
+- 将中文工作流 topic 改成阅读系统、结构视图、Agent 工作流、复用规则、审计线索。
+- 浏览器验证发现旧 JS 缓存后，为本地 docs dev server 增加 no-store 响应头。
+
+验证：
+
+- `npm run build` 生成 57 份文档和 380 条 graph edges。
+- 浏览器验证确认：
+  - 全量树显示 57 份文档和 85 个树节点，root / module / section / topic 均使用新命名。
+  - 中文筛选显示 28 份文档和 45 个树节点，并使用新的中文 topic 名称。
+  - 旧 topic 名称如 Map Experience、Collaboration、Governance、图谱体验、协作机制、治理机制、执行记录不再出现在渲染树中。

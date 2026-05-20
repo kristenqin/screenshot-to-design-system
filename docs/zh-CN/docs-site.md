@@ -58,7 +58,8 @@ public/vendor/
   - Structure Tree：查看项目生命周期、模块、section、topic 和文档层级，使用 Mind Elixir 渲染
   - Relationship Graph：查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
 - Structure Tree 是默认管理视图；Relationship Graph 是关系审计视图
-- Structure Tree 会把过载 section 拆成 topic group；中文工作流会拆成文档系统、图谱体验、协作机制、治理机制和执行记录
+- Structure Tree 会统一 root、module、section、topic 和 document 五层节点命名
+- Structure Tree 会把过载 section 拆成 topic group；中文工作流会拆成阅读系统、结构视图、Agent 工作流、复用规则和审计线索
 - 文档叶子节点使用更短的概念标签，同时在 metadata 中保留完整文档标题
 - Relationship Graph 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
 - Concept Map scope 切换：中文决策图、English execution graph、全量审计图

@@ -97,14 +97,19 @@ Problems found:
 
 - Workflow and Chinese Workflow each contained 14 document leaves under one section, exceeding the recommended 5-9 scannable choices per level.
 - The tree had only four semantic layers: project, module, section, document. Dense sections needed one additional topic layer.
+- Root, module, section, and topic labels mixed project phases, file sections, and operating intent, so the naming system was not coherent enough for decision-making.
+- Some top-level labels were sentence-like or internally oriented, which made the map harder to scan.
 - Document leaves used full Markdown titles, so the tree read like a file inventory instead of a concept map.
 - Full source paths were useful for debugging, but too noisy as visible node content.
 
 Applied changes:
 
 - Dense Workflow sections now use a fifth layer: project -> module -> section -> topic -> document.
-- Workflow is split into Docs System, Map Experience, Collaboration, Governance, and History.
-- Chinese Workflow is split into 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录.
+- The root is shortened to Design Recovery.
+- Top-level modules are renamed to Entry, Product, Evidence, Operating Model, and Modules.
+- File-derived sections are displayed as task domains such as Session Entry, Product Context, Work Plan, Technical Research, Documentation Ops, and Module Passport.
+- Workflow is split into Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail.
+- Chinese Workflow is split into 阅读系统, 结构视图, Agent 工作流, 复用规则, and 审计线索.
 - Document leaves use short concept labels in the tree while keeping the full document title in node metadata.
 
 This keeps the tree aligned with the user's goal: make project structure decisions quickly, then open the exact document only when needed.

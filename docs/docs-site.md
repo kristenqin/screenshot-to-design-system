@@ -76,7 +76,8 @@ package-lock.json
   - Structure Tree for project lifecycle, module, section, topic, and document hierarchy, rendered with Mind Elixir
   - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 - Structure Tree is the default management view; Relationship Graph is the audit view
-- Dense Structure Tree sections are split into topic groups; Workflow is organized into Docs System, Map Experience, Collaboration, Governance, and History
+- Structure Tree labels are normalized across root, module, section, topic, and document levels
+- Dense Structure Tree sections are split into topic groups; Workflow is organized into Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail
 - Document leaves use short concept labels while retaining full document titles in metadata
 - Relationship Graph selection highlights relationship neighborhoods and summarizes edge types in the right panel
 - Concept Map scope switcher: Chinese decision graph, English execution graph, and full audit graph

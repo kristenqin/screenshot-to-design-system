@@ -27,6 +27,8 @@ Next hardening should focus on adapter quality, viewport reset, and document-lea
 The renderer is no longer the bottleneck. The tree content now follows a deeper IA model:
 
 - Project -> Module -> Section -> Topic -> Document
+- Labels should use decision-oriented concepts rather than raw file-section names.
+- The current root/module set is Design Recovery, Entry, Product, Evidence, Operating Model, and Modules.
 - Dense Workflow sections are split into topic groups instead of exposing 14 document leaves at one level.
 - Document leaves use short concept labels in the tree; full titles remain available as metadata.
 

@@ -48,7 +48,10 @@ const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
     const file = await readStatic(url.pathname);
     const type = mimeTypes[extname(file.path)] ?? "application/octet-stream";
-    response.writeHead(200, { "Content-Type": type });
+    response.writeHead(200, {
+      "Content-Type": type,
+      "Cache-Control": "no-store"
+    });
     response.end(file.body);
   } catch (error) {
     response.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });

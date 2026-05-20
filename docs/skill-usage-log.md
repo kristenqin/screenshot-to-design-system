@@ -737,14 +737,16 @@ Skill sources:
 
 Reason:
 
-- The rendering layer was good enough; the next bottleneck was the node content model. The tree needed to read more like a concept map and less like a file inventory.
+- The rendering layer was good enough; the next bottleneck was the whole node naming model. The tree needed coherent labels across root, module, section, topic, and document levels.
 
 Workflow steps followed:
 
 - Audited the current tree and found Workflow / Chinese Workflow each had 14 document leaves under one section, exceeding the recommended 5-9 scannable options per level.
 - Upgraded dense sections from four levels to five: project -> module -> section -> topic -> document.
-- Added Docs System, Map Experience, Collaboration, Governance, and History under Workflow.
-- Added 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录 under Chinese Workflow.
+- Renamed the root and module layer to shorter decision labels: Design Recovery, Entry, Product, Evidence, Operating Model, and Modules.
+- Renamed file-derived sections into task domains such as Session Entry, Product Context, Work Plan, Technical Research, Documentation Ops, and Module Passport.
+- Added Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail under Workflow.
+- Added 阅读系统, 结构视图, Agent 工作流, 复用规则, and 审计线索 under Chinese Workflow.
 - Shortened selected document leaf labels while retaining full titles in node metadata.
 
 Output artifacts:
@@ -763,4 +765,36 @@ Verification:
   - The full Structure Tree renders through Mind Elixir with 57 docs and 85 tree nodes
   - Workflow / Chinese Workflow now include 10 topic groups in total
   - The Chinese filter narrows the tree to 28 docs and 45 tree nodes
-  - Chinese Workflow exposes 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录
+  - Chinese Workflow exposes 阅读系统, 结构视图, Agent 工作流, 复用规则, and 审计线索
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+Task:
+
+- Expand Structure Tree naming cleanup from document leaves to the whole tree.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The previous pass improved document leaves, but the full tree still mixed product phases, raw file sections, and operational intent. The user asked to evaluate and adjust all node names.
+
+Workflow steps followed:
+
+- Reviewed root, module, section, topic, and document node names as one naming system.
+- Renamed the root and module layer to Design Recovery, Entry, Product, Evidence, Operating Model, and Modules.
+- Added display labels for raw manifest sections so sections read as task domains.
+- Renamed Workflow topics to Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail.
+- Renamed Chinese Workflow topics to 阅读系统, 结构视图, Agent 工作流, 复用规则, and 审计线索.
+- Added no-store headers to the local docs dev server after browser verification exposed stale JS caching.
+
+Verification:
+
+- `npm run build` generated 57 docs and 380 graph edges.
+- Browser verification confirmed:
+  - Full tree renders 57 docs and 85 tree nodes with the new root/module/section/topic names.
+  - Chinese filter renders 28 docs and 45 tree nodes with the renamed Chinese topics.
+  - Previous topic names such as Map Experience, Collaboration, Governance, 图谱体验, 协作机制, 治理机制, and 执行记录 no longer appear in the rendered tree.
