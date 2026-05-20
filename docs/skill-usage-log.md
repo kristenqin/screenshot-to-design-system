@@ -908,3 +908,44 @@ Verification:
   - The reader pane opens `START_HERE.md`.
   - Relationship Graph renders in the map pane with 59 nodes and 254 visible edges.
   - Chinese scope renders 29 docs and 46 tree nodes with redundant Chinese prefixes removed.
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture` + `browser`
+
+Task:
+
+- Research and improve the map navigator filter area, active-node feedback, and browser navigation history.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The first two-column workbench made the map primary, but the filter area was too heavy and map navigation lacked active-state and history-state behavior.
+
+Workflow steps followed:
+
+- Researched mature documentation and ToB navigation patterns.
+- Added bilingual Navigation Interaction Research docs.
+- Compressed reading paths into compact chips and removed the visible search label.
+- Added browser Back and Forward buttons.
+- Added route state for doc, lang, path, and mapMode.
+- Added `popstate` handling for browser back and forward.
+- Added visible current-document marking for Mind Elixir document topics.
+- Added pointer release cleanup after opening a document topic.
+
+Output artifacts:
+
+- Added [Navigation Interaction Research](navigation-interaction-research.md)
+- Added [Chinese Navigation Interaction Research](zh-CN/navigation-interaction-research.md)
+- Updated `src/main.js`
+- Updated `src/styles.css`
+- Updated `scripts/build-docs-content.mjs`
+
+Verification:
+
+- `npm run build` prepared 61 docs and 404 graph edges.
+- `git diff --check` passed.
+- Browser verification confirmed compact filters, visible map stage, Mind Elixir rendering, active document highlighting, document-leaf click cleanup, and Back/Forward route restoration.

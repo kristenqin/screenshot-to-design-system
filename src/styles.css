@@ -43,7 +43,7 @@ input {
   border-right: 1px solid var(--line);
   background: var(--panel);
   display: grid;
-  grid-template-rows: auto auto auto minmax(440px, 1fr) auto;
+  grid-template-rows: auto auto auto auto minmax(280px, 1fr) auto;
   gap: 10px;
   padding: 18px;
   overflow: auto;
@@ -71,7 +71,7 @@ h1 {
 
 .controls {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .map-toolbar {
@@ -80,7 +80,7 @@ h1 {
 }
 
 .map-stage {
-  min-height: 440px;
+  min-height: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background:
@@ -117,16 +117,18 @@ h1 {
 }
 
 .search-label {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 650;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
 .search {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 11px 12px;
+  padding: 9px 10px;
   background: #fff;
   color: var(--text);
   outline: none;
@@ -148,7 +150,7 @@ h1 {
 .segment {
   border: 0;
   border-right: 1px solid var(--line);
-  padding: 8px 10px;
+  padding: 7px 9px;
   background: var(--panel);
   color: var(--muted);
   cursor: pointer;
@@ -165,30 +167,30 @@ h1 {
 
 .path-group {
   display: grid;
-  gap: 8px;
-}
-
-.filter-title {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.path-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
 }
 
+.filter-title {
+  display: none;
+}
+
+.path-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
 .path-card {
-  display: grid;
-  gap: 2px;
-  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 30px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 6px;
+  border-radius: 999px;
+  padding: 6px 10px;
   background: var(--panel);
   color: var(--text);
   text-align: left;
@@ -207,14 +209,34 @@ h1 {
 }
 
 .path-card span {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
 }
 
 .path-card small {
-  color: var(--muted);
-  font-size: 10px;
-  line-height: 1.2;
+  display: none;
+}
+
+.map-history {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.history-button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fbfcfd;
+  color: var(--accent-strong);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.history-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .nav-summary {
@@ -707,6 +729,11 @@ h1 {
 .mind-elixir-host .mind-elixir-toolbar {
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
+}
+
+.mind-elixir-host me-tpc[data-current-doc="true"] {
+  border: 2px solid var(--accent) !important;
+  box-shadow: 0 0 0 4px rgba(23, 105, 170, 0.16), 0 10px 24px rgba(23, 105, 170, 0.18);
 }
 
 .structure-svg {

@@ -850,3 +850,44 @@ Skill 来源：
   - 右侧 reader pane 打开 `START_HERE.md`。
   - Relationship Graph 在地图面板中渲染 59 个节点和 254 条可见边。
   - 中文 scope 渲染 29 份文档和 46 个树节点，并移除了冗余“中文”前缀。
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture` + `browser`
+
+任务：
+
+- 调研并优化地图导航的筛选区域、当前节点反馈和浏览器导航历史。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 第一版两栏工作台已经让地图成为主导航，但筛选区域过重，地图导航也缺少 active state 和 history state 行为。
+
+遵循步骤：
+
+- 调研成熟文档站和 ToB 导航模式。
+- 新增中英文 Navigation Interaction Research 文档。
+- 将 reading path 压缩成紧凑 chips，并隐藏可见 search label。
+- 增加浏览器 Back / Forward 按钮。
+- 为 doc、lang、path、mapMode 增加 route state。
+- 增加 `popstate` 处理浏览器前进和后退。
+- 为 Mind Elixir 文档 topic 增加当前文档高亮。
+- 打开文档 topic 后执行 pointer release cleanup。
+
+输出：
+
+- 新增 [导航交互调研](navigation-interaction-research.md)
+- 新增 [英文 Navigation Interaction Research](../navigation-interaction-research.md)
+- 更新 `src/main.js`
+- 更新 `src/styles.css`
+- 更新 `scripts/build-docs-content.mjs`
+
+验证：
+
+- `npm run build` 生成 61 份文档和 404 条图谱边。
+- `git diff --check` 通过。
+- 浏览器验证确认：筛选区压缩、地图区域首屏可见、Mind Elixir 正常渲染、当前文档高亮、文档叶子点击后释放 pointer 状态、Back/Forward 能恢复 route state。

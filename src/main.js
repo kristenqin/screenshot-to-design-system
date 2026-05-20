@@ -49,10 +49,41 @@ function getHashDoc() {
   return params.get("doc");
 }
 
-function setHashDoc(source) {
+function getRouteState() {
+  const params = new URLSearchParams(location.hash.replace(/^#\/?/, ""));
+  return {
+    doc: params.get("doc"),
+    lang: params.get("lang"),
+    path: params.get("path"),
+    mapMode: params.get("mapMode")
+  };
+}
+
+function setRouteState({ replace = false } = {}) {
   const params = new URLSearchParams();
-  params.set("doc", source);
-  history.replaceState(null, "", `#${params.toString()}`);
+  if (state.active?.source) params.set("doc", state.active.source);
+  if (state.lang !== "all") params.set("lang", state.lang);
+  if (state.path !== "all") params.set("path", state.path);
+  if (state.mapMode !== "tree") params.set("mapMode", state.mapMode);
+  const hash = `#${params.toString()}`;
+  if (location.hash === hash) return;
+  const route = {
+    doc: state.active?.source ?? null,
+    lang: state.lang,
+    path: state.path,
+    mapMode: state.mapMode
+  };
+  if (replace) history.replaceState(route, "", hash);
+  else history.pushState(route, "", hash);
+}
+
+function applyRoute(route) {
+  const nextLang = ["all", "en", "zh-CN"].includes(route.lang) ? route.lang : "all";
+  const nextPath = readingPathLabels.some((item) => item.id === route.path) ? route.path : "all";
+  const nextMapMode = ["tree", "graph"].includes(route.mapMode) ? route.mapMode : "tree";
+  state.lang = nextLang;
+  state.path = nextPath;
+  state.mapMode = nextMapMode;
 }
 
 function normalizeRelativeDoc(baseSource, href) {
@@ -103,7 +134,7 @@ function renderShell() {
           <label class="search-label" for="doc-search">Search docs</label>
           <input id="doc-search" class="search" type="search" placeholder="Search title, path, summary" value="${escapeHtml(state.search)}" />
           <div class="path-group" aria-label="Reading paths">
-            <p class="filter-title">Reading path</p>
+            <p class="filter-title">Path</p>
             <div class="path-grid">
               ${readingPathLabels.map(pathButton).join("")}
             </div>
@@ -113,6 +144,10 @@ function renderShell() {
             ${segmentButton("en", "EN")}
             ${segmentButton("zh-CN", "中文")}
           </div>
+        </div>
+        <div class="map-history" aria-label="Navigation history">
+          <button class="history-button" type="button" data-history="back">Back</button>
+          <button class="history-button" type="button" data-history="forward">Forward</button>
         </div>
         <div class="map-toolbar">
           <div class="graph-view-tabs compact" aria-label="Concept map mode">
@@ -147,6 +182,7 @@ function renderShell() {
     state.search = event.target.value;
     renderNav();
     renderMapPanel().catch(showGraphError);
+    setRouteState({ replace: true });
   });
 
   document.querySelectorAll("[data-lang]").forEach((button) => {
@@ -154,6 +190,7 @@ function renderShell() {
       state.lang = button.dataset.lang;
       renderNav();
       renderMapPanel().catch(showGraphError);
+      setRouteState({ replace: false });
     });
   });
 
@@ -163,10 +200,12 @@ function renderShell() {
       if (state.path === "zh") state.lang = "zh-CN";
       renderNav();
       renderMapPanel().catch(showGraphError);
+      setRouteState({ replace: false });
     });
   });
 
   bindMapModeControls();
+  bindHistoryControls();
 }
 
 function segmentButton(value, label) {
@@ -177,11 +216,20 @@ function segmentButton(value, label) {
 function pathButton(item) {
   const active = state.path === item.id ? "active" : "";
   return `
-    <button class="path-card ${active}" type="button" data-path="${item.id}">
+    <button class="path-card ${active}" type="button" data-path="${item.id}" title="${escapeHtml(item.hint)}">
       <span>${escapeHtml(item.label)}</span>
       <small>${escapeHtml(item.hint)}</small>
     </button>
   `;
+}
+
+function bindHistoryControls() {
+  document.querySelectorAll("[data-history]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.history === "back") history.back();
+      else history.forward();
+    });
+  });
 }
 
 function renderNav() {
@@ -224,12 +272,15 @@ function renderNav() {
   });
 }
 
-async function loadDoc(source) {
+async function loadDoc(source, options = {}) {
   const doc = state.manifest.find((item) => item.source === source) ?? state.manifest[0];
   if (!doc) return;
   state.active = doc;
-  setHashDoc(doc.source);
+  if (options.history !== "none") {
+    setRouteState({ replace: options.replace ?? false });
+  }
   renderNav();
+  markCurrentMindNode(options.focusMap ?? false);
 
   const markdown = await fetch(doc.contentPath).then((response) => {
     if (!response.ok) throw new Error(`Unable to load ${doc.contentPath}`);
@@ -440,6 +491,7 @@ function bindMapModeControls() {
     button.addEventListener("click", () => {
       state.mapMode = button.dataset.mapMode;
       renderConceptMap().catch(showGraphError);
+      setRouteState({ replace: false });
     });
   });
 }
@@ -528,7 +580,8 @@ const structureSubgroups = {
         "docs/concept-map-research.md",
         "docs/obsidian-graph-open-source-research.md",
         "docs/mind-map-library-evaluation.md",
-        "docs/navigation-map-research.md"
+        "docs/navigation-map-research.md",
+        "docs/navigation-interaction-research.md"
       ]
     },
     {
@@ -580,7 +633,8 @@ const structureSubgroups = {
         "docs/zh-CN/concept-map-research.md",
         "docs/zh-CN/obsidian-graph-open-source-research.md",
         "docs/zh-CN/mind-map-library-evaluation.md",
-        "docs/zh-CN/navigation-map-research.md"
+        "docs/zh-CN/navigation-map-research.md",
+        "docs/zh-CN/navigation-interaction-research.md"
       ]
     },
     {
@@ -637,6 +691,7 @@ const structureDocLabels = {
   "docs/obsidian-graph-open-source-research.md": "Obsidian",
   "docs/mind-map-library-evaluation.md": "Mind Map",
   "docs/navigation-map-research.md": "Map Nav",
+  "docs/navigation-interaction-research.md": "Nav UX",
   "docs/module-governance-first.md": "Module First",
   "docs/reuse-first-discovery-gate.md": "Reuse Gate",
   "docs/module-passports/documentation-system.md": "Docs Passport",
@@ -659,6 +714,7 @@ const structureDocLabels = {
   "docs/zh-CN/obsidian-graph-open-source-research.md": "Obsidian",
   "docs/zh-CN/mind-map-library-evaluation.md": "思维导图",
   "docs/zh-CN/navigation-map-research.md": "地图导航",
+  "docs/zh-CN/navigation-interaction-research.md": "导航交互",
   "docs/zh-CN/module-governance-first.md": "模块优先",
   "docs/zh-CN/reuse-first-discovery-gate.md": "复用门禁",
   "docs/zh-CN/module-passports/documentation-system.md": "文档 Passport",
@@ -831,11 +887,15 @@ async function mountMindElixirTree(tree, container) {
   requestAnimationFrame(() => {
     mind.scale(0.78);
     mind.move(-360, -250);
+    markCurrentMindNode(true);
   });
 
   state.structureTreeInstance = {
     kind: "mind-elixir",
     mind,
+    markCurrent(focus = false) {
+      markMindElixirCurrentNode(host, docSourceByMindId, state.active?.source, focus);
+    },
     destroy() {
       unbindDocClicks();
       mind.destroy();
@@ -853,7 +913,11 @@ function bindMindElixirDocClicks(host, docSourceByMindId) {
     if (!source) return;
     event?.preventDefault();
     event?.stopPropagation();
-    loadDoc(source);
+    host.classList.remove("dragging");
+    host.style.cursor = "";
+    window.getSelection?.()?.removeAllRanges?.();
+    document.activeElement?.blur?.();
+    loadDoc(source, { focusMap: true });
   };
   const clickListener = (event) => {
     const topic = event.target.closest?.("me-tpc[data-nodeid]");
@@ -889,6 +953,23 @@ function bindMindElixirDocClicks(host, docSourceByMindId) {
 function mindElixirDocSource(docSourceByMindId, id) {
   if (!id) return null;
   return docSourceByMindId.get(id) ?? docSourceByMindId.get(id.replace(/^me/, "")) ?? null;
+}
+
+function markCurrentMindNode(focus = false) {
+  state.structureTreeInstance?.markCurrent?.(focus);
+}
+
+function markMindElixirCurrentNode(host, docSourceByMindId, source, focus = false) {
+  host.querySelectorAll("me-tpc[data-current-doc]").forEach((topic) => {
+    topic.removeAttribute("data-current-doc");
+  });
+  if (!source) return;
+  const current = [...host.querySelectorAll("me-tpc[data-nodeid]")].find((topic) => {
+    return mindElixirDocSource(docSourceByMindId, topic.dataset.nodeid) === source;
+  });
+  if (!current) return;
+  current.dataset.currentDoc = "true";
+  if (focus) current.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
 }
 
 function mountSvgStructureTree(tree, container = document.querySelector("#concept-map")) {
@@ -2209,12 +2290,24 @@ async function boot() {
   const manifest = await fetch("/docs-manifest.json").then((response) => response.json());
   state.manifest = manifest.docs;
   state.graph = manifest.graph ?? { nodes: [], edges: [] };
+  const route = getRouteState();
+  applyRoute(route);
   renderShell();
-  const source = getHashDoc();
-  await loadDoc(source && state.manifest.some((doc) => doc.source === source) ? source : "START_HERE.md");
+  const source = route.doc ?? getHashDoc();
+  await loadDoc(source && state.manifest.some((doc) => doc.source === source) ? source : "START_HERE.md", {
+    replace: true
+  });
   await renderMapPanel();
 }
 
 boot().catch((error) => {
   app.innerHTML = `<main class="error"><h1>Unable to load docs</h1><pre>${escapeHtml(error.stack ?? error.message)}</pre></main>`;
+});
+
+window.addEventListener("popstate", async () => {
+  const route = getRouteState();
+  applyRoute(route);
+  const source = route.doc && state.manifest.some((doc) => doc.source === route.doc) ? route.doc : "START_HERE.md";
+  await loadDoc(source, { history: "none", focusMap: true });
+  await renderMapPanel();
 });

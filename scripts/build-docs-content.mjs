@@ -33,10 +33,11 @@ const docs = [
   { source: "docs/obsidian-graph-open-source-research.md", section: "Workflow", lang: "en", order: 49 },
   { source: "docs/mind-map-library-evaluation.md", section: "Workflow", lang: "en", order: 50 },
   { source: "docs/navigation-map-research.md", section: "Workflow", lang: "en", order: 51 },
-  { source: "docs/module-governance-first.md", section: "Workflow", lang: "en", order: 52 },
-  { source: "docs/reuse-first-discovery-gate.md", section: "Workflow", lang: "en", order: 53 },
-  { source: "docs/module-passports/documentation-system.md", section: "Module Passports", lang: "en", order: 54 },
-  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 55 },
+  { source: "docs/navigation-interaction-research.md", section: "Workflow", lang: "en", order: 52 },
+  { source: "docs/module-governance-first.md", section: "Workflow", lang: "en", order: 53 },
+  { source: "docs/reuse-first-discovery-gate.md", section: "Workflow", lang: "en", order: 54 },
+  { source: "docs/module-passports/documentation-system.md", section: "Module Passports", lang: "en", order: 55 },
+  { source: "docs/skills-research.md", section: "Workflow", lang: "en", order: 56 },
 
   { source: "docs/zh-CN/index.md", section: "中文入口", lang: "zh-CN", order: 100 },
   { source: "docs/zh-CN/readme.md", section: "中文项目", lang: "zh-CN", order: 101 },
@@ -63,10 +64,11 @@ const docs = [
   { source: "docs/zh-CN/obsidian-graph-open-source-research.md", section: "中文工作流", lang: "zh-CN", order: 139 },
   { source: "docs/zh-CN/mind-map-library-evaluation.md", section: "中文工作流", lang: "zh-CN", order: 140 },
   { source: "docs/zh-CN/navigation-map-research.md", section: "中文工作流", lang: "zh-CN", order: 141 },
-  { source: "docs/zh-CN/module-governance-first.md", section: "中文工作流", lang: "zh-CN", order: 142 },
-  { source: "docs/zh-CN/reuse-first-discovery-gate.md", section: "中文工作流", lang: "zh-CN", order: 143 },
-  { source: "docs/zh-CN/module-passports/documentation-system.md", section: "中文模块 Passport", lang: "zh-CN", order: 144 },
-  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 145 }
+  { source: "docs/zh-CN/navigation-interaction-research.md", section: "中文工作流", lang: "zh-CN", order: 142 },
+  { source: "docs/zh-CN/module-governance-first.md", section: "中文工作流", lang: "zh-CN", order: 143 },
+  { source: "docs/zh-CN/reuse-first-discovery-gate.md", section: "中文工作流", lang: "zh-CN", order: 144 },
+  { source: "docs/zh-CN/module-passports/documentation-system.md", section: "中文模块 Passport", lang: "zh-CN", order: 145 },
+  { source: "docs/zh-CN/skills-research.md", section: "中文工作流", lang: "zh-CN", order: 146 }
 ];
 
 const readingPaths = {
@@ -96,6 +98,7 @@ const readingPaths = {
   "docs/obsidian-graph-open-source-research.md": ["research", "plan", "operate"],
   "docs/mind-map-library-evaluation.md": ["research", "plan", "operate"],
   "docs/navigation-map-research.md": ["research", "plan", "operate"],
+  "docs/navigation-interaction-research.md": ["research", "plan", "operate"],
   "docs/module-governance-first.md": ["plan", "operate", "research"],
   "docs/reuse-first-discovery-gate.md": ["research", "plan", "operate"],
   "docs/module-passports/documentation-system.md": ["operate", "audit", "plan"],
@@ -126,6 +129,7 @@ const readingPaths = {
   "docs/zh-CN/obsidian-graph-open-source-research.md": ["research", "plan", "operate", "zh"],
   "docs/zh-CN/mind-map-library-evaluation.md": ["research", "plan", "operate", "zh"],
   "docs/zh-CN/navigation-map-research.md": ["research", "plan", "operate", "zh"],
+  "docs/zh-CN/navigation-interaction-research.md": ["research", "plan", "operate", "zh"],
   "docs/zh-CN/module-governance-first.md": ["plan", "operate", "research", "zh"],
   "docs/zh-CN/reuse-first-discovery-gate.md": ["research", "plan", "operate", "zh"],
   "docs/zh-CN/module-passports/documentation-system.md": ["operate", "audit", "plan", "zh"],

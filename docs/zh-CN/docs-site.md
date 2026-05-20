@@ -49,6 +49,7 @@ public/vendor/
 
 - 两栏工作台：左侧 Structure Tree 地图导航，右侧文档阅读
 - 用于搜索、小屏和可访问性的 fallback 文档列表
+- 紧凑筛选栏：search、reading path chips、language segmented control 和浏览器历史按钮
 - 按语言筛选：全部、英文、中文
 - 按标题、路径、分组、摘要搜索
 - Markdown 渲染
@@ -60,6 +61,7 @@ public/vendor/
   - Relationship Graph：查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
 - Structure Tree 是默认导航视图；Relationship Graph 是关系审计视图
 - Structure Tree 会统一 root、module、section、topic 和 document 五层节点命名
+- 当前文档节点在 Structure Tree 中可见时会高亮
 - Structure Tree 会把过载 section 拆成 topic group；中文工作流会拆成阅读系统、结构视图、Agent 工作流、复用规则和审计线索
 - 文档叶子节点使用更短的概念标签，同时在 metadata 中保留完整文档标题
 - Relationship Graph 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
@@ -73,12 +75,13 @@ public/vendor/
 已在本地浏览器验证：
 
 - 默认打开 `START_HERE.md`
-- 导航里有 59 份文档
+- 导航里有 61 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
 - 两栏工作台会渲染 `.map-pane` 和 `.reader-pane`
-- Structure Tree 通过 Mind Elixir 渲染，包含 87 个树节点、59 个可见文档，以及 10 个用于拆分 Workflow 的 topic group
-- 中文 Structure Tree scope 包含 29 份文档和 46 个树节点，并移除了冗余“中文”前缀
-- Relationship Graph 可以用 canvas 渲染；默认 global graph 显示 59 个文档节点和 254 条可见关系
+- Structure Tree 通过 Mind Elixir 渲染完整文档集，并使用紧凑筛选栏
+- 中文 Structure Tree scope 会移除冗余“中文”前缀
+- Relationship Graph 可以在地图面板中用 canvas 渲染
+- 浏览器前进和后退通过 History API 恢复 route state
 - Local graph mode 在 depth 1 时可将当前文档邻域收敛到 8 个节点和 20 条边
 - 中文和英文 graph scope 可以独立切换
 - Graph settings 暴露 4 个 toggle 和 4 个 slider

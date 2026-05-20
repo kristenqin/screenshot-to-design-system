@@ -67,6 +67,7 @@ package-lock.json
 
 - Two-column workbench: Structure Tree map navigator on the left and document reader on the right
 - Fallback document list for search, small screens, and accessibility
+- Compact filter bar with search, reading path chips, language segmented control, and browser history buttons
 - Language filter: all, English, Chinese
 - Text search across title, path, section, and summary
 - Markdown rendering for headings, lists, tables, links, code blocks, and blockquotes
@@ -78,6 +79,7 @@ package-lock.json
   - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 - Structure Tree is the default navigation view; Relationship Graph is the audit view
 - Structure Tree labels are normalized across root, module, section, topic, and document levels
+- Current document nodes are highlighted in the Structure Tree when visible
 - Dense Structure Tree sections are split into topic groups; Workflow is organized into Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail
 - Document leaves use short concept labels while retaining full document titles in metadata
 - Relationship Graph selection highlights relationship neighborhoods and summarizes edge types in the right panel
@@ -98,11 +100,12 @@ Checks performed:
 
 - default document loads as `START_HERE.md`
 - Reading-path filters reduce the navigation to task-focused sets
-- 59 documentation files appear in navigation
+- 61 documentation files appear in navigation
 - Two-column workbench renders `.map-pane` and `.reader-pane`
-- Structure Tree renders through Mind Elixir with 87 tree nodes, 59 visible docs, and 10 topic groups for dense Workflow sections
-- Chinese Structure Tree scope renders 29 docs and 46 tree nodes, with redundant Chinese prefixes removed
-- Relationship Graph view renders with canvas; the default global graph shows 59 document nodes and 254 visible relationships
+- Structure Tree renders through Mind Elixir with the full docs set and a compact filter bar
+- Chinese Structure Tree scope removes redundant Chinese prefixes
+- Relationship Graph view renders with canvas in the map pane
+- Browser back and forward restore route state through the History API
 - Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently
 - Graph settings expose 4 toggles and 4 sliders
