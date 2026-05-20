@@ -452,13 +452,52 @@ Skill 来源：
 
 偏离：
 
-- 外部 Skills.sh 内容作为流程参考采用，没有全部安装成本地 skills。
+- 后续已处理：相关 Skills.sh 工作流现在已安装为本地 skill，或作为 audited local skill mirror 落地。
 - 浏览器验证复用了现有本地文档站。
 
 验证：
 
 - `npm run build` 成功准备 53 份文档和 344 条 graph edges。
 - 浏览器验证确认侧边栏显示 53 份文档，中文复用优先门禁页面可以打开，并显示触发条件、必须遵循的顺序和项目应用示例。
+
+## 2026-05-20 - `skill-installer`
+
+任务：
+
+- 处理复用优先门禁中的偏离项：外部 Skills.sh 工作流不能只作为参考，需要安装成本地 skill。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/.system/skill-installer/SKILL.md`
+
+原因：
+
+- 用户希望这些工作流在后续 session 中成为本地可触发 skill，减少 agent 只按项目文档自由发挥的概率。
+
+遵循步骤：
+
+- 读取本地 `skill-installer`。
+- 使用 helper installer 安装 GitHub-backed skills。
+- 检查本地 skill 目录。
+- 对不可安装或不安全的来源先做安全判断，再决定是否镜像。
+
+输出：
+
+- 已安装 `/Users/qyx/.codex/skills/evaluating-new-technology`
+- 已安装 `/Users/qyx/.codex/skills/spec-first`
+- 已安装 `/Users/qyx/.codex/skills/implementation-planner`
+- 添加 audited local mirror `/Users/qyx/.codex/skills/simple-brainstorm`
+- 添加 audited local mirror `/Users/qyx/.codex/skills/create-plan`
+- 更新 [复用优先发现门禁](reuse-first-discovery-gate.md)
+
+偏离：
+
+- `simple-brainstorm` 没有直接从关联 GitHub repo 安装，因为可用的相近 repo skill 含有不可信指令；当前安装的是只保留 brainstorming workflow 的本地审计镜像。
+- `create-plan` 当前无法从公开 `openai/skills` 仓库或 `npx skills add` 安装；当前安装的是基于 Skills.sh 可见工作流的本地审计镜像。
+
+验证：
+
+- 本地 skill 目录现在包含 `evaluating-new-technology`、`spec-first`、`implementation-planner`、`simple-brainstorm` 和 `create-plan`。
 
 ## 2026-05-20 - `information-architecture` + `browser`
 

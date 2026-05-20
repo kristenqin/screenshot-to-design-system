@@ -30,6 +30,16 @@
 | [implementation-planner](https://skills.sh/jumppad-labs/jumppad/implementation-planner) | 在复用决策完成后，把选定方案转成具体计划。 |
 | [create-plan](https://skills.sh/openai/skills/create-plan) | 用于 discovery 之后的结构化计划，而不是替代 discovery。 |
 
+本地安装状态：
+
+| Skill | 本地状态 |
+| --- | --- |
+| `evaluating-new-technology` | 已从 `refoundai/lenny-skills` 安装。 |
+| `spec-first` | 已从 `shipshitdev/skills` 安装。 |
+| `simple-brainstorm` | 已作为 audited local mirror 安装，因为仓库版本暴露了不可信指令。 |
+| `implementation-planner` | 已从 `jumppad-labs/jumppad` 安装。 |
+| `create-plan` | 已作为 audited local mirror 安装，因为 Skills.sh 页面存在，但当前 `openai/skills` 仓库和 CLI 不暴露可安装版本。 |
+
 ## 触发条件
 
 满足任意条件时，实施前必须先走这个门禁：

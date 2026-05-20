@@ -34,11 +34,15 @@ The documentation system itself now has a module passport. It is treated as the 
 
 The project now includes a reuse-first discovery gate. Before non-core implementation, agents should research reusable tools, libraries, skills, APIs, or product patterns and record the reuse-vs-self-build decision.
 
+The reuse-first gate's referenced Skills.sh workflows are now installed locally or mirrored as audited local skills:
+`evaluating-new-technology`, `spec-first`, `implementation-planner`, `simple-brainstorm`, and `create-plan`.
+
 ## Latest Commits
 
 ```text
 docs(workflow): add reuse-first discovery gate
 feat(docs): add obsidian-style graph controls
+docs(workflow): install reuse-first skills locally
 feat(docs): use cytoscape for concept map
 docs(workflow): apply governance to documentation module
 ```
@@ -79,6 +83,7 @@ docs(workflow): apply governance to documentation module
 - The documentation system is a governed module, not only a place where governance is written down.
 - Self-implementation is not the default for non-core capabilities.
 - The reuse-first discovery gate should run before third-party UI/graph work, OCR/image/ML/parsing infrastructure, workflow automation, or any unclear build-vs-buy decision.
+- The gate should prefer the local skills `evaluating-new-technology`, `spec-first`, `simple-brainstorm`, `implementation-planner`, and `create-plan` instead of treating Skills.sh pages as external-only references.
 
 ## Current Tasks
 
@@ -141,7 +146,7 @@ The Concept Map also supports global/local mode, 1-3 hop local depth, labels, ar
 Last known clean Git state after commit:
 
 ```text
-feat(docs): add obsidian-style graph controls
+docs(workflow): install reuse-first skills locally
 ```
 
 New session should still run:

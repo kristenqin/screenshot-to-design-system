@@ -510,13 +510,52 @@ Output artifacts:
 
 Deviations:
 
-- The external Skills.sh ideas were adopted as workflow references rather than installed as local skills.
+- Resolved later: the referenced Skills.sh workflows are now installed locally or mirrored as audited local skills.
 - Browser verification used the existing local docs site.
 
 Verification:
 
 - `npm run build` prepared 53 documentation files and 344 graph edges.
 - Browser verification confirmed the sidebar lists 53 documents and the Chinese reuse-first gate renders with its trigger conditions, required sequence, and project-specific examples.
+
+## 2026-05-20 - `skill-installer`
+
+Task:
+
+- Resolve the reuse-first gate deviation where external Skills.sh workflows were only referenced instead of installed locally.
+
+Skill source:
+
+- `/Users/qyx/.codex/skills/.system/skill-installer/SKILL.md`
+
+Reason:
+
+- The user wanted the referenced Skills.sh workflows to become local executable skills so future agents are less likely to improvise from project prose alone.
+
+Workflow steps followed:
+
+- Read local `skill-installer`.
+- Installed GitHub-backed skills with the helper installer.
+- Checked local installed skill directories.
+- Audited unavailable or unsafe sources before deciding whether to mirror them.
+
+Output artifacts:
+
+- Installed `/Users/qyx/.codex/skills/evaluating-new-technology`
+- Installed `/Users/qyx/.codex/skills/spec-first`
+- Installed `/Users/qyx/.codex/skills/implementation-planner`
+- Added audited local mirror `/Users/qyx/.codex/skills/simple-brainstorm`
+- Added audited local mirror `/Users/qyx/.codex/skills/create-plan`
+- Updated [Reuse-First Discovery Gate](reuse-first-discovery-gate.md)
+
+Deviations:
+
+- `simple-brainstorm` was not installed directly from its associated GitHub repository because the available similarly named repository skill contained untrusted instructions. It was mirrored locally with only the relevant brainstorming workflow.
+- `create-plan` was not installable from the current public `openai/skills` repository or `npx skills add`; it was mirrored locally from the visible Skills.sh workflow.
+
+Verification:
+
+- Local skill directories now include `evaluating-new-technology`, `spec-first`, `implementation-planner`, `simple-brainstorm`, and `create-plan`.
 
 ## 2026-05-20 - `information-architecture` + `browser`
 

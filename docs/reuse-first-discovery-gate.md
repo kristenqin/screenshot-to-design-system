@@ -30,6 +30,16 @@ The following Skills.sh resources should inform this gate:
 | [implementation-planner](https://skills.sh/jumppad-labs/jumppad/implementation-planner) | Use after the reuse decision is made to turn the selected approach into a concrete plan. |
 | [create-plan](https://skills.sh/openai/skills/create-plan) | Use for structured planning after discovery, not as a replacement for discovery. |
 
+Local installation status:
+
+| Skill | Local status |
+| --- | --- |
+| `evaluating-new-technology` | Installed from `refoundai/lenny-skills`. |
+| `spec-first` | Installed from `shipshitdev/skills`. |
+| `simple-brainstorm` | Installed as an audited local mirror because the repository version exposed untrusted instructions. |
+| `implementation-planner` | Installed from `jumppad-labs/jumppad`. |
+| `create-plan` | Installed as an audited local mirror because the Skills.sh page exists but the current `openai/skills` repository and CLI do not expose it as installable. |
+
 ## When This Gate Triggers
 
 Run this gate before implementation when any of these are true:
