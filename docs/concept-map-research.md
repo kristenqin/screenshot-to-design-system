@@ -127,6 +127,12 @@ This makes the graph closer to a coupling and relationship inspection tool, rath
 
 The current docs site applies the Obsidian interaction model through reusable Cytoscape.js behavior rather than a new custom renderer.
 
+Important correction:
+
+- The next fidelity pass should not continue from product reference alone.
+- The project has now separately researched open source implementations in [Obsidian Graph Open Source Research](obsidian-graph-open-source-research.md).
+- GraphFrontier is the leading reuse/reference candidate for a higher-fidelity implementation spike.
+
 Discovery gate:
 
 - Problem: make the knowledge graph readable and controllable in the same spirit as Obsidian Graph View.

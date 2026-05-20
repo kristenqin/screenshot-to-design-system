@@ -28,6 +28,8 @@ The docs site navigation now uses task-based reading paths in addition to langua
 
 The docs site now includes a Cytoscape-powered Concept Map view. The build script generates a graph from reading-path membership, bilingual companion docs, and Markdown links. The browser view lets users inspect document nodes, relationship neighborhoods, and edge type counts directly. The graph now follows an Obsidian-style interaction model with global/local view, local depth, graph settings, label toggles, arrows, relationship toggles, and force controls.
 
+The project has now researched open source Obsidian-style graph implementations before continuing graph fidelity work. GraphFrontier is the preferred next spike reference because it is MIT licensed, independent from Obsidian's built-in graph, and has clear rendering/physics modules. Juggl and Obsidian Extended Graph remain strong interaction references but are less attractive for direct reuse because of GPL/license and Obsidian API coupling.
+
 The project now follows a module-governance-first planning model: mature module boundaries, contracts, verification, and readiness levels should precede a broad product MVP.
 
 The documentation system itself now has a module passport. It is treated as the first governed module, currently M4 with a target of M5 reusable.
@@ -40,6 +42,7 @@ The reuse-first gate's referenced Skills.sh workflows are now installed locally 
 ## Latest Commits
 
 ```text
+docs(research): evaluate obsidian graph implementations
 docs(workflow): add reuse-first discovery gate
 feat(docs): add obsidian-style graph controls
 docs(workflow): install reuse-first skills locally
@@ -61,6 +64,7 @@ docs(workflow): apply governance to documentation module
 - [Docs Site](../../docs/docs-site.md)
 - [Information Architecture](../../docs/information-architecture.md)
 - [Concept Map Research](../../docs/concept-map-research.md)
+- [Obsidian Graph Open Source Research](../../docs/obsidian-graph-open-source-research.md)
 - [Module Governance First](../../docs/module-governance-first.md)
 - [Reuse-First Discovery Gate](../../docs/reuse-first-discovery-gate.md)
 - [Documentation System Module Passport](../../docs/module-passports/documentation-system.md)
@@ -79,6 +83,8 @@ docs(workflow): apply governance to documentation module
 - Documentation can be represented as a graph: documents are concept nodes and relationships are edges.
 - Graph rendering uses Cytoscape.js because the custom SVG map did not make document-to-document relationships clear enough.
 - Concept Map interaction borrows from Obsidian Graph View: global/local graph, local depth, display controls, relationship toggles, and force controls.
+- Do not continue Concept Map fidelity work from product reference alone; first use the open source implementation research.
+- GraphFrontier is the preferred next spike reference for a higher-fidelity graph module.
 - Product MVP should be composed from modules that have explicit readiness levels.
 - The documentation system is a governed module, not only a place where governance is written down.
 - Self-implementation is not the default for non-core capabilities.
@@ -90,18 +96,19 @@ docs(workflow): apply governance to documentation module
 Likely next task:
 
 ```text
-T-020: Promote UI AST parsing from M1 to M3
+T-023: Spike GraphFrontier-style graph rendering
 ```
 
 Required skill:
 
 ```text
-project-planner
+evaluating-new-technology, information-architecture, browser, commit-work
 ```
 
 Related docs:
 
 - [Task Board](../../TASKS.md)
+- [Obsidian Graph Open Source Research](../../docs/obsidian-graph-open-source-research.md)
 - [Documentation System Module Passport](../../docs/module-passports/documentation-system.md)
 - [Module Governance First](../../docs/module-governance-first.md)
 - [Project Management Workflow](../../docs/project-management.md)
@@ -112,8 +119,8 @@ Related docs:
 1. Read [START_HERE.md](../../START_HERE.md).
 2. Read [TASKS.md](../../TASKS.md).
 3. Read [Reuse-First Discovery Gate](../../docs/reuse-first-discovery-gate.md) before selecting any non-core implementation approach.
-4. Install or read the `project-planner` skill before starting T-003.
-5. Create an implementation plan for promoting `UI AST parsing` from M1 to M3.
+4. Read [Obsidian Graph Open Source Research](../../docs/obsidian-graph-open-source-research.md) before continuing Concept Map fidelity work.
+5. If continuing graph work, create a scoped spike for GraphFrontier-style rendering behind the existing `manifest.graph` interface.
 6. Record skill usage in [Skill Usage Log](../../docs/skill-usage-log.md).
 7. Update this handoff after completing the plan.
 
@@ -146,7 +153,7 @@ The Concept Map also supports global/local mode, 1-3 hop local depth, labels, ar
 Last known clean Git state after commit:
 
 ```text
-docs(workflow): install reuse-first skills locally
+docs(research): evaluate obsidian graph implementations
 ```
 
 New session should still run:

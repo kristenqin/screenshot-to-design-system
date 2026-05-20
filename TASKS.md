@@ -42,6 +42,7 @@ The next concrete implementation task is:
 | T-020 | Promote UI AST parsing from M1 to M3 | AFK | `project-planner`, `verification-before-completion`, `commit-work` | T-001 approval preferred | [Module Governance First](docs/module-governance-first.md) |
 | T-021 | Promote documentation system from M4 to M5 | AFK | `information-architecture`, `commit-work` | None | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
 | T-022 | Maintain reuse-first discovery gate | AFK | `information-architecture`, `commit-work` | None | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
+| T-023 | Spike GraphFrontier-style graph rendering | AFK | `evaluating-new-technology`, `information-architecture`, `browser`, `commit-work` | T-019 | [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md) |
 
 ## Backlog
 
@@ -78,6 +79,7 @@ The next concrete implementation task is:
 | D-015 | Add module-governance-first planning model | [Module Governance First](docs/module-governance-first.md) |
 | D-016 | Apply module governance to documentation system | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
 | D-017 | Add reuse-first discovery gate | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
+| D-018 | Research Obsidian-style open source graph implementations | [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md) |
 
 ## Operating Rules
 

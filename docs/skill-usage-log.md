@@ -599,3 +599,41 @@ Verification:
   - local graph at depth 1 narrows to 8 nodes and 20 edges
   - graph settings expose 4 toggles and 4 sliders
   - label toggle changes node label opacity
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture`
+
+Task:
+
+- Research open source implementations before continuing the Obsidian-style graph fidelity work.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+Reason:
+
+- The user pointed out that product-reference analysis was not enough; the project should first look for reusable open source implementations.
+
+Workflow steps followed:
+
+- Ran the reuse-first discovery gate.
+- Checked Obsidian Graph View as the product baseline.
+- Evaluated Juggl, Obsidian Extended Graph, GraphFrontier, and Obsidian Digital Garden.
+- Compared implementation fit, license posture, Obsidian API coupling, and direct reuse potential.
+- Documented a recommended spike path.
+
+Output artifacts:
+
+- [Obsidian Graph Open Source Research](obsidian-graph-open-source-research.md)
+- [Chinese Obsidian Graph Open Source Research](zh-CN/obsidian-graph-open-source-research.md)
+- Updated [Concept Map Research](concept-map-research.md)
+- Updated [README](../README.md)
+
+Deviations:
+
+- No implementation changes were made in this pass; this is intentionally a selection and planning artifact.
+
+Verification:
+
+- The docs site build should include the new English and Chinese research docs.

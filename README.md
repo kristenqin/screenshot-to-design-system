@@ -59,6 +59,7 @@ Language:
 - Skill usage policy and audit log live in [Skill Usage Policy](docs/skill-usage-policy.md) and [Skill Usage Log](docs/skill-usage-log.md).
 - Local browser docs site instructions live in [Docs Site](docs/docs-site.md).
 - Concept map research and graph navigation decisions live in [Concept Map Research](docs/concept-map-research.md).
+- Obsidian-style open source graph implementation research lives in [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md).
 - Module-first planning rules live in [Module Governance First](docs/module-governance-first.md).
 - Reuse-first implementation rules live in [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md).
 - The documentation system's own module contract lives in [Documentation System Module Passport](docs/module-passports/documentation-system.md).
@@ -70,6 +71,7 @@ Language:
 - [Docs Site](docs/docs-site.md)
 - [Information Architecture](docs/information-architecture.md)
 - [Concept Map Research](docs/concept-map-research.md)
+- [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md)
 - [Module Governance First](docs/module-governance-first.md)
 - [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md)
 - [Documentation System Module Passport](docs/module-passports/documentation-system.md)

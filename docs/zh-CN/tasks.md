@@ -19,6 +19,7 @@
 | T-003 | 为 UI AST run 写实施计划 | AFK | `project-planner` | T-001 | [项目管理工作流](project-management.md) |
 | T-014 | 维护 skill 使用规范和审计日志 | AFK | `commit-work` | 无 | [Skill 使用规范](skill-usage-policy.md) |
 | T-022 | 维护复用优先发现门禁 | AFK | `information-architecture`, `commit-work` | 无 | [复用优先发现门禁](reuse-first-discovery-gate.md) |
+| T-023 | Spike GraphFrontier 风格图谱渲染 | AFK | `evaluating-new-technology`, `information-architecture`, `browser`, `commit-work` | T-019 | [Obsidian Graph 开源实现调研](obsidian-graph-open-source-research.md) |
 
 ## Backlog
 
@@ -43,6 +44,7 @@
 - 调研 Skills.sh 项目管理 skills
 - 建立 skill 使用可审计机制
 - 加入复用优先发现门禁
+- 调研 Obsidian 风格开源图谱实现
 
 ## 规则
 

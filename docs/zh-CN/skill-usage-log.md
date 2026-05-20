@@ -541,3 +541,41 @@ Skill 来源：
   - local graph 在 depth 1 时收敛到 8 个节点和 20 条边
   - graph settings 暴露 4 个 toggle 和 4 个 slider
   - label toggle 可以改变节点标签透明度
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture`
+
+任务：
+
+- 在继续 Obsidian 风格图谱拟真前，先调研可复用开源实现。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+
+原因：
+
+- 用户指出只分析产品参考还不够，应该先找是否已有可复用开源实现。
+
+遵循步骤：
+
+- 运行复用优先发现门禁。
+- 将 Obsidian Graph View 作为产品行为基准。
+- 评估 Juggl、Obsidian Extended Graph、GraphFrontier 和 Obsidian Digital Garden。
+- 对比实现适配度、license、Obsidian API 耦合和直接复用潜力。
+- 记录推荐 spike 路径。
+
+输出：
+
+- [Obsidian Graph 开源实现调研](obsidian-graph-open-source-research.md)
+- [英文 Obsidian Graph Open Source Research](../obsidian-graph-open-source-research.md)
+- 更新 [概念图调研](concept-map-research.md)
+- 更新 [README](../../README.md)
+
+偏离：
+
+- 本轮没有改实现代码；这是有意的选型和计划 artifact。
+
+验证：
+
+- 文档站构建应包含新的中英文调研文档。
