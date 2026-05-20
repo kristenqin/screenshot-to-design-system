@@ -5,6 +5,7 @@ const state = {
   graph: { nodes: [], edges: [] },
   cytoscape: null,
   graphInstance: null,
+  graphCanvas: null,
   active: null,
   search: "",
   lang: "all",
@@ -317,7 +318,7 @@ async function renderConceptMap() {
         <p class="eyebrow">Concept Map</p>
         <h1>Document Relationship Graph</h1>
       </div>
-      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Drag nodes, zoom the canvas, select a node to inspect its neighborhood, or double-click to open it.</p>
+      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Pan, zoom, hover to focus, select a node, or double-click to open it.</p>
     </section>
     <div class="graph-controls" aria-label="Graph controls">
       <div class="graph-control-group">
@@ -367,7 +368,7 @@ async function renderConceptMap() {
 
   renderGraphToc(graph);
   bindGraphScopeControls();
-  await mountCytoscapeGraph(graph);
+  await mountGraph(graph);
   content.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "instant" });
 }
@@ -457,6 +458,491 @@ async function loadCytoscape() {
     state.cytoscape = module.default;
   }
   return state.cytoscape;
+}
+
+async function mountGraph(graph) {
+  try {
+    mountCanvasGraph(graph);
+  } catch (error) {
+    console.warn("Canvas graph failed, falling back to Cytoscape.", error);
+    await mountCytoscapeGraph(graph);
+  }
+}
+
+function mountCanvasGraph(graph) {
+  const container = document.querySelector("#concept-map");
+  if (!container) return;
+  if (state.graphInstance) {
+    state.graphInstance.destroy();
+    state.graphInstance = null;
+  }
+  if (state.graphCanvas?.destroy) state.graphCanvas.destroy();
+  container.innerHTML = `<canvas class="graph-canvas" aria-label="GraphFrontier-style documentation graph"></canvas>`;
+
+  const canvas = container.querySelector("canvas");
+  const ctx = canvas.getContext("2d");
+  const model = createCanvasGraphModel(graph);
+  const edgePairs = model.edges.map((edge) => ({
+    ...edge,
+    sourceNode: model.nodeById.get(edge.source),
+    targetNode: model.nodeById.get(edge.target)
+  })).filter((edge) => edge.sourceNode && edge.targetNode);
+
+  const view = {
+    graph,
+    canvas,
+    ctx,
+    model,
+    edges: edgePairs,
+    scale: 1,
+    tx: 0,
+    ty: 0,
+    hoverId: null,
+    selectedId: null,
+    focusProgress: 0,
+    pointer: null,
+    draggingNode: null,
+    draggingCanvas: false,
+    lastPointer: null,
+    animationId: null,
+    destroyed: false,
+    settledTicks: 0
+  };
+  canvas.dataset.graphRenderer = "canvas";
+  canvas.dataset.nodeCount = String(model.nodes.length);
+  canvas.dataset.edgeCount = String(edgePairs.length);
+  canvas.dataset.scale = "1";
+
+  resizeCanvasGraph(view);
+  seedCanvasGraph(view);
+  const unbindCanvasGraphEvents = bindCanvasGraphEvents(view);
+  runCanvasGraphFrame(view);
+
+  state.graphCanvas = {
+    view,
+    destroy() {
+      view.destroyed = true;
+      if (view.animationId) cancelAnimationFrame(view.animationId);
+      unbindCanvasGraphEvents();
+    }
+  };
+  window.__graphCanvas = view;
+}
+
+function createCanvasGraphModel(graph) {
+  const degreeByNode = graphDegreeByNode(graph);
+  const nodes = graph.nodes.map((node) => ({
+    ...node,
+    degree: degreeByNode.get(node.id) ?? 0,
+    radius: canvasNodeRadius(node, degreeByNode.get(node.id) ?? 0),
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    pinned: false
+  }));
+  return {
+    nodes,
+    edges: graph.edges,
+    nodeById: new Map(nodes.map((node) => [node.id, node]))
+  };
+}
+
+function canvasNodeRadius(node, degree) {
+  const base = node.kind === "path" ? 6 : 3.2;
+  return Math.max(2.6, Math.min(9.5, (base + Math.log2(degree + 2) * 1.5) * state.graphSettings.nodeScale));
+}
+
+function resizeCanvasGraph(view) {
+  const rect = view.canvas.parentElement.getBoundingClientRect();
+  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  view.width = Math.max(320, rect.width);
+  view.height = Math.max(480, rect.height);
+  view.dpr = dpr;
+  view.canvas.width = Math.floor(view.width * dpr);
+  view.canvas.height = Math.floor(view.height * dpr);
+  view.canvas.style.width = `${view.width}px`;
+  view.canvas.style.height = `${view.height}px`;
+  view.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function seedCanvasGraph(view) {
+  const { nodes } = view.model;
+  const count = Math.max(1, nodes.length);
+  const radius = Math.min(view.width, view.height) * 0.28;
+  const centerX = view.width / 2;
+  const centerY = view.height / 2;
+  nodes.forEach((node, index) => {
+    const angle = (index / count) * Math.PI * 2;
+    const ringNoise = 0.72 + ((index * 37) % 23) / 80;
+    node.x = centerX + Math.cos(angle) * radius * ringNoise;
+    node.y = centerY + Math.sin(angle) * radius * ringNoise;
+    node.vx = 0;
+    node.vy = 0;
+  });
+}
+
+function bindCanvasGraphEvents(view) {
+  const canvas = view.canvas;
+  const updatePointer = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    view.pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    return view.pointer;
+  };
+
+  canvas.addEventListener("pointermove", (event) => {
+    const pointer = updatePointer(event);
+    const world = screenToWorld(view, pointer.x, pointer.y);
+    if (view.draggingNode) {
+      view.draggingNode.x = world.x;
+      view.draggingNode.y = world.y;
+      view.draggingNode.vx = 0;
+      view.draggingNode.vy = 0;
+      view.draggingNode.pinned = true;
+      view.settledTicks = 0;
+      return;
+    }
+    if (view.draggingCanvas && view.lastPointer) {
+      view.tx += pointer.x - view.lastPointer.x;
+      view.ty += pointer.y - view.lastPointer.y;
+      view.lastPointer = pointer;
+      return;
+    }
+    const hover = findCanvasNodeAt(view, pointer.x, pointer.y);
+    view.hoverId = hover?.id ?? null;
+    canvas.dataset.hoverId = view.hoverId ?? "";
+  });
+
+  canvas.addEventListener("pointerdown", (event) => {
+    canvas.setPointerCapture(event.pointerId);
+    const pointer = updatePointer(event);
+    const hit = findCanvasNodeAt(view, pointer.x, pointer.y);
+    view.lastPointer = pointer;
+    if (hit) {
+      view.draggingNode = hit;
+      view.selectedId = hit.id;
+      renderGraphToc(view.graph, null, null, canvasNodeDetails(view, hit));
+    } else {
+      view.draggingCanvas = true;
+      view.selectedId = null;
+      renderGraphToc(view.graph);
+    }
+  });
+
+  canvas.addEventListener("pointerup", () => {
+    view.draggingNode = null;
+    view.draggingCanvas = false;
+    view.lastPointer = null;
+  });
+
+  canvas.addEventListener("pointerleave", () => {
+    view.hoverId = null;
+    view.draggingNode = null;
+    view.draggingCanvas = false;
+  });
+
+  canvas.addEventListener("dblclick", (event) => {
+    const pointer = updatePointer(event);
+    const hit = findCanvasNodeAt(view, pointer.x, pointer.y);
+    if (!hit) return;
+    if (hit.kind === "doc") loadDoc(hit.id);
+    if (hit.kind === "path") {
+      state.path = hit.id.replace(/^path:/, "");
+      renderNav();
+      renderConceptMap().catch(showGraphError);
+    }
+  });
+
+  canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const pointer = updatePointer(event);
+    const before = screenToWorld(view, pointer.x, pointer.y);
+    const factor = Math.exp(-event.deltaY * 0.0012);
+    view.scale = Math.max(0.22, Math.min(3.2, view.scale * factor));
+    const after = worldToScreen(view, before.x, before.y);
+    view.tx += pointer.x - after.x;
+    view.ty += pointer.y - after.y;
+    canvas.dataset.scale = view.scale.toFixed(3);
+  }, { passive: false });
+
+  const resizeListener = () => {
+    if (view.destroyed) return;
+    resizeCanvasGraph(view);
+  };
+  window.addEventListener("resize", resizeListener);
+
+  return () => {
+    window.removeEventListener("resize", resizeListener);
+  };
+}
+
+function runCanvasGraphFrame(view) {
+  if (view.destroyed) return;
+  if (view.settledTicks < 260) {
+    stepCanvasPhysics(view);
+    view.settledTicks += 1;
+  }
+  drawCanvasGraph(view);
+  view.animationId = requestAnimationFrame(() => runCanvasGraphFrame(view));
+}
+
+function stepCanvasPhysics(view) {
+  const nodes = view.model.nodes;
+  const edges = view.edges;
+  const repel = 1100 * state.graphSettings.repel;
+  const linkDistance = 92 * state.graphSettings.distance;
+  const centerX = view.width / 2;
+  const centerY = view.height / 2;
+
+  for (let i = 0; i < nodes.length; i += 1) {
+    const a = nodes[i];
+    for (let j = i + 1; j < nodes.length; j += 1) {
+      const b = nodes[j];
+      const dx = a.x - b.x || 0.01;
+      const dy = a.y - b.y || 0.01;
+      const distSq = Math.max(120, dx * dx + dy * dy);
+      const force = repel / distSq;
+      const fx = dx * force;
+      const fy = dy * force;
+      if (!a.pinned) {
+        a.vx += fx;
+        a.vy += fy;
+      }
+      if (!b.pinned) {
+        b.vx -= fx;
+        b.vy -= fy;
+      }
+    }
+  }
+
+  for (const edge of edges) {
+    const source = edge.sourceNode;
+    const target = edge.targetNode;
+    const dx = target.x - source.x;
+    const dy = target.y - source.y;
+    const dist = Math.max(1, Math.hypot(dx, dy));
+    const desired = edge.type === "references" ? linkDistance : linkDistance * 1.25;
+    const strength = edge.type === "references" ? 0.012 : 0.006;
+    const force = (dist - desired) * strength;
+    const fx = (dx / dist) * force;
+    const fy = (dy / dist) * force;
+    if (!source.pinned) {
+      source.vx += fx;
+      source.vy += fy;
+    }
+    if (!target.pinned) {
+      target.vx -= fx;
+      target.vy -= fy;
+    }
+  }
+
+  for (const node of nodes) {
+    if (!node.pinned) {
+      node.vx += (centerX - node.x) * 0.0018;
+      node.vy += (centerY - node.y) * 0.0018;
+      node.x += node.vx;
+      node.y += node.vy;
+    }
+    node.vx *= 0.82;
+    node.vy *= 0.82;
+  }
+}
+
+function drawCanvasGraph(view) {
+  const { ctx } = view;
+  ctx.save();
+  ctx.setTransform(view.dpr, 0, 0, view.dpr, 0, 0);
+  ctx.clearRect(0, 0, view.width, view.height);
+  ctx.fillStyle = "#11151c";
+  ctx.fillRect(0, 0, view.width, view.height);
+  drawCanvasGrid(view);
+  ctx.translate(view.tx, view.ty);
+  ctx.scale(view.scale, view.scale);
+
+  const focusId = view.hoverId || view.selectedId;
+  const focusNeighbors = focusId ? canvasNeighborSet(view, focusId) : null;
+  view.focusProgress += ((focusId ? 1 : 0) - view.focusProgress) * 0.18;
+
+  for (const edge of view.edges) drawCanvasEdge(view, edge, focusNeighbors);
+  for (const node of view.model.nodes) drawCanvasNode(view, node, focusId, focusNeighbors);
+  ctx.restore();
+
+  const focusedNode = view.model.nodeById.get(focusId);
+  if (focusedNode) drawCanvasLabelBubble(view, focusedNode);
+}
+
+function drawCanvasGrid(view) {
+  const { ctx } = view;
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,0.035)";
+  ctx.lineWidth = 1;
+  const gap = 36;
+  const ox = view.tx % gap;
+  const oy = view.ty % gap;
+  for (let x = ox; x < view.width; x += gap) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, view.height);
+    ctx.stroke();
+  }
+  for (let y = oy; y < view.height; y += gap) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(view.width, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawCanvasEdge(view, edge, focusNeighbors) {
+  const { ctx } = view;
+  const relevant = !focusNeighbors || (focusNeighbors.has(edge.source) && focusNeighbors.has(edge.target));
+  const alphaBase = edge.type === "references" ? 0.34 : edge.type === "companion" ? 0.16 : 0.08;
+  const alpha = relevant ? alphaBase : Math.max(0.025, alphaBase * (1 - view.focusProgress * 0.86));
+  ctx.strokeStyle = edge.type === "references"
+    ? `rgba(139, 170, 202, ${alpha})`
+    : edge.type === "companion"
+      ? `rgba(214, 170, 92, ${alpha})`
+      : `rgba(89, 146, 190, ${alpha})`;
+  ctx.lineWidth = (edge.type === "references" ? 1.05 : 0.7) * state.graphSettings.linkScale / view.scale;
+  ctx.beginPath();
+  ctx.moveTo(edge.sourceNode.x, edge.sourceNode.y);
+  ctx.lineTo(edge.targetNode.x, edge.targetNode.y);
+  ctx.stroke();
+}
+
+function drawCanvasNode(view, node, focusId, focusNeighbors) {
+  const { ctx } = view;
+  const relevant = !focusNeighbors || focusNeighbors.has(node.id);
+  const selected = node.id === view.selectedId;
+  const hovered = node.id === view.hoverId;
+  const alpha = relevant ? 1 : Math.max(0.08, 1 - view.focusProgress * 0.82);
+  ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  ctx.arc(node.x, node.y, node.radius * (selected || hovered ? 1.45 : 1), 0, Math.PI * 2);
+  ctx.fillStyle = node.kind === "path" ? "#59a9e8" : node.lang === "zh-CN" ? "#d6aa5c" : "#d9e7f5";
+  ctx.shadowColor = selected || hovered ? "rgba(119, 190, 255, 0.9)" : "rgba(119, 190, 255, 0.18)";
+  ctx.shadowBlur = selected || hovered ? 18 : 7;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.lineWidth = (selected ? 2.4 : 0.7) / view.scale;
+  ctx.strokeStyle = selected ? "#91d5ff" : "rgba(255,255,255,0.5)";
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  if (state.graphSettings.showLabels || view.scale > 1.45 || selected || hovered) {
+    drawCanvasNodeLabel(view, node, selected || hovered ? 1 : alpha * 0.72);
+  }
+}
+
+function drawCanvasNodeLabel(view, node, alpha) {
+  const { ctx } = view;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.font = `${Math.max(9, 11 / view.scale)}px ui-monospace, SFMono-Regular, Menlo, monospace`;
+  ctx.fillStyle = "rgba(238, 245, 255, 0.95)";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText(node.label, node.x, node.y + node.radius + 5 / view.scale);
+  ctx.restore();
+}
+
+function drawCanvasLabelBubble(view, node) {
+  const { ctx } = view;
+  const point = worldToScreen(view, node.x, node.y);
+  const label = node.label || node.id;
+  ctx.save();
+  ctx.font = "13px ui-monospace, SFMono-Regular, Menlo, monospace";
+  const width = Math.min(340, ctx.measureText(label).width + 18);
+  const x = Math.max(10, Math.min(view.width - width - 10, point.x - width / 2));
+  const y = Math.max(10, point.y - 38);
+  ctx.fillStyle = "rgba(8, 11, 16, 0.78)";
+  ctx.strokeStyle = "rgba(145, 213, 255, 0.55)";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, width, 26, 8);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillText(label, x + 9, y + 13, width - 18);
+  ctx.restore();
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.arcTo(x + width, y, x + width, y + radius, radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+  ctx.lineTo(x + radius, y + height);
+  ctx.arcTo(x, y + height, x, y + height - radius, radius);
+  ctx.lineTo(x, y + radius);
+  ctx.arcTo(x, y, x + radius, y, radius);
+  ctx.closePath();
+}
+
+function canvasNeighborSet(view, id) {
+  const set = new Set([id]);
+  for (const edge of view.edges) {
+    if (edge.source === id) set.add(edge.target);
+    if (edge.target === id) set.add(edge.source);
+  }
+  return set;
+}
+
+function findCanvasNodeAt(view, screenX, screenY) {
+  const world = screenToWorld(view, screenX, screenY);
+  let best = null;
+  let bestDistance = Infinity;
+  for (const node of view.model.nodes) {
+    const distance = Math.hypot(world.x - node.x, world.y - node.y);
+    const hitRadius = Math.max(8 / view.scale, node.radius + 4 / view.scale);
+    if (distance <= hitRadius && distance < bestDistance) {
+      best = node;
+      bestDistance = distance;
+    }
+  }
+  return best;
+}
+
+function screenToWorld(view, x, y) {
+  return {
+    x: (x - view.tx) / view.scale,
+    y: (y - view.ty) / view.scale
+  };
+}
+
+function worldToScreen(view, x, y) {
+  return {
+    x: x * view.scale + view.tx,
+    y: y * view.scale + view.ty
+  };
+}
+
+function canvasNodeDetails(view, node) {
+  const connectedEdges = view.edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+  const references = connectedEdges.filter((edge) => edge.type === "references").length;
+  const companions = connectedEdges.filter((edge) => edge.type === "companion").length;
+  const pathLinks = connectedEdges.filter((edge) => edge.type === "path").length;
+  const weightedDegree = connectedEdges.reduce((sum, edge) => sum + edgeWeight(edge), 0);
+  const action = node.kind === "doc"
+    ? `<button class="toc-action" type="button" onclick="window.__openGraphDoc('${escapeHtml(node.id)}')">Open document</button>`
+    : "";
+  return `
+    <div class="toc-detail">
+      <p class="toc-title">Selected</p>
+      <strong>${escapeHtml(node.label)}</strong>
+      <span>${escapeHtml(node.section ?? node.hint ?? node.id)}</span>
+      <div class="toc-stat"><strong>${connectedEdges.length}</strong><span>relationships</span></div>
+      <div class="toc-stat"><strong>${weightedDegree.toFixed(1)}</strong><span>weighted degree</span></div>
+      <div class="toc-stat"><strong>${references}</strong><span>references</span></div>
+      <div class="toc-stat"><strong>${companions}</strong><span>companions</span></div>
+      <div class="toc-stat"><strong>${pathLinks}</strong><span>path links</span></div>
+      ${action}
+    </div>
+  `;
 }
 
 async function mountCytoscapeGraph(graph) {
@@ -803,14 +1289,14 @@ function localGraph(nodes, edges) {
   };
 }
 
-function renderGraphToc(graph, selectedNode = null, selectedEdge = null) {
+function renderGraphToc(graph, selectedNode = null, selectedEdge = null, selectedHtml = "") {
   const toc = document.querySelector("#toc");
   const byKind = graph.edges.reduce((counts, edge) => {
     counts[edge.type] = (counts[edge.type] ?? 0) + 1;
     return counts;
   }, {});
   const density = couplingSummary(graph);
-  const selected = selectedNode ? selectedNodeDetails(selectedNode) : selectedEdge ? selectedEdgeDetails(selectedEdge) : "";
+  const selected = selectedHtml || (selectedNode ? selectedNodeDetails(selectedNode) : selectedEdge ? selectedEdgeDetails(selectedEdge) : "");
   toc.innerHTML = `
     <p class="toc-title">Graph</p>
     <div class="toc-stat"><strong>${graph.nodes.length}</strong><span>nodes</span></div>
