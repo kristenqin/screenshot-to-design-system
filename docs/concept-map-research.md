@@ -64,3 +64,61 @@ The project should adopt the concept map now, but keep its data model conservati
 - Use the right panel to inspect relationship counts and edge types.
 
 This matches the document-engineering direction: the documentation system behaves more like a codebase, where relationships between modules matter as much as the folder layout.
+
+## Relationship Governance
+
+The concept map should not treat every relationship as equally important. Dense graphs quickly become unreadable and can hide document coupling problems.
+
+Language should be treated as graph scope:
+
+- `中文决策图`: default decision-making view for Chinese companion docs.
+- `English execution`: execution-oriented view for English source docs.
+- `All audit`: full coverage view for checking bilingual parity and cross-language relationships.
+
+This reduces visual noise from language companion links and lets each audience inspect the graph it actually needs.
+
+Relationship weights:
+
+| Relationship | Purpose | Default visual weight |
+| --- | --- | --- |
+| `references` | Knowledge or execution relationship between docs. | High |
+| `companion` | Bilingual mapping between English and Chinese docs. | Low, mostly useful in audit mode |
+| `path` | Reading-path membership and navigation aid. | Ambient, hidden outside audit mode |
+
+The graph should also expose coupling signals:
+
+- `degree`: total number of connected relationships.
+- `weighted degree`: degree adjusted by relationship importance.
+- `max degree`: highest degree in the current graph scope.
+- `high coupling nodes`: nodes above the current coupling threshold.
+
+A high-degree document is not always wrong. It may be a legitimate hub, index, or policy. But high degree should be intentional. If a normal module document accumulates too many strong links, it may need to be split, converted into a hub, or given a clearer interface.
+
+Software engineering principles applied to document graphs:
+
+- **Separation of concerns**: Chinese decision docs and English execution docs should be inspectable separately.
+- **High cohesion, low coupling**: a document should have a clear responsibility and avoid unnecessary strong links.
+- **Stable dependencies**: stable principle or contract docs may be referenced widely; temporary task or log docs should not become dependency hubs.
+- **Layered architecture**: principles, product docs, module contracts, plans, evidence, and logs should not form uncontrolled cycles.
+- **Interface segregation**: if one document serves too many readers or jobs, split it into explanation, how-to, reference, decision, or audit surfaces.
+
+## Obsidian-Inspired Rendering
+
+Obsidian's graph view is useful as a product reference because it does not try to display every piece of graph information at once. Its graph settings separate the problem into:
+
+- filters for what nodes and links enter the graph
+- groups for visual categorization
+- display controls such as arrows, text fade threshold, node size, and link thickness
+- force controls such as center force, repel force, link force, and link distance
+- local graph depth for inspecting a smaller neighborhood
+
+The docs site should borrow this interaction model:
+
+- Nodes are rendered as circles rather than text-heavy boxes.
+- Labels are hidden by default and only shown for selected nodes.
+- Hovering or selecting a node highlights its local neighborhood.
+- Weak navigation edges stay ambient or hidden outside audit mode.
+- Layout uses stronger repel force and longer link distance to reduce overlap.
+- The right panel carries the details, so the graph canvas can stay visually quiet.
+
+This makes the graph closer to a coupling and relationship inspection tool, rather than a diagram that attempts to label every document at once.

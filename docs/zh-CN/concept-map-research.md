@@ -64,3 +64,61 @@
 - 在右侧面板查看关系数量和 edge types。
 
 这符合“把文档当工程”的方向：文档系统更像代码库，模块之间的关系和目录层级同样重要。
+
+## 关系治理
+
+Concept Map 不应该把所有关系都当成同等重要。图一旦过密，就会变得不可读，也会掩盖文档之间的耦合问题。
+
+语言应该作为 graph scope 处理：
+
+- `中文决策图`：默认用于中文 companion docs 的决策视图。
+- `English execution`：面向英文源文档的执行视图。
+- `All audit`：用于检查双语覆盖和跨语言关系的全量审计视图。
+
+这样可以减少 language companion links 带来的噪声，让每类用户只检查自己真正需要的图。
+
+关系权重：
+
+| 关系 | 作用 | 默认视觉权重 |
+| --- | --- | --- |
+| `references` | 文档之间的知识关系或执行关系。 | 高 |
+| `companion` | 中英文文档之间的双语映射。 | 低，主要在 audit mode 有用 |
+| `path` | 阅读路径成员关系和导航辅助。 | 环境信息，audit mode 之外默认隐藏 |
+
+图谱也应该暴露耦合信号：
+
+- `degree`：节点参与的总关系数。
+- `weighted degree`：按关系重要性调整后的关系数。
+- `max degree`：当前 graph scope 中最高 degree。
+- `high coupling nodes`：超过当前耦合阈值的节点数量。
+
+高 degree 不一定是错误。它可能是合理的 hub、index 或 policy。但高 degree 必须是有意为之。如果一个普通模块文档积累了太多强关系，它可能需要拆分、转成 hub，或者定义更清楚的接口。
+
+应用到文档图谱的软件工程原则：
+
+- **Separation of concerns**：中文决策文档和英文执行文档应该可以分开检查。
+- **High cohesion, low coupling**：文档应该有清晰职责，避免不必要的强连接。
+- **Stable dependencies**：稳定的原则或 contract 文档可以被广泛引用；临时任务或日志文档不应该变成依赖中心。
+- **Layered architecture**：principles、product docs、module contracts、plans、evidence、logs 不应该形成失控循环。
+- **Interface segregation**：如果一份文档服务太多读者或任务，就应该拆成 explanation、how-to、reference、decision 或 audit surfaces。
+
+## 借鉴 Obsidian 的渲染方式
+
+Obsidian 的 Graph View 很值得作为产品参考，因为它不是把所有图信息一次性展示出来，而是把问题拆成几组控制：
+
+- filters：控制哪些节点和链接进入图谱
+- groups：用于视觉分组
+- display controls：例如 arrows、text fade threshold、node size、link thickness
+- force controls：例如 center force、repel force、link force、link distance
+- local graph depth：用于查看更小的局部邻域
+
+文档站应该借鉴这种交互模型：
+
+- 节点用圆点渲染，而不是文字很重的矩形卡片。
+- 标签默认隐藏，只在选中节点时展示。
+- hover 或选择节点时高亮它的局部邻域。
+- 弱导航边在 audit mode 之外保持环境化或隐藏。
+- 布局使用更强的 repel force 和更长的 link distance，减少重叠。
+- 细节放到右侧面板，让图谱画布本身保持安静。
+
+这样图谱会更像耦合和关系检查工具，而不是试图一次性标注所有文档的图表。

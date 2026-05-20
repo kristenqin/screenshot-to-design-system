@@ -56,6 +56,9 @@ public/vendor/
 - 内部 Markdown 链接尽量转成站内跳转
 - 基于 Cytoscape 的 Concept Map 视图，用来查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
 - 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
+- Concept Map scope 切换：中文决策图、English execution graph、全量审计图
+- 低价值关系会被视觉降权，让强文档引用更容易检查
+- 借鉴 Obsidian 的图谱渲染：圆形节点、默认隐藏标签、hover/selection 邻域，以及更安静的画布密度
 
 ## 已验证
 
@@ -65,6 +68,7 @@ public/vendor/
 - 导航里有 51 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
 - Concept Map 视图可以用 Cytoscape canvas 渲染 57 个节点和 321 条关系边
+- 中文和英文 graph scope 可以独立切换
 - 中文筛选可用
 - 中文文档入口可打开
 - 页面目录可生成

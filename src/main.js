@@ -306,10 +306,15 @@ async function renderConceptMap() {
       </div>
       <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Drag nodes, zoom the canvas, or select a node to inspect its neighborhood.</p>
     </section>
+    <div class="graph-controls" aria-label="Graph scope">
+      ${graphScopeButton("zh-CN", "中文决策图", "Decision")}
+      ${graphScopeButton("en", "English execution", "Agent")}
+      ${graphScopeButton("all", "All audit", "Coverage")}
+    </div>
     <div class="graph-legend" aria-label="Relationship legend">
-      <span><i class="legend-dot path"></i>Path organizes doc</span>
-      <span><i class="legend-dot companion"></i>Bilingual companion</span>
-      <span><i class="legend-dot references"></i>Markdown reference</span>
+      <span><i class="legend-dot references"></i>Primary reference</span>
+      <span><i class="legend-dot companion"></i>Language companion</span>
+      <span><i class="legend-dot path"></i>Navigation path</span>
     </div>
     <div class="graph-stage">
       <div id="concept-map" class="concept-map" role="img" aria-label="Interactive documentation concept map"></div>
@@ -317,9 +322,30 @@ async function renderConceptMap() {
   `;
 
   renderGraphToc(graph);
+  bindGraphScopeControls();
   await mountCytoscapeGraph(graph);
   content.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function graphScopeButton(value, label, hint) {
+  const active = state.lang === value ? "active" : "";
+  return `
+    <button class="graph-scope ${active}" type="button" data-graph-scope="${value}">
+      <span>${escapeHtml(label)}</span>
+      <small>${escapeHtml(hint)}</small>
+    </button>
+  `;
+}
+
+function bindGraphScopeControls() {
+  document.querySelectorAll("[data-graph-scope]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.lang = button.dataset.graphScope;
+      renderNav();
+      renderConceptMap().catch(showGraphError);
+    });
+  });
 }
 
 async function loadCytoscape() {
@@ -339,6 +365,7 @@ async function mountCytoscapeGraph(graph) {
     state.graphInstance = null;
   }
 
+  const degreeByNode = graphDegreeByNode(graph);
   const elements = [
     ...graph.nodes.map((node) => ({
       data: {
@@ -348,7 +375,9 @@ async function mountCytoscapeGraph(graph) {
         lang: node.lang,
         section: node.section,
         hint: node.hint,
-        paths: node.paths ?? []
+        paths: node.paths ?? [],
+        degree: degreeByNode.get(node.id) ?? 0,
+        size: graphNodeSize(node, degreeByNode.get(node.id) ?? 0)
       },
       classes: `${node.kind} ${node.lang === "zh-CN" ? "zh" : ""}`
     })),
@@ -358,9 +387,10 @@ async function mountCytoscapeGraph(graph) {
         source: edge.source,
         target: edge.target,
         type: edge.type,
-        label: edge.label
+        label: edge.label,
+        weight: edgeWeight(edge)
       },
-      classes: edge.type
+      classes: `${edge.type} ${edgeWeightClass(edge)}`
     }))
   ];
 
@@ -375,14 +405,27 @@ async function mountCytoscapeGraph(graph) {
       name: "cose",
       animate: false,
       fit: true,
-      padding: 48,
-      nodeRepulsion: 7600,
-      idealEdgeLength: (edge) => edge.data("type") === "references" ? 150 : 105,
-      edgeElasticity: (edge) => edge.data("type") === "references" ? 0.42 : 0.62,
+      padding: 76,
+      nodeOverlap: 24,
+      componentSpacing: 120,
+      nodeRepulsion: 24000,
+      idealEdgeLength: (edge) => edge.data("type") === "references" ? 220 : 260,
+      edgeElasticity: (edge) => edge.data("type") === "references" ? 0.18 : 0.08,
       nestingFactor: 1.15,
-      gravity: 0.34,
-      numIter: 1400
+      gravity: 0.08,
+      numIter: 2600
     }
+  });
+
+  cy.on("mouseover", "node", (event) => {
+    const node = event.target;
+    if (cy.nodes(".selected").length) return;
+    node.closedNeighborhood().addClass("preview");
+  });
+
+  cy.on("mouseout", "node", () => {
+    if (cy.nodes(".selected").length) return;
+    cy.elements().removeClass("preview");
   });
 
   cy.on("tap", "node", (event) => {
@@ -416,6 +459,35 @@ async function mountCytoscapeGraph(graph) {
   window.__graphCy = cy;
 }
 
+function graphDegreeByNode(graph) {
+  const degreeByNode = new Map(graph.nodes.map((node) => [node.id, 0]));
+  for (const edge of graph.edges) {
+    const weight = edgeWeight(edge);
+    degreeByNode.set(edge.source, (degreeByNode.get(edge.source) ?? 0) + weight);
+    degreeByNode.set(edge.target, (degreeByNode.get(edge.target) ?? 0) + weight);
+  }
+  return degreeByNode;
+}
+
+function graphNodeSize(node, degree) {
+  const base = node.kind === "path" ? 18 : 11;
+  return Math.round(base + Math.min(20, degree * 1.35));
+}
+
+function edgeWeight(edge) {
+  if (edge.type === "references") return 1;
+  if (edge.type === "companion") return 0.34;
+  if (edge.type === "path") return 0.16;
+  return 0.5;
+}
+
+function edgeWeightClass(edge) {
+  const weight = edgeWeight(edge);
+  if (weight >= 0.75) return "strong";
+  if (weight >= 0.3) return "supporting";
+  return "ambient";
+}
+
 function graphStyles() {
   return [
     {
@@ -423,19 +495,24 @@ function graphStyles() {
       style: {
         "background-color": "#ffffff",
         "border-color": "#c8d3df",
-        "border-width": 1,
+        "border-opacity": 0.72,
+        "border-width": 1.2,
         "color": "#17202a",
-        "font-size": 11,
+        "font-size": 10,
         "font-weight": 700,
-        "height": 42,
+        "height": "data(size)",
         "label": "data(label)",
         "line-height": 1.2,
-        "shape": "round-rectangle",
+        "min-zoomed-font-size": 7,
+        "overlay-opacity": 0,
+        "shape": "ellipse",
         "text-halign": "center",
-        "text-max-width": 112,
-        "text-valign": "center",
+        "text-margin-y": -11,
+        "text-max-width": 92,
+        "text-opacity": 0,
+        "text-valign": "top",
         "text-wrap": "wrap",
-        "width": 128
+        "width": "data(size)"
       }
     },
     {
@@ -444,9 +521,8 @@ function graphStyles() {
         "background-color": "#e6f2fb",
         "border-color": "#1769aa",
         "color": "#0f4f82",
-        "height": 46,
-        "shape": "round-rectangle",
-        "width": 104
+        "height": "data(size)",
+        "width": "data(size)"
       }
     },
     {
@@ -460,17 +536,12 @@ function graphStyles() {
       selector: "edge",
       style: {
         "curve-style": "bezier",
-        "font-size": 9,
-        "label": "data(label)",
+        "label": "",
         "line-color": "#9aacbf",
-        "opacity": 0.72,
+        "opacity": 0.28,
         "target-arrow-color": "#9aacbf",
-        "target-arrow-shape": "triangle",
-        "text-background-color": "#fbfcfd",
-        "text-background-opacity": 0.82,
-        "text-background-padding": 2,
-        "text-rotation": "autorotate",
-        "width": 1.5
+        "target-arrow-shape": "none",
+        "width": 0.9
       }
     },
     {
@@ -479,8 +550,9 @@ function graphStyles() {
         "label": "",
         "line-color": "#1769aa",
         "target-arrow-color": "#1769aa",
-        "width": 1.25,
-        "opacity": 0.36
+        "width": 0.45,
+        "opacity": 0.05,
+        "target-arrow-shape": "none"
       }
     },
     {
@@ -489,7 +561,8 @@ function graphStyles() {
         "line-color": "#9a6a2f",
         "line-style": "dashed",
         "target-arrow-color": "#9a6a2f",
-        "width": 2
+        "width": 0.7,
+        "opacity": 0.12
       }
     },
     {
@@ -497,21 +570,41 @@ function graphStyles() {
       style: {
         "line-color": "#65727e",
         "target-arrow-color": "#65727e",
-        "width": 2.2
+        "width": 1.25,
+        "opacity": 0.36
+      }
+    },
+    {
+      selector: "edge.ambient",
+      style: {
+        "display": state.lang === "all" ? "element" : "none"
+      }
+    },
+    {
+      selector: "edge.supporting",
+      style: {
+        "opacity": state.lang === "all" ? 0.24 : 0.12
       }
     },
     {
       selector: ".faded",
       style: {
-        "opacity": 0.12,
-        "text-opacity": 0.05
+        "opacity": 0.08,
+        "text-opacity": 0
+      }
+    },
+    {
+      selector: ".preview",
+      style: {
+        "opacity": 1,
+        "text-opacity": 0
       }
     },
     {
       selector: ".neighborhood",
       style: {
         "opacity": 1,
-        "text-opacity": 1
+        "text-opacity": 0
       }
     },
     {
@@ -519,14 +612,18 @@ function graphStyles() {
       style: {
         "border-color": "#0f4f82",
         "border-width": 3,
-        "background-color": "#d8ebf8"
+        "background-color": "#d8ebf8",
+        "height": "data(size)",
+        "text-opacity": 1,
+        "width": "data(size)"
       }
     },
     {
       selector: "edge.selected",
       style: {
         "opacity": 1,
-        "width": 3.2
+        "target-arrow-shape": "triangle",
+        "width": 2.4
       }
     }
   ];
@@ -534,7 +631,7 @@ function graphStyles() {
 
 function focusGraphNode(cy, node) {
   const neighborhood = node.closedNeighborhood();
-  cy.elements().addClass("faded").removeClass("selected neighborhood");
+  cy.elements().addClass("faded").removeClass("selected neighborhood preview");
   neighborhood.removeClass("faded").addClass("neighborhood");
   node.addClass("selected");
   neighborhood.edges().addClass("selected");
@@ -564,6 +661,7 @@ function renderGraphToc(graph, selectedNode = null, selectedEdge = null) {
     counts[edge.type] = (counts[edge.type] ?? 0) + 1;
     return counts;
   }, {});
+  const density = couplingSummary(graph);
   const selected = selectedNode ? selectedNodeDetails(selectedNode) : selectedEdge ? selectedEdgeDetails(selectedEdge) : "";
   toc.innerHTML = `
     <p class="toc-title">Graph</p>
@@ -572,6 +670,8 @@ function renderGraphToc(graph, selectedNode = null, selectedEdge = null) {
     <div class="toc-stat"><strong>${byKind.path ?? 0}</strong><span>path links</span></div>
     <div class="toc-stat"><strong>${byKind.companion ?? 0}</strong><span>bilingual links</span></div>
     <div class="toc-stat"><strong>${byKind.references ?? 0}</strong><span>doc links</span></div>
+    <div class="toc-stat"><strong>${density.maxDegree}</strong><span>max degree</span></div>
+    <div class="toc-stat"><strong>${density.highCouplingNodes}</strong><span>high coupling</span></div>
     ${selected}
   `;
 }
@@ -581,6 +681,7 @@ function selectedNodeDetails(node) {
   const references = connectedEdges.filter((edge) => edge.data("type") === "references").length;
   const companions = connectedEdges.filter((edge) => edge.data("type") === "companion").length;
   const pathLinks = connectedEdges.filter((edge) => edge.data("type") === "path").length;
+  const weightedDegree = connectedEdges.reduce((sum, edge) => sum + Number(edge.data("weight") ?? 0), 0);
   const action = node.data("kind") === "doc"
     ? `<button class="toc-action" type="button" onclick="window.__openGraphDoc('${escapeHtml(node.id())}')">Open document</button>`
     : "";
@@ -590,12 +691,27 @@ function selectedNodeDetails(node) {
       <strong>${escapeHtml(node.data("label"))}</strong>
       <span>${escapeHtml(node.data("section") ?? node.data("hint") ?? node.id())}</span>
       <div class="toc-stat"><strong>${connectedEdges.length}</strong><span>relationships</span></div>
+      <div class="toc-stat"><strong>${weightedDegree.toFixed(1)}</strong><span>weighted degree</span></div>
       <div class="toc-stat"><strong>${references}</strong><span>references</span></div>
       <div class="toc-stat"><strong>${companions}</strong><span>companions</span></div>
       <div class="toc-stat"><strong>${pathLinks}</strong><span>path links</span></div>
       ${action}
     </div>
   `;
+}
+
+function couplingSummary(graph) {
+  const degreeByNode = new Map(graph.nodes.map((node) => [node.id, 0]));
+  for (const edge of graph.edges) {
+    degreeByNode.set(edge.source, (degreeByNode.get(edge.source) ?? 0) + 1);
+    degreeByNode.set(edge.target, (degreeByNode.get(edge.target) ?? 0) + 1);
+  }
+  const degrees = [...degreeByNode.values()];
+  const maxDegree = Math.max(0, ...degrees);
+  return {
+    maxDegree,
+    highCouplingNodes: degrees.filter((degree) => degree >= 18).length
+  };
 }
 
 function selectedEdgeDetails(edge) {

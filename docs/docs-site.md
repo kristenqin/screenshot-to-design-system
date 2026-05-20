@@ -74,6 +74,9 @@ package-lock.json
 - Internal Markdown links resolve to docs-site navigation where possible
 - Cytoscape-powered Concept Map view for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 - Node selection highlights relationship neighborhoods and summarizes edge types in the right panel
+- Concept Map scope switcher: Chinese decision graph, English execution graph, and full audit graph
+- Low-value relationship types are visually downweighted so strong document references are easier to inspect
+- Obsidian-inspired graph rendering: circular nodes, hidden default labels, hover/selection neighborhoods, and quieter canvas density
 
 ## Verification
 
@@ -89,6 +92,7 @@ Checks performed:
 - 51 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
 - Concept Map view renders with Cytoscape canvas, 57 nodes, and 321 relationship edges
+- Chinese and English graph scopes can be switched independently
 - Chinese language filter shows Chinese docs
 - Chinese docs index opens correctly
 - table of contents is generated for headings

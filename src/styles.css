@@ -453,6 +453,41 @@ h1 {
   font-size: 13px;
 }
 
+.graph-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.graph-scope {
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.graph-scope.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.graph-scope span {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.graph-scope small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .graph-legend span {
   display: inline-flex;
   align-items: center;
@@ -643,6 +678,10 @@ h1 {
   .graph-intro {
     display: grid;
     gap: 10px;
+  }
+
+  .graph-controls {
+    grid-template-columns: 1fr;
   }
 
   .view-button {
