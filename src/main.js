@@ -3,6 +3,8 @@ const app = document.querySelector("#app");
 const state = {
   manifest: [],
   graph: { nodes: [], edges: [] },
+  cytoscape: null,
+  graphInstance: null,
   active: null,
   search: "",
   lang: "all",
@@ -119,14 +121,14 @@ function renderShell() {
   document.querySelector("#doc-search").addEventListener("input", (event) => {
     state.search = event.target.value;
     renderNav();
-    if (state.view === "map") renderConceptMap();
+    if (state.view === "map") renderConceptMap().catch(showGraphError);
   });
 
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.addEventListener("click", () => {
       state.lang = button.dataset.lang;
       renderNav();
-      if (state.view === "map") renderConceptMap();
+      if (state.view === "map") renderConceptMap().catch(showGraphError);
     });
   });
 
@@ -135,7 +137,7 @@ function renderShell() {
       state.path = button.dataset.path;
       if (state.path === "zh") state.lang = "zh-CN";
       renderNav();
-      if (state.view === "map") renderConceptMap();
+      if (state.view === "map") renderConceptMap().catch(showGraphError);
     });
   });
 
@@ -147,7 +149,7 @@ function renderShell() {
     if (state.view === "map") {
       loadDoc(state.active?.source ?? "START_HERE.md");
     } else {
-      renderConceptMap();
+      renderConceptMap().catch(showGraphError);
     }
   });
 }
@@ -283,15 +285,12 @@ function renderToc() {
   `;
 }
 
-function renderConceptMap() {
+async function renderConceptMap() {
   state.view = "map";
   renderNav();
 
   const content = document.querySelector("#content");
   const graph = visibleGraph();
-  const layout = layoutGraph(graph.nodes);
-  const width = 1180;
-  const height = layout.height;
 
   document.querySelector("#doc-title").textContent = "Concept Map";
   document.querySelector("#doc-path").textContent = `${activePathLabel()} relationship graph`;
@@ -305,41 +304,240 @@ function renderConceptMap() {
         <p class="eyebrow">Concept Map</p>
         <h1>Document Relationship Graph</h1>
       </div>
-      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Filter by reading path, language, or search to reduce the map.</p>
+      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Drag nodes, zoom the canvas, or select a node to inspect its neighborhood.</p>
     </section>
     <div class="graph-legend" aria-label="Relationship legend">
       <span><i class="legend-dot path"></i>Path organizes doc</span>
       <span><i class="legend-dot companion"></i>Bilingual companion</span>
       <span><i class="legend-dot references"></i>Markdown reference</span>
     </div>
-    <div class="graph-scroll">
-      <svg class="concept-graph" viewBox="0 0 ${width} ${height}" role="img" aria-label="Documentation concept map">
-        <g class="graph-edges">
-          ${graph.edges.map((edge) => renderEdge(edge, layout.positions)).join("")}
-        </g>
-        <g class="graph-nodes">
-          ${graph.nodes.map((node) => renderNode(node, layout.positions.get(node.id))).join("")}
-        </g>
-      </svg>
+    <div class="graph-stage">
+      <div id="concept-map" class="concept-map" role="img" aria-label="Interactive documentation concept map"></div>
     </div>
   `;
 
-  content.querySelectorAll("[data-source]").forEach((node) => {
-    node.addEventListener("click", () => loadDoc(node.dataset.source));
-  });
-
-  content.querySelectorAll("[data-graph-path]").forEach((node) => {
-    node.addEventListener("click", () => {
-      state.path = node.dataset.graphPath;
-      if (state.path === "zh") state.lang = "zh-CN";
-      renderNav();
-      renderConceptMap();
-    });
-  });
-
   renderGraphToc(graph);
+  await mountCytoscapeGraph(graph);
   content.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+async function loadCytoscape() {
+  if (!state.cytoscape) {
+    const module = await import("/vendor/cytoscape.esm.min.mjs?v=cytoscape");
+    state.cytoscape = module.default;
+  }
+  return state.cytoscape;
+}
+
+async function mountCytoscapeGraph(graph) {
+  const cytoscape = await loadCytoscape();
+  const container = document.querySelector("#concept-map");
+  if (!container) return;
+  if (state.graphInstance) {
+    state.graphInstance.destroy();
+    state.graphInstance = null;
+  }
+
+  const elements = [
+    ...graph.nodes.map((node) => ({
+      data: {
+        id: node.id,
+        label: node.label,
+        kind: node.kind,
+        lang: node.lang,
+        section: node.section,
+        hint: node.hint,
+        paths: node.paths ?? []
+      },
+      classes: `${node.kind} ${node.lang === "zh-CN" ? "zh" : ""}`
+    })),
+    ...graph.edges.map((edge, index) => ({
+      data: {
+        id: `edge:${index}:${edge.source}:${edge.target}:${edge.type}`,
+        source: edge.source,
+        target: edge.target,
+        type: edge.type,
+        label: edge.label
+      },
+      classes: edge.type
+    }))
+  ];
+
+  const cy = cytoscape({
+    container,
+    elements,
+    minZoom: 0.28,
+    maxZoom: 2.4,
+    wheelSensitivity: 0.18,
+    style: graphStyles(),
+    layout: {
+      name: "cose",
+      animate: false,
+      fit: true,
+      padding: 48,
+      nodeRepulsion: 7600,
+      idealEdgeLength: (edge) => edge.data("type") === "references" ? 150 : 105,
+      edgeElasticity: (edge) => edge.data("type") === "references" ? 0.42 : 0.62,
+      nestingFactor: 1.15,
+      gravity: 0.34,
+      numIter: 1400
+    }
+  });
+
+  cy.on("tap", "node", (event) => {
+    const node = event.target;
+    focusGraphNode(cy, node);
+    renderGraphToc(graph, node);
+  });
+
+  cy.on("tap", "edge", (event) => {
+    renderGraphToc(graph, null, event.target);
+  });
+
+  cy.on("tap", (event) => {
+    if (event.target === cy) {
+      cy.elements().removeClass("faded selected neighborhood");
+      renderGraphToc(graph);
+    }
+  });
+
+  cy.on("dbltap", "node", (event) => {
+    const node = event.target;
+    if (node.data("kind") === "doc") loadDoc(node.id());
+    if (node.data("kind") === "path") {
+      state.path = node.id().replace(/^path:/, "");
+      renderNav();
+      renderConceptMap().catch(showGraphError);
+    }
+  });
+
+  state.graphInstance = cy;
+  window.__graphCy = cy;
+}
+
+function graphStyles() {
+  return [
+    {
+      selector: "node",
+      style: {
+        "background-color": "#ffffff",
+        "border-color": "#c8d3df",
+        "border-width": 1,
+        "color": "#17202a",
+        "font-size": 11,
+        "font-weight": 700,
+        "height": 42,
+        "label": "data(label)",
+        "line-height": 1.2,
+        "shape": "round-rectangle",
+        "text-halign": "center",
+        "text-max-width": 112,
+        "text-valign": "center",
+        "text-wrap": "wrap",
+        "width": 128
+      }
+    },
+    {
+      selector: "node.path",
+      style: {
+        "background-color": "#e6f2fb",
+        "border-color": "#1769aa",
+        "color": "#0f4f82",
+        "height": 46,
+        "shape": "round-rectangle",
+        "width": 104
+      }
+    },
+    {
+      selector: "node.zh",
+      style: {
+        "background-color": "#fff8ed",
+        "border-color": "#d2aa64"
+      }
+    },
+    {
+      selector: "edge",
+      style: {
+        "curve-style": "bezier",
+        "font-size": 9,
+        "label": "data(label)",
+        "line-color": "#9aacbf",
+        "opacity": 0.72,
+        "target-arrow-color": "#9aacbf",
+        "target-arrow-shape": "triangle",
+        "text-background-color": "#fbfcfd",
+        "text-background-opacity": 0.82,
+        "text-background-padding": 2,
+        "text-rotation": "autorotate",
+        "width": 1.5
+      }
+    },
+    {
+      selector: "edge.path",
+      style: {
+        "label": "",
+        "line-color": "#1769aa",
+        "target-arrow-color": "#1769aa",
+        "width": 1.25,
+        "opacity": 0.36
+      }
+    },
+    {
+      selector: "edge.companion",
+      style: {
+        "line-color": "#9a6a2f",
+        "line-style": "dashed",
+        "target-arrow-color": "#9a6a2f",
+        "width": 2
+      }
+    },
+    {
+      selector: "edge.references",
+      style: {
+        "line-color": "#65727e",
+        "target-arrow-color": "#65727e",
+        "width": 2.2
+      }
+    },
+    {
+      selector: ".faded",
+      style: {
+        "opacity": 0.12,
+        "text-opacity": 0.05
+      }
+    },
+    {
+      selector: ".neighborhood",
+      style: {
+        "opacity": 1,
+        "text-opacity": 1
+      }
+    },
+    {
+      selector: "node.selected",
+      style: {
+        "border-color": "#0f4f82",
+        "border-width": 3,
+        "background-color": "#d8ebf8"
+      }
+    },
+    {
+      selector: "edge.selected",
+      style: {
+        "opacity": 1,
+        "width": 3.2
+      }
+    }
+  ];
+}
+
+function focusGraphNode(cy, node) {
+  const neighborhood = node.closedNeighborhood();
+  cy.elements().addClass("faded").removeClass("selected neighborhood");
+  neighborhood.removeClass("faded").addClass("neighborhood");
+  node.addClass("selected");
+  neighborhood.edges().addClass("selected");
 }
 
 function visibleGraph() {
@@ -360,75 +558,13 @@ function visibleGraph() {
   return { nodes, edges, docCount: docs.length };
 }
 
-function layoutGraph(nodes) {
-  const positions = new Map();
-  const width = 1180;
-  const margin = 80;
-  const pathNodes = nodes.filter((node) => node.kind === "path");
-  const docNodes = nodes.filter((node) => node.kind === "doc");
-  const sectionGroups = groupDocs(docNodes);
-  const sections = Object.entries(sectionGroups);
-  const pathGap = Math.max(82, 520 / Math.max(1, pathNodes.length));
-
-  pathNodes.forEach((node, index) => {
-    positions.set(node.id, { x: 126, y: 118 + index * pathGap });
-  });
-
-  let maxY = 0;
-  sections.forEach(([section, docs], sectionIndex) => {
-    const x = 330 + (sectionIndex % 3) * 275;
-    const rowOffset = Math.floor(sectionIndex / 3) * 380;
-    positions.set(`section:${section}`, { x, y: 84 + rowOffset });
-    docs.forEach((node, index) => {
-      const y = 134 + rowOffset + index * 76;
-      positions.set(node.id, { x, y });
-      maxY = Math.max(maxY, y);
-    });
-  });
-
-  return { positions, height: Math.max(720, maxY + margin), width };
-}
-
-function renderEdge(edge, positions) {
-  const source = positions.get(edge.source);
-  const target = positions.get(edge.target);
-  if (!source || !target) return "";
-  return `<line class="graph-edge ${escapeHtml(edge.type)}" x1="${source.x}" y1="${source.y}" x2="${target.x}" y2="${target.y}" />`;
-}
-
-function renderNode(node, position) {
-  if (!position) return "";
-  const label = truncateLabel(node.label, node.kind === "path" ? 18 : 30);
-  if (node.kind === "path") {
-    const pathId = node.id.replace(/^path:/, "");
-    return `
-      <g class="graph-node path-node" transform="translate(${position.x} ${position.y})" data-graph-path="${escapeHtml(pathId)}" tabindex="0" role="button">
-        <rect x="-78" y="-26" width="156" height="52" rx="8"></rect>
-        <text y="-2">${escapeHtml(label)}</text>
-        <text class="node-subtitle" y="15">${escapeHtml(node.hint ?? "")}</text>
-      </g>
-    `;
-  }
-  return `
-    <g class="graph-node doc-node ${node.lang === "zh-CN" ? "zh-node" : ""}" transform="translate(${position.x} ${position.y})" data-source="${escapeHtml(node.id)}" tabindex="0" role="button">
-      <rect x="-112" y="-28" width="224" height="56" rx="8"></rect>
-      <text y="-4">${escapeHtml(label)}</text>
-      <text class="node-subtitle" y="15">${escapeHtml(node.section)}</text>
-    </g>
-  `;
-}
-
-function truncateLabel(value, limit) {
-  const text = String(value ?? "");
-  return text.length > limit ? `${text.slice(0, limit - 1)}...` : text;
-}
-
-function renderGraphToc(graph) {
+function renderGraphToc(graph, selectedNode = null, selectedEdge = null) {
   const toc = document.querySelector("#toc");
   const byKind = graph.edges.reduce((counts, edge) => {
     counts[edge.type] = (counts[edge.type] ?? 0) + 1;
     return counts;
   }, {});
+  const selected = selectedNode ? selectedNodeDetails(selectedNode) : selectedEdge ? selectedEdgeDetails(selectedEdge) : "";
   toc.innerHTML = `
     <p class="toc-title">Graph</p>
     <div class="toc-stat"><strong>${graph.nodes.length}</strong><span>nodes</span></div>
@@ -436,7 +572,52 @@ function renderGraphToc(graph) {
     <div class="toc-stat"><strong>${byKind.path ?? 0}</strong><span>path links</span></div>
     <div class="toc-stat"><strong>${byKind.companion ?? 0}</strong><span>bilingual links</span></div>
     <div class="toc-stat"><strong>${byKind.references ?? 0}</strong><span>doc links</span></div>
+    ${selected}
   `;
+}
+
+function selectedNodeDetails(node) {
+  const connectedEdges = node.connectedEdges();
+  const references = connectedEdges.filter((edge) => edge.data("type") === "references").length;
+  const companions = connectedEdges.filter((edge) => edge.data("type") === "companion").length;
+  const pathLinks = connectedEdges.filter((edge) => edge.data("type") === "path").length;
+  const action = node.data("kind") === "doc"
+    ? `<button class="toc-action" type="button" onclick="window.__openGraphDoc('${escapeHtml(node.id())}')">Open document</button>`
+    : "";
+  return `
+    <div class="toc-detail">
+      <p class="toc-title">Selected</p>
+      <strong>${escapeHtml(node.data("label"))}</strong>
+      <span>${escapeHtml(node.data("section") ?? node.data("hint") ?? node.id())}</span>
+      <div class="toc-stat"><strong>${connectedEdges.length}</strong><span>relationships</span></div>
+      <div class="toc-stat"><strong>${references}</strong><span>references</span></div>
+      <div class="toc-stat"><strong>${companions}</strong><span>companions</span></div>
+      <div class="toc-stat"><strong>${pathLinks}</strong><span>path links</span></div>
+      ${action}
+    </div>
+  `;
+}
+
+function selectedEdgeDetails(edge) {
+  const source = edge.source().data("label");
+  const target = edge.target().data("label");
+  return `
+    <div class="toc-detail">
+      <p class="toc-title">Relationship</p>
+      <strong>${escapeHtml(edge.data("label"))}</strong>
+      <span>${escapeHtml(source)} -> ${escapeHtml(target)}</span>
+    </div>
+  `;
+}
+
+window.__openGraphDoc = (source) => loadDoc(source);
+
+function showGraphError(error) {
+  const content = document.querySelector("#content");
+  if (content) {
+    content.className = "content graph-content";
+    content.innerHTML = `<h1>Unable to load concept map</h1><pre>${escapeHtml(error.stack ?? error.message)}</pre>`;
+  }
 }
 
 function escapeHtml(value) {

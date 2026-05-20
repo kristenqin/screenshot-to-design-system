@@ -1,9 +1,10 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join, posix } from "node:path";
 
 const root = process.cwd();
 const publicDir = join(root, "public");
 const contentDir = join(publicDir, "content");
+const vendorDir = join(publicDir, "vendor");
 
 const docs = [
   { source: "START_HERE.md", section: "Start", lang: "en", order: 1 },
@@ -190,6 +191,11 @@ function companionFor(source) {
 
 await rm(contentDir, { recursive: true, force: true });
 await mkdir(contentDir, { recursive: true });
+await mkdir(vendorDir, { recursive: true });
+await copyFile(
+  join(root, "node_modules/cytoscape/dist/cytoscape.esm.min.mjs"),
+  join(vendorDir, "cytoscape.esm.min.mjs")
+);
 
 const manifest = [];
 const markdownBySource = new Map();

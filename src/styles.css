@@ -478,83 +478,18 @@ h1 {
   background: #65727e;
 }
 
-.graph-scroll {
-  overflow: auto;
+.graph-stage {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfd;
+  min-height: 680px;
+  overflow: hidden;
 }
 
-.concept-graph {
-  display: block;
-  min-width: 1080px;
+.concept-map {
+  height: min(760px, calc(100vh - 180px));
+  min-height: 640px;
   width: 100%;
-}
-
-.graph-edge {
-  stroke: #9aacbf;
-  stroke-width: 1.2;
-  stroke-opacity: 0.58;
-}
-
-.graph-edge.path {
-  stroke: var(--accent);
-  stroke-width: 1.6;
-  stroke-opacity: 0.52;
-}
-
-.graph-edge.companion {
-  stroke: #9a6a2f;
-  stroke-dasharray: 6 6;
-  stroke-width: 1.5;
-}
-
-.graph-edge.references {
-  stroke: #65727e;
-  stroke-dasharray: 2 6;
-}
-
-.graph-node {
-  cursor: pointer;
-}
-
-.graph-node rect {
-  fill: #fff;
-  stroke: #cfd8e3;
-  stroke-width: 1;
-  filter: drop-shadow(0 8px 16px rgba(28, 43, 60, 0.08));
-}
-
-.graph-node:hover rect {
-  stroke: var(--accent);
-  stroke-width: 2;
-}
-
-.graph-node text {
-  fill: var(--text);
-  font-size: 13px;
-  font-weight: 800;
-  text-anchor: middle;
-}
-
-.graph-node .node-subtitle {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 650;
-}
-
-.path-node rect {
-  fill: var(--accent-soft);
-  stroke: var(--accent);
-}
-
-.path-node text {
-  fill: var(--accent-strong);
-}
-
-.doc-node.zh-node rect {
-  fill: #fff8ed;
-  stroke: #dfc38d;
 }
 
 .toc-stat {
@@ -574,6 +509,36 @@ h1 {
 .toc-stat span {
   color: var(--muted);
   font-size: 13px;
+}
+
+.toc-detail {
+  display: grid;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.toc-detail strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.toc-detail > span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.toc-action {
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .toc {

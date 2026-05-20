@@ -7,7 +7,7 @@ This project includes a local browser documentation site so the documentation sy
 The site is intentionally lightweight:
 
 - no framework dependency
-- no install step required beyond Node.js
+- one npm install step for the graph dependency
 - generated content is copied from the canonical Markdown docs
 - English and Chinese docs are both available
 - concept map graph data is generated from Markdown links and docs metadata
@@ -46,6 +46,7 @@ Generated files:
 ```text
 public/content/
 public/docs-manifest.json
+public/vendor/
 ```
 
 These are build artifacts and are ignored by Git.
@@ -59,6 +60,7 @@ src/styles.css
 scripts/build-docs-content.mjs
 scripts/dev-server.mjs
 package.json
+package-lock.json
 ```
 
 ## Features
@@ -70,7 +72,8 @@ package.json
 - Right-side table of contents on wide screens
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
-- Concept Map view for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
+- Cytoscape-powered Concept Map view for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
+- Node selection highlights relationship neighborhoods and summarizes edge types in the right panel
 
 ## Verification
 
@@ -83,9 +86,9 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 49 documentation files appear in navigation
+- 51 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
-- Concept Map view renders document nodes and relationship edges
+- Concept Map view renders with Cytoscape canvas, 57 nodes, and 321 relationship edges
 - Chinese language filter shows Chinese docs
 - Chinese docs index opens correctly
 - table of contents is generated for headings

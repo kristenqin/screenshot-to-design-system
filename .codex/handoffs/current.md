@@ -22,11 +22,11 @@ It contains a bilingual documentation system for a screenshot-to-design-system p
 
 The project now also includes a workflow retrospective loop for analyzing collaboration friction and converting it into concrete process improvements.
 
-The project now includes a zero-dependency local browser documentation site for reading the Markdown system at `http://127.0.0.1:4173`.
+The project now includes a local browser documentation site for reading the Markdown system at `http://127.0.0.1:4173`.
 
 The docs site navigation now uses task-based reading paths in addition to language and section filters.
 
-The docs site now includes a Concept Map view. The build script generates a graph from reading-path membership, bilingual companion docs, and Markdown links. The browser view lets users inspect document nodes and relationship edges directly.
+The docs site now includes a Cytoscape-powered Concept Map view. The build script generates a graph from reading-path membership, bilingual companion docs, and Markdown links. The browser view lets users inspect document nodes, relationship neighborhoods, and edge type counts directly.
 
 The project now follows a module-governance-first planning model: mature module boundaries, contracts, verification, and readiness levels should precede a broad product MVP.
 
@@ -35,9 +35,9 @@ The documentation system itself now has a module passport. It is treated as the 
 ## Latest Commits
 
 ```text
+feat(docs): use cytoscape for concept map
 docs(workflow): apply governance to documentation module
 docs(workflow): add module-governance-first model
-feat(docs): add concept map navigation
 ```
 
 ## Important Files
@@ -69,7 +69,7 @@ feat(docs): add concept map navigation
 - The docs site is a reading layer; canonical content remains in Markdown files.
 - Documentation navigation should prioritize reader tasks before file categories.
 - Documentation can be represented as a graph: documents are concept nodes and relationships are edges.
-- Graph rendering should stay zero-dependency until the project needs Cytoscape.js, Sigma.js, or another dedicated graph library.
+- Graph rendering uses Cytoscape.js because the custom SVG map did not make document-to-document relationships clear enough.
 - Product MVP should be composed from modules that have explicit readiness levels.
 - The documentation system is a governed module, not only a place where governance is written down.
 
@@ -117,6 +117,8 @@ http://127.0.0.1:4173
 ```
 
 Click `Concept map` in the top bar to inspect the document graph.
+
+The Concept Map supports zoom, drag, node selection, neighborhood highlighting, and right-panel relationship summaries.
 
 ## Blockers
 

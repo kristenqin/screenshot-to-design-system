@@ -9,7 +9,7 @@
 这个站点是轻量方案：
 
 - 不依赖前端框架
-- 不需要额外安装依赖
+- 需要一次 npm install 来安装 graph dependency
 - 内容从 canonical Markdown 文档生成
 - 支持英文和中文文档
 - 从 Markdown 链接和文档元数据生成概念图数据
@@ -40,6 +40,7 @@ npm run build
 ```text
 public/content/
 public/docs-manifest.json
+public/vendor/
 ```
 
 这些是构建产物，已经被 `.gitignore` 忽略。
@@ -53,16 +54,17 @@ public/docs-manifest.json
 - 宽屏右侧目录
 - 移动端响应式导航
 - 内部 Markdown 链接尽量转成站内跳转
-- Concept Map 视图，用来查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
+- 基于 Cytoscape 的 Concept Map 视图，用来查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
+- 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
 
 ## 已验证
 
 已在本地浏览器验证：
 
 - 默认打开 `START_HERE.md`
-- 导航里有 49 份文档
+- 导航里有 51 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
-- Concept Map 视图可以渲染文档节点和关系连线
+- Concept Map 视图可以用 Cytoscape canvas 渲染 57 个节点和 321 条关系边
 - 中文筛选可用
 - 中文文档入口可打开
 - 页面目录可生成

@@ -375,3 +375,46 @@ Skill 来源：
 验证：
 
 - `npm run build` 应包含 module passport 文档，并更新浏览器站点和 Concept Map。
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+任务：
+
+- 用图原生第三方库替换自定义 SVG Concept Map。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户反馈上一版 map 只是把文档节点放在画布上，没有清晰表达文档与文档之间的连接关系。
+
+遵循步骤：
+
+- 重新用“关系可读性”评估 Concept Map。
+- 采用 Cytoscape.js 进行交互式图渲染。
+- 保留现有 manifest graph 数据模型。
+- 增加关系邻域高亮和右侧关系摘要。
+- 在浏览器中完成验证。
+
+输出：
+
+- 更新 [概念图调研](concept-map-research.md)
+- 更新 [文档站](docs-site.md)
+- 更新 `src/main.js`
+- 更新 `src/styles.css`
+- 更新 `scripts/build-docs-content.mjs`
+- 更新 `scripts/dev-server.mjs`
+- 增加 `cytoscape` dependency
+
+偏离：
+
+- 文档站不再是零依赖。新增依赖被限制在 graph rendering。
+
+验证：
+
+- `npm run build` 成功准备 51 份文档和 321 条 graph edges。
+- 浏览器验证确认 Cytoscape 渲染 57 个节点和 321 条边。
+- 选择节点后会高亮邻域，并在右侧显示关系数量。

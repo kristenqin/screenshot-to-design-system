@@ -8,5 +8,8 @@
     "dev": "npm run prepare:docs && node scripts/dev-server.mjs",
     "build": "npm run prepare:docs",
     "preview": "node scripts/dev-server.mjs"
+  },
+  "dependencies": {
+    "cytoscape": "^3.33.4"
   }
 }

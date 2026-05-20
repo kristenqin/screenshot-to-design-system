@@ -432,3 +432,46 @@ Deviations:
 Verification:
 
 - `npm run build` should include the module passport docs in the browser site and concept map.
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+Task:
+
+- Replace the custom SVG concept map with a graph-native third-party library.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The user reported that the prior map placed document nodes on a canvas but did not make document-to-document relationships clear.
+
+Workflow steps followed:
+
+- Reassessed the concept map against the goal of relationship readability.
+- Adopted Cytoscape.js for interactive graph rendering.
+- Kept the existing manifest graph data model.
+- Added relationship-neighborhood selection and right-panel relationship summaries.
+- Verified the graph in the browser.
+
+Output artifacts:
+
+- Updated [Concept Map Research](concept-map-research.md)
+- Updated [Docs Site](docs-site.md)
+- Updated `src/main.js`
+- Updated `src/styles.css`
+- Updated `scripts/build-docs-content.mjs`
+- Updated `scripts/dev-server.mjs`
+- Added `cytoscape` dependency
+
+Deviations:
+
+- The docs site is no longer zero-dependency. The added dependency is intentionally limited to graph rendering.
+
+Verification:
+
+- `npm run build` prepared 51 documentation files and 321 graph edges.
+- Browser verification confirmed Cytoscape renders 57 nodes and 321 edges.
+- Selecting a node highlights its neighborhood and shows relationship counts in the right panel.
