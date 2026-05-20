@@ -657,7 +657,7 @@ Skill 来源：
 
 验证：
 
-- `npm run build` 生成 57 份文档和 378 条 graph edges。
+- `npm run build` 生成 57 份文档和 380 条 graph edges。
 - 浏览器验证确认：
   - Structure Tree 通过 Mind Elixir 渲染
   - tree 有 57 个可见文档和 75 个总树节点
@@ -665,3 +665,44 @@ Skill 来源：
   - 中文 scope 可将 tree 收敛到 28 个文档和 40 个总树节点
   - Relationship Graph 仍通过 canvas 渲染，包含 57 个节点和 247 条可见关系
   - 切换到 Relationship Graph 后 Mind Elixir host 会被移除
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+任务：
+
+- 优化 Structure Tree 的节点内容和层级结构。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户认为渲染形式已经可用，接下来应治理节点内容，让树更像概念地图，而不是文件清单。
+
+遵循步骤：
+
+- 审计现有树：Workflow / 中文工作流各有 14 个文档叶子，超过每层 5-9 个可扫描选项的建议。
+- 将高密度 section 从四层结构升级为五层结构：项目 -> 模块 -> section -> topic -> 文档。
+- 为 Workflow 增加 Docs System、Map Experience、Collaboration、Governance、History。
+- 为中文工作流增加文档系统、图谱体验、协作机制、治理机制、执行记录。
+- 将部分文档叶子改成更短的概念标签，完整标题保留在节点 metadata 中。
+
+输出：
+
+- 更新 [信息架构](information-architecture.md)
+- 更新 [英文 Information Architecture](../information-architecture.md)
+- 更新 [文档站](docs-site.md)
+- 更新 [英文 Docs Site](../docs-site.md)
+- 更新 `src/main.js`
+
+验证：
+
+- `npm run build` 生成 57 份文档和 378 条 graph edges。
+- `git diff --check` 通过。
+- 浏览器验证确认：
+  - 全量 Structure Tree 通过 Mind Elixir 渲染，包含 57 份文档和 85 个树节点
+  - Workflow / 中文工作流共拆出 10 个 topic group
+  - 中文筛选后包含 28 份文档和 45 个树节点
+  - 中文工作流可见文档系统、图谱体验、协作机制、治理机制和执行记录

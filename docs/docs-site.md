@@ -73,9 +73,11 @@ package-lock.json
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
 - Concept Map with two modes:
-  - Structure Tree for project lifecycle, module, section, and document hierarchy, rendered with Mind Elixir
+  - Structure Tree for project lifecycle, module, section, topic, and document hierarchy, rendered with Mind Elixir
   - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 - Structure Tree is the default management view; Relationship Graph is the audit view
+- Dense Structure Tree sections are split into topic groups; Workflow is organized into Docs System, Map Experience, Collaboration, Governance, and History
+- Document leaves use short concept labels while retaining full document titles in metadata
 - Relationship Graph selection highlights relationship neighborhoods and summarizes edge types in the right panel
 - Concept Map scope switcher: Chinese decision graph, English execution graph, and full audit graph
 - Low-value relationship types are visually downweighted so strong document references are easier to inspect
@@ -96,7 +98,8 @@ Checks performed:
 - Reading-path filters reduce the navigation to task-focused sets
 - 57 documentation files appear in navigation
 - Concept Map opens Structure Tree by default
-- Structure Tree renders through Mind Elixir with 75 tree nodes, 57 visible docs, 18 initial rendered topics, and 17 expanders
+- Structure Tree renders through Mind Elixir with 85 tree nodes, 57 visible docs, and 10 topic groups for dense Workflow sections
+- Chinese Structure Tree scope renders 28 docs and 45 tree nodes, including 5 Chinese Workflow topic groups
 - Relationship Graph view renders with canvas; the default global graph shows 57 document nodes and 247 visible relationships
 - Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently

@@ -22,8 +22,16 @@ Mind Elixir passed the first spike and is now the primary Structure Tree rendere
 
 Next hardening should focus on adapter quality, viewport reset, and document-leaf click verification after branch expansion.
 
+## Content Structure Update
+
+The renderer is no longer the bottleneck. The tree content now follows a deeper IA model:
+
+- Project -> Module -> Section -> Topic -> Document
+- Dense Workflow sections are split into topic groups instead of exposing 14 document leaves at one level.
+- Document leaves use short concept labels in the tree; full titles remain available as metadata.
+
 ## Deferred
 - Editable node operations.
 - Collapsing/expanding branches.
 - Persisted manual layout.
-- Importing a dedicated mind-map library.
+- Further tree-testing of topic labels with real project tasks.

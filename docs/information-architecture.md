@@ -89,6 +89,26 @@ The sidebar should support both:
 
 Document sections remain available, but they are secondary to the user's current task.
 
+## Structure Tree Content Audit
+
+The Structure Tree rendering is strong enough. The next bottleneck is the node content model.
+
+Problems found:
+
+- Workflow and Chinese Workflow each contained 14 document leaves under one section, exceeding the recommended 5-9 scannable choices per level.
+- The tree had only four semantic layers: project, module, section, document. Dense sections needed one additional topic layer.
+- Document leaves used full Markdown titles, so the tree read like a file inventory instead of a concept map.
+- Full source paths were useful for debugging, but too noisy as visible node content.
+
+Applied changes:
+
+- Dense Workflow sections now use a fifth layer: project -> module -> section -> topic -> document.
+- Workflow is split into Docs System, Map Experience, Collaboration, Governance, and History.
+- Chinese Workflow is split into 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录.
+- Document leaves use short concept labels in the tree while keeping the full document title in node metadata.
+
+This keeps the tree aligned with the user's goal: make project structure decisions quickly, then open the exact document only when needed.
+
 ## Success Criteria
 
 The improved navigation should make it easier to answer:
@@ -106,4 +126,3 @@ The improved navigation should make it easier to answer:
 - Add visible document metadata such as `canonical`, `companion`, `audit`, `handoff`.
 - Add lightweight tree testing tasks for navigation validation.
 - Add search result snippets from document body, not only title and summary.
-

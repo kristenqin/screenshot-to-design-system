@@ -723,3 +723,44 @@ Verification:
   - Chinese scope narrows the tree to 28 docs and 40 total tree nodes
   - Relationship Graph still renders through canvas with 57 nodes and 247 visible edges
   - switching to Relationship Graph removes the Mind Elixir host
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+Task:
+
+- Optimize Structure Tree node content and hierarchy.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The rendering layer was good enough; the next bottleneck was the node content model. The tree needed to read more like a concept map and less like a file inventory.
+
+Workflow steps followed:
+
+- Audited the current tree and found Workflow / Chinese Workflow each had 14 document leaves under one section, exceeding the recommended 5-9 scannable options per level.
+- Upgraded dense sections from four levels to five: project -> module -> section -> topic -> document.
+- Added Docs System, Map Experience, Collaboration, Governance, and History under Workflow.
+- Added 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录 under Chinese Workflow.
+- Shortened selected document leaf labels while retaining full titles in node metadata.
+
+Output artifacts:
+
+- Updated [Information Architecture](information-architecture.md)
+- Updated [Chinese Information Architecture](zh-CN/information-architecture.md)
+- Updated [Docs Site](docs-site.md)
+- Updated [Chinese Docs Site](zh-CN/docs-site.md)
+- Updated `src/main.js`
+
+Verification:
+
+- `npm run build` generated 57 docs and 380 graph edges.
+- `git diff --check` passed.
+- Browser verification confirmed:
+  - The full Structure Tree renders through Mind Elixir with 57 docs and 85 tree nodes
+  - Workflow / Chinese Workflow now include 10 topic groups in total
+  - The Chinese filter narrows the tree to 28 docs and 45 tree nodes
+  - Chinese Workflow exposes 文档系统, 图谱体验, 协作机制, 治理机制, and 执行记录

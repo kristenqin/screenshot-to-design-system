@@ -534,6 +534,158 @@ const structureBuckets = [
   }
 ];
 
+const structureSubgroups = {
+  Workflow: [
+    {
+      id: "system",
+      label: "Docs System",
+      hint: "Reader-facing documentation experience",
+      sources: [
+        "docs/documentation-system.md",
+        "docs/docs-site.md",
+        "docs/information-architecture.md"
+      ]
+    },
+    {
+      id: "map",
+      label: "Map Experience",
+      hint: "Graph and tree interaction decisions",
+      sources: [
+        "docs/concept-map-research.md",
+        "docs/obsidian-graph-open-source-research.md",
+        "docs/mind-map-library-evaluation.md"
+      ]
+    },
+    {
+      id: "collaboration",
+      label: "Collaboration",
+      hint: "Session, skill, and operating habits",
+      sources: [
+        "docs/document-engineering-workflow.md",
+        "docs/skill-usage-policy.md",
+        "docs/session-continuity.md"
+      ]
+    },
+    {
+      id: "governance",
+      label: "Governance",
+      hint: "Quality gates and reusable operating rules",
+      sources: [
+        "docs/module-governance-first.md",
+        "docs/reuse-first-discovery-gate.md",
+        "docs/skills-research.md"
+      ]
+    },
+    {
+      id: "audit",
+      label: "History",
+      hint: "Execution log and retrospective record",
+      sources: [
+        "docs/skill-usage-log.md",
+        "docs/workflow-retrospective.md"
+      ]
+    }
+  ],
+  "中文工作流": [
+    {
+      id: "system",
+      label: "文档系统",
+      hint: "面向阅读的文档体验",
+      sources: [
+        "docs/zh-CN/documentation-system.md",
+        "docs/zh-CN/docs-site.md",
+        "docs/zh-CN/information-architecture.md"
+      ]
+    },
+    {
+      id: "map",
+      label: "图谱体验",
+      hint: "图和树的交互决策",
+      sources: [
+        "docs/zh-CN/concept-map-research.md",
+        "docs/zh-CN/obsidian-graph-open-source-research.md",
+        "docs/zh-CN/mind-map-library-evaluation.md"
+      ]
+    },
+    {
+      id: "collaboration",
+      label: "协作机制",
+      hint: "Session、Skill 和执行习惯",
+      sources: [
+        "docs/zh-CN/document-engineering-workflow.md",
+        "docs/zh-CN/skill-usage-policy.md",
+        "docs/zh-CN/session-continuity.md"
+      ]
+    },
+    {
+      id: "governance",
+      label: "治理机制",
+      hint: "质量门禁和复用规则",
+      sources: [
+        "docs/zh-CN/module-governance-first.md",
+        "docs/zh-CN/reuse-first-discovery-gate.md",
+        "docs/zh-CN/skills-research.md"
+      ]
+    },
+    {
+      id: "audit",
+      label: "执行记录",
+      hint: "日志和复盘",
+      sources: [
+        "docs/zh-CN/skill-usage-log.md",
+        "docs/zh-CN/workflow-retrospective.md"
+      ]
+    }
+  ]
+};
+
+const structureDocLabels = {
+  ".codex/handoffs/current.md": "Handoff",
+  "docs/prd.md": "PRD",
+  "docs/issue-breakdown-draft.md": "Issue Draft",
+  "docs/project-management.md": "PM Workflow",
+  "docs/workflow-overview.md": "Workflow",
+  "docs/existing-tools-and-algorithms.md": "Tools",
+  "docs/component-clustering-strategy.md": "Clustering",
+  "docs/design-token-extraction.md": "Tokens",
+  "docs/open-questions.md": "Questions",
+  "docs/documentation-system.md": "Docs System",
+  "docs/document-engineering-workflow.md": "Doc Workflow",
+  "docs/skill-usage-policy.md": "Skill Policy",
+  "docs/skill-usage-log.md": "Skill Log",
+  "docs/session-continuity.md": "Session",
+  "docs/workflow-retrospective.md": "Retrospective",
+  "docs/docs-site.md": "Docs Site",
+  "docs/information-architecture.md": "IA",
+  "docs/concept-map-research.md": "Concept Map",
+  "docs/obsidian-graph-open-source-research.md": "Obsidian",
+  "docs/mind-map-library-evaluation.md": "Mind Map",
+  "docs/module-governance-first.md": "Module First",
+  "docs/reuse-first-discovery-gate.md": "Reuse Gate",
+  "docs/module-passports/documentation-system.md": "Docs Passport",
+  "docs/skills-research.md": "Skills",
+  "docs/zh-CN/issue-breakdown-draft.md": "Issue 拆分",
+  "docs/zh-CN/project-management.md": "项目管理",
+  "docs/zh-CN/workflow-overview.md": "工作流",
+  "docs/zh-CN/existing-tools-and-algorithms.md": "现成工具",
+  "docs/zh-CN/component-clustering-strategy.md": "组件聚类",
+  "docs/zh-CN/design-token-extraction.md": "Token 提取",
+  "docs/zh-CN/open-questions.md": "开放问题",
+  "docs/zh-CN/document-engineering-workflow.md": "文档工程",
+  "docs/zh-CN/skill-usage-policy.md": "Skill 规范",
+  "docs/zh-CN/skill-usage-log.md": "Skill 日志",
+  "docs/zh-CN/session-continuity.md": "Session",
+  "docs/zh-CN/workflow-retrospective.md": "复盘",
+  "docs/zh-CN/information-architecture.md": "信息架构",
+  "docs/zh-CN/concept-map-research.md": "概念图",
+  "docs/zh-CN/obsidian-graph-open-source-research.md": "Obsidian",
+  "docs/zh-CN/mind-map-library-evaluation.md": "思维导图",
+  "docs/zh-CN/module-governance-first.md": "模块优先",
+  "docs/zh-CN/reuse-first-discovery-gate.md": "复用门禁",
+  "docs/zh-CN/module-passports/documentation-system.md": "文档 Passport",
+  "docs/zh-CN/skills-research.md": "Skills"
+};
+
 function buildStructureTree() {
   const docs = filteredDocs().slice().sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
   const used = new Set();
@@ -571,20 +723,59 @@ function structureBucketNode(bucket, docs) {
     hint: bucket.hint,
     kind: "bucket",
     docCount: docs.length,
-    children: Object.entries(sectionGroups).map(([section, sectionDocs]) => ({
-      id: `section:${bucket.id}:${section}`,
-      label: section,
-      hint: `${sectionDocs.length} docs`,
-      kind: "section",
-      docCount: sectionDocs.length,
-      children: sectionDocs.map((doc) => ({
-        id: doc.source,
-        label: doc.title,
-        hint: doc.source,
-        kind: "doc",
-        doc
-      }))
-    }))
+    children: Object.entries(sectionGroups).map(([section, sectionDocs]) => structureSectionNode(bucket, section, sectionDocs))
+  };
+}
+
+function structureSectionNode(bucket, section, docs) {
+  const groups = structureSubgroups[section];
+  return {
+    id: `section:${bucket.id}:${section}`,
+    label: section,
+    hint: `${docs.length} docs`,
+    kind: "section",
+    docCount: docs.length,
+    children: groups ? structureTopicNodes(bucket, section, docs, groups) : docs.map(structureDocNode)
+  };
+}
+
+function structureTopicNodes(bucket, section, docs, groups) {
+  const docBySource = new Map(docs.map((doc) => [doc.source, doc]));
+  const used = new Set();
+  const topics = groups.map((group) => {
+    const groupDocs = group.sources.map((source) => docBySource.get(source)).filter(Boolean);
+    groupDocs.forEach((doc) => used.add(doc.source));
+    return {
+      id: `topic:${bucket.id}:${section}:${group.id}`,
+      label: group.label,
+      hint: group.hint,
+      kind: "topic",
+      docCount: groupDocs.length,
+      children: groupDocs.map(structureDocNode)
+    };
+  }).filter((topic) => topic.children.length);
+
+  const uncategorized = docs.filter((doc) => !used.has(doc.source));
+  if (uncategorized.length) {
+    topics.push({
+      id: `topic:${bucket.id}:${section}:other`,
+      label: "Other",
+      hint: "Unclassified documents",
+      kind: "topic",
+      docCount: uncategorized.length,
+      children: uncategorized.map(structureDocNode)
+    });
+  }
+  return topics;
+}
+
+function structureDocNode(doc) {
+  return {
+    id: doc.source,
+    label: structureDocLabels[doc.source] ?? doc.title,
+    hint: doc.title,
+    kind: "doc",
+    doc
   };
 }
 
@@ -733,7 +924,7 @@ function mindElixirNodeFromStructureNode(node, depth) {
   return {
     id,
     topic: node.label,
-    expanded: depth < 2,
+    expanded: depth < 3,
     tags: node.kind === "doc" ? [] : [`${node.docCount ?? ""} docs`.trim()],
     style: mindElixirNodeStyle(node.kind),
     metadata: {
@@ -786,6 +977,14 @@ function mindElixirNodeStyle(kind) {
       color: "#17202a",
       border: "1px solid #d7e0e8",
       fontWeight: "800"
+    };
+  }
+  if (kind === "topic") {
+    return {
+      background: "#f4fbf6",
+      color: "#173f28",
+      border: "1px solid #9fc9aa",
+      fontWeight: "780"
     };
   }
   return {
@@ -1762,15 +1961,17 @@ function renderStructureToc(tree) {
   const toc = document.querySelector("#toc");
   const modules = tree.children ?? [];
   const sections = modules.flatMap((module) => module.children ?? []);
+  const topics = sections.flatMap((section) => (section.children ?? []).filter((child) => child.kind === "topic"));
   toc.innerHTML = `
     <p class="toc-title">Structure</p>
     <div class="toc-stat"><strong>${tree.docCount}</strong><span>visible docs</span></div>
     <div class="toc-stat"><strong>${modules.length}</strong><span>lifecycle groups</span></div>
     <div class="toc-stat"><strong>${sections.length}</strong><span>sections</span></div>
+    <div class="toc-stat"><strong>${topics.length}</strong><span>topics</span></div>
     <div class="toc-detail">
       <p class="toc-title">Reading Model</p>
-      <strong>Project -> Module -> Section -> Document</strong>
-      <span>This view hides lateral references so the canonical project structure stays readable.</span>
+      <strong>Project -> Module -> Section -> Topic -> Document</strong>
+      <span>Dense sections are split into topic groups so the canonical project structure stays readable.</span>
     </div>
     <div class="toc-detail">
       <p class="toc-title">Groups</p>
