@@ -142,6 +142,23 @@ Structure Tree 后续应该更像真正的思维导图：
 
 ## 当前决策
 
-当前原生 SVG tree 是原型，不是最终架构。
+Mind Elixir spike 已经通过第一轮可用性门禁。
 
-下一步实现应该先做 Mind Elixir spike，不应继续给自研 tree 追加功能。
+Mind Elixir 现在是 Structure Tree 的主渲染器，之前的原生 SVG tree 保留为 fallback。
+
+已验证行为：
+
+- Structure Tree 默认使用 Mind Elixir 打开。
+- adapter 可以将 manifest tree 映射到 Mind Elixir `nodeData`。
+- 初始渲染展示 root / module / section，不再一次性展开所有文档叶子。
+- 分支 expander 可用，支持渐进展开。
+- scope filter 仍然可以重渲染 tree。
+- Relationship Graph 仍然走原有 canvas 路径，不受影响。
+- 切换到 Relationship Graph 时会销毁 Mind Elixir host。
+
+后续硬化：
+
+- 为 Structure Tree 增加显式 reset view 控制。
+- 继续优化不同 viewport 宽度下的初始视角。
+- 增加浏览器测试：展开 section 后点击文档叶子。
+- 再经过一轮验证后，决定 SVG fallback 是永久保留还是删除。

@@ -73,7 +73,7 @@ package-lock.json
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
 - Concept Map with two modes:
-  - Structure Tree for project lifecycle, module, section, and document hierarchy
+  - Structure Tree for project lifecycle, module, section, and document hierarchy, rendered with Mind Elixir
   - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
 - Structure Tree is the default management view; Relationship Graph is the audit view
 - Relationship Graph selection highlights relationship neighborhoods and summarizes edge types in the right panel
@@ -95,8 +95,9 @@ Checks performed:
 - default document loads as `START_HERE.md`
 - Reading-path filters reduce the navigation to task-focused sets
 - 57 documentation files appear in navigation
-- Concept Map opens Structure Tree by default with 73 tree nodes and 55 document leaves
-- Relationship Graph view renders with canvas; the default global graph shows 55 document nodes and 240 visible relationships
+- Concept Map opens Structure Tree by default
+- Structure Tree renders through Mind Elixir with 75 tree nodes, 57 visible docs, 18 initial rendered topics, and 17 expanders
+- Relationship Graph view renders with canvas; the default global graph shows 57 document nodes and 247 visible relationships
 - Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently
 - Graph settings expose 4 toggles and 4 sliders

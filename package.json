@@ -10,6 +10,7 @@
     "preview": "node scripts/dev-server.mjs"
   },
   "dependencies": {
-    "cytoscape": "^3.33.4"
+    "cytoscape": "^3.33.4",
+    "mind-elixir": "^5.11.0"
   }
 }

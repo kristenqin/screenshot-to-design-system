@@ -18,7 +18,9 @@ Use a native SVG structure tree as the default map mode and keep the existing ca
 
 Treat the native SVG structure tree as a validated prototype and fallback, not as the default long-term implementation.
 
-Before adding more custom tree features, run a Mind Elixir spike. If Mind Elixir fails, evaluate `d3-hierarchy` as the layout-only replacement for the custom layout math.
+Mind Elixir passed the first spike and is now the primary Structure Tree renderer. The SVG tree remains as fallback.
+
+Next hardening should focus on adapter quality, viewport reset, and document-leaf click verification after branch expansion.
 
 ## Deferred
 - Editable node operations.

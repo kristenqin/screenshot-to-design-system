@@ -208,6 +208,15 @@ await copyFile(
   join(root, "node_modules/cytoscape/dist/cytoscape.esm.min.mjs"),
   join(vendorDir, "cytoscape.esm.min.mjs")
 );
+await mkdir(join(vendorDir, "mind-elixir"), { recursive: true });
+await copyFile(
+  join(root, "node_modules/mind-elixir/dist/MindElixir.js"),
+  join(vendorDir, "mind-elixir/MindElixir.js")
+);
+await copyFile(
+  join(root, "node_modules/mind-elixir/dist/MindElixir.css"),
+  join(vendorDir, "mind-elixir/MindElixir.css")
+);
 
 const manifest = [];
 const markdownBySource = new Map();

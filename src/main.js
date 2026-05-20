@@ -4,8 +4,10 @@ const state = {
   manifest: [],
   graph: { nodes: [], edges: [] },
   cytoscape: null,
+  mindElixir: null,
   graphInstance: null,
   graphCanvas: null,
+  structureTreeInstance: null,
   active: null,
   search: "",
   lang: "all",
@@ -227,6 +229,15 @@ function renderNav() {
 async function loadDoc(source) {
   const doc = state.manifest.find((item) => item.source === source) ?? state.manifest[0];
   if (!doc) return;
+  destroyStructureTree();
+  if (state.graphCanvas?.destroy) {
+    state.graphCanvas.destroy();
+    state.graphCanvas = null;
+  }
+  if (state.graphInstance) {
+    state.graphInstance.destroy();
+    state.graphInstance = null;
+  }
   state.active = doc;
   state.view = "doc";
   setHashDoc(doc.source);
@@ -386,7 +397,7 @@ async function renderConceptMap() {
   renderMapToc(isTree ? tree : graph, isTree ? "tree" : "graph");
   bindGraphScopeControls();
   bindMapModeControls();
-  if (isTree) mountStructureTree(tree);
+  if (isTree) await mountStructureTree(tree);
   else await mountGraph(graph);
   content.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "instant" });
@@ -577,9 +588,34 @@ function structureBucketNode(bucket, docs) {
   };
 }
 
-function mountStructureTree(tree) {
+async function loadMindElixir() {
+  if (!document.querySelector("#mind-elixir-style")) {
+    const link = document.createElement("link");
+    link.id = "mind-elixir-style";
+    link.rel = "stylesheet";
+    link.href = "/vendor/mind-elixir/MindElixir.css?v=mind-elixir";
+    document.head.appendChild(link);
+  }
+  if (!state.mindElixir) {
+    const module = await import("/vendor/mind-elixir/MindElixir.js?v=mind-elixir");
+    state.mindElixir = module.default;
+  }
+  return state.mindElixir;
+}
+
+async function mountStructureTree(tree) {
   const container = document.querySelector("#concept-map");
   if (!container) return;
+  try {
+    await mountMindElixirTree(tree, container);
+  } catch (error) {
+    console.warn("Mind Elixir structure tree failed, falling back to SVG.", error);
+    mountSvgStructureTree(tree, container);
+  }
+}
+
+async function mountMindElixirTree(tree, container) {
+  destroyStructureTree();
   if (state.graphInstance) {
     state.graphInstance.destroy();
     state.graphInstance = null;
@@ -591,11 +627,203 @@ function mountStructureTree(tree) {
   delete window.__graphCanvas;
   delete window.__graphCy;
 
+  const MindElixir = await loadMindElixir();
+  const data = mindElixirDataFromStructureTree(tree);
+  const docSourceByMindId = new Map();
+  indexMindElixirDocs(data.nodeData, docSourceByMindId);
+  container.innerHTML = `<div class="mind-elixir-host" data-tree-renderer="mind-elixir" data-node-count="${countStructureNodes(tree)}" data-doc-count="${tree.docCount}"></div>`;
+  const host = container.querySelector(".mind-elixir-host");
+
+  const mind = new MindElixir({
+    el: host,
+    direction: MindElixir.RIGHT,
+    editable: false,
+    contextMenu: false,
+    toolBar: true,
+    keypress: false,
+    allowUndo: false,
+    overflowHidden: false,
+    alignment: "root",
+    scaleMin: 0.35,
+    scaleMax: 2.4,
+    scaleSensitivity: 0.12,
+    theme: structureMindElixirTheme()
+  });
+
+  const initError = mind.init(data);
+  if (initError) throw initError;
+  mind.bus.addListener("selectNodes", (nodes) => {
+    const selected = nodes?.[0];
+    const source = selected?.metadata?.docSource ?? (selected ? mindElixirDocSource(docSourceByMindId, selected.id) : null);
+    if (source) loadDoc(source);
+  });
+  const unbindDocClicks = bindMindElixirDocClicks(host, docSourceByMindId);
+  requestAnimationFrame(() => {
+    mind.scale(0.78);
+    mind.move(-360, -250);
+  });
+
+  state.structureTreeInstance = {
+    kind: "mind-elixir",
+    mind,
+    destroy() {
+      unbindDocClicks();
+      mind.destroy();
+    }
+  };
+  window.__mindElixirTree = mind;
+}
+
+function bindMindElixirDocClicks(host, docSourceByMindId) {
+  const clickListener = (event) => {
+    const topic = event.target.closest?.("me-tpc[data-nodeid]");
+    if (!topic || !host.contains(topic)) return;
+    const source = mindElixirDocSource(docSourceByMindId, topic.dataset.nodeid);
+    host.dataset.lastSelectedId = topic.dataset.nodeid;
+    host.dataset.lastSelectedSource = source ?? "";
+    if (!source) return;
+    event.preventDefault();
+    event.stopPropagation();
+    loadDoc(source);
+  };
+  host.dataset.clickAdapter = "doc-open";
+  host.addEventListener("click", clickListener, true);
+  return () => host.removeEventListener("click", clickListener, true);
+}
+
+function mindElixirDocSource(docSourceByMindId, id) {
+  if (!id) return null;
+  return docSourceByMindId.get(id) ?? docSourceByMindId.get(id.replace(/^me/, "")) ?? null;
+}
+
+function mountSvgStructureTree(tree, container = document.querySelector("#concept-map")) {
+  if (!container) return;
+  destroyStructureTree();
   const layout = layoutStructureTree(tree);
   container.innerHTML = renderStructureSvg(layout);
   container.querySelectorAll("[data-tree-doc]").forEach((node) => {
     node.addEventListener("click", () => loadDoc(node.dataset.treeDoc));
   });
+  state.structureTreeInstance = {
+    kind: "svg",
+    destroy() {
+      container.innerHTML = "";
+    }
+  };
+}
+
+function destroyStructureTree() {
+  if (state.structureTreeInstance?.destroy) {
+    state.structureTreeInstance.destroy();
+    state.structureTreeInstance = null;
+  }
+  delete window.__mindElixirTree;
+}
+
+function mindElixirDataFromStructureTree(tree) {
+  return {
+    nodeData: mindElixirNodeFromStructureNode(tree, 0),
+    direction: 1,
+    theme: structureMindElixirTheme()
+  };
+}
+
+function mindElixirNodeFromStructureNode(node, depth) {
+  const id = mindElixirNodeId(node);
+  return {
+    id,
+    topic: node.label,
+    expanded: depth < 2,
+    tags: node.kind === "doc" ? [] : [`${node.docCount ?? ""} docs`.trim()],
+    style: mindElixirNodeStyle(node.kind),
+    metadata: {
+      kind: node.kind,
+      docSource: node.kind === "doc" ? node.id : null,
+      hint: node.hint ?? ""
+    },
+    children: (node.children ?? []).map((child) => mindElixirNodeFromStructureNode(child, depth + 1))
+  };
+}
+
+function mindElixirNodeId(node) {
+  let hash = 0;
+  const input = `${node.kind}:${node.id}`;
+  for (let index = 0; index < input.length; index += 1) {
+    hash = ((hash << 5) - hash + input.charCodeAt(index)) | 0;
+  }
+  return `me-${Math.abs(hash).toString(36)}`;
+}
+
+function indexMindElixirDocs(node, target) {
+  if (node.metadata?.docSource) target.set(node.id, node.metadata.docSource);
+  for (const child of node.children ?? []) indexMindElixirDocs(child, target);
+}
+
+function countStructureNodes(node) {
+  return 1 + (node.children ?? []).reduce((sum, child) => sum + countStructureNodes(child), 0);
+}
+
+function mindElixirNodeStyle(kind) {
+  if (kind === "root") {
+    return {
+      background: "#e8f2fb",
+      color: "#123a59",
+      border: "2px solid #1769aa",
+      fontWeight: "850"
+    };
+  }
+  if (kind === "bucket") {
+    return {
+      background: "#fff7e8",
+      color: "#4d3411",
+      border: "1px solid #d6aa5c",
+      fontWeight: "850"
+    };
+  }
+  if (kind === "section") {
+    return {
+      background: "#f8fafc",
+      color: "#17202a",
+      border: "1px solid #d7e0e8",
+      fontWeight: "800"
+    };
+  }
+  return {
+    background: "#ffffff",
+    color: "#17202a",
+    border: "1px solid #d7e0e8",
+    fontWeight: "700"
+  };
+}
+
+function structureMindElixirTheme() {
+  return {
+    name: "Docs Structure",
+    palette: ["#1769aa", "#d6aa5c", "#5d7590", "#5d9a6f", "#a85d6a", "#6d6ab5"],
+    cssVar: {
+      "--node-gap-x": "34px",
+      "--node-gap-y": "10px",
+      "--main-gap-x": "74px",
+      "--main-gap-y": "42px",
+      "--root-radius": "8px",
+      "--main-radius": "8px",
+      "--root-color": "#123a59",
+      "--root-bgcolor": "#e8f2fb",
+      "--root-border-color": "#1769aa",
+      "--main-color": "#17202a",
+      "--main-bgcolor": "#ffffff",
+      "--main-bgcolor-transparent": "rgba(255,255,255,0.84)",
+      "--topic-padding": "7px 11px",
+      "--color": "#17202a",
+      "--bgcolor": "#fbfcfd",
+      "--selected": "#1769aa",
+      "--accent-color": "#1769aa",
+      "--panel-color": "#17202a",
+      "--panel-bgcolor": "#ffffff",
+      "--panel-border-color": "#d7e0e8",
+      "--map-padding": "56px 96px"
+    }
+  };
 }
 
 function layoutStructureTree(tree) {
@@ -696,6 +924,7 @@ async function loadCytoscape() {
 }
 
 async function mountGraph(graph) {
+  destroyStructureTree();
   try {
     mountCanvasGraph(graph);
   } catch (error) {

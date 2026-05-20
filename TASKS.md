@@ -43,7 +43,6 @@ The next concrete implementation task is:
 | T-021 | Promote documentation system from M4 to M5 | AFK | `information-architecture`, `commit-work` | None | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
 | T-022 | Maintain reuse-first discovery gate | AFK | `information-architecture`, `commit-work` | None | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
 | T-023 | Spike GraphFrontier-style graph rendering | AFK | `evaluating-new-technology`, `information-architecture`, `browser`, `commit-work` | T-019 | [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md) |
-| T-024 | Spike Mind Elixir for the Structure Tree | AFK | `evaluating-new-technology`, `information-architecture`, `browser`, `commit-work` | T-019 | [Mind Map Library Evaluation](docs/mind-map-library-evaluation.md) |
 
 ## Backlog
 
@@ -82,6 +81,7 @@ The next concrete implementation task is:
 | D-017 | Add reuse-first discovery gate | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
 | D-018 | Research Obsidian-style open source graph implementations | [Obsidian Graph Open Source Research](docs/obsidian-graph-open-source-research.md) |
 | D-019 | Evaluate reusable mind-map libraries for Structure Tree | [Mind Map Library Evaluation](docs/mind-map-library-evaluation.md) |
+| D-020 | Spike Mind Elixir for Structure Tree rendering | [Mind Map Library Evaluation](docs/mind-map-library-evaluation.md) |
 
 ## Operating Rules
 

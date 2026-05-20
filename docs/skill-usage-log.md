@@ -674,3 +674,52 @@ Deviations:
 Verification:
 
 - `npm run build` should include 57 documentation files after the new bilingual docs are added to the manifest.
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture` + `browser`
+
+Task:
+
+- Execute the Mind Elixir spike for the Structure Tree renderer.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The user approved the reuse-first plan and asked to assign agents to execute the spike.
+
+Workflow steps followed:
+
+- Spawned read-only agents for Mind Elixir API review and current docs-site integration review.
+- Installed `mind-elixir@5.11.0`.
+- Copied Mind Elixir JS/CSS into docs-site vendor assets during `prepare:docs`.
+- Added a Structure Tree adapter from project IA tree data to Mind Elixir `nodeData`.
+- Kept the native SVG tree as fallback.
+- Preserved the Relationship Graph canvas path.
+- Verified the result in the browser.
+
+Output artifacts:
+
+- Updated [Mind Map Library Evaluation](mind-map-library-evaluation.md)
+- Updated [Chinese Mind Map Library Evaluation](zh-CN/mind-map-library-evaluation.md)
+- Updated [Task Board](../TASKS.md)
+- Updated `.agents/DECISIONS/structure-map.md`
+- Updated `src/main.js`, `src/styles.css`, `scripts/build-docs-content.mjs`, `package.json`, and `package-lock.json`
+
+Deviations:
+
+- The initial all-expanded Mind Elixir view was visually too dense, so the default expansion depth was reduced to root/module/section level.
+
+Verification:
+
+- `npm run build` prepared 57 documentation files and 378 graph edges.
+- Browser verification confirmed:
+  - Structure Tree renders through Mind Elixir
+  - tree has 57 visible docs and 75 total tree nodes
+  - initial visible mind map has 18 rendered topics and 17 expanders
+  - Chinese scope narrows the tree to 28 docs and 40 total tree nodes
+  - Relationship Graph still renders through canvas with 57 nodes and 247 visible edges
+  - switching to Relationship Graph removes the Mind Elixir host

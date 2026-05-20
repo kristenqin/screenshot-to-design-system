@@ -55,7 +55,7 @@ public/vendor/
 - 移动端响应式导航
 - 内部 Markdown 链接尽量转成站内跳转
 - Concept Map 支持两种模式：
-  - Structure Tree：查看项目生命周期、模块、section 和文档层级
+  - Structure Tree：查看项目生命周期、模块、section 和文档层级，使用 Mind Elixir 渲染
   - Relationship Graph：查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
 - Structure Tree 是默认管理视图；Relationship Graph 是关系审计视图
 - Relationship Graph 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
@@ -71,8 +71,9 @@ public/vendor/
 - 默认打开 `START_HERE.md`
 - 导航里有 57 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
-- Concept Map 默认打开 Structure Tree，包含 73 个树节点和 55 个文档叶子
-- Relationship Graph 可以用 canvas 渲染；默认 global graph 显示 55 个文档节点和 240 条可见关系
+- Concept Map 默认打开 Structure Tree
+- Structure Tree 通过 Mind Elixir 渲染，包含 75 个树节点、57 个可见文档、18 个初始渲染 topic 和 17 个 expander
+- Relationship Graph 可以用 canvas 渲染；默认 global graph 显示 57 个文档节点和 247 条可见关系
 - Local graph mode 在 depth 1 时可将当前文档邻域收敛到 8 个节点和 20 条边
 - 中文和英文 graph scope 可以独立切换
 - Graph settings 暴露 4 个 toggle 和 4 个 slider

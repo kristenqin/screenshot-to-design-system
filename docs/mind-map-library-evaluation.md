@@ -140,6 +140,23 @@ Recommended path:
 
 ## Current Decision
 
-The current native SVG tree is a prototype, not the final architecture.
+The Mind Elixir spike passed the first usability gate.
 
-The next implementation step should be a Mind Elixir spike before any more custom tree features are added.
+Mind Elixir is now the primary Structure Tree renderer, with the previous native SVG tree retained as fallback.
+
+Verified behavior:
+
+- Structure Tree opens with Mind Elixir by default.
+- The adapter maps the manifest tree into Mind Elixir `nodeData`.
+- Initial rendering shows a readable root/module/section view instead of expanding all document leaves.
+- Branch expanders are available for progressive disclosure.
+- Scope filters still rerender the tree.
+- Relationship Graph remains isolated and renders through the existing canvas path.
+- Switching to Relationship Graph destroys the Mind Elixir host.
+
+Follow-up hardening:
+
+- Add an explicit "reset view" control for the Structure Tree.
+- Improve initial camera positioning for different viewport widths.
+- Add a browser test for expanding a section and opening a document leaf.
+- Decide whether SVG fallback should remain permanently or be removed after another validation pass.

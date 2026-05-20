@@ -616,3 +616,52 @@ Skill 来源：
 验证：
 
 - 新增中英文文档加入 manifest 后，`npm run build` 应生成 57 份文档。
+
+## 2026-05-20 - `evaluating-new-technology` + `information-architecture` + `browser`
+
+任务：
+
+- 执行 Structure Tree 的 Mind Elixir spike。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户确认了 reuse-first 方案，并要求分配 agent 执行 spike。
+
+遵循步骤：
+
+- 分配只读 agent 分别审查 Mind Elixir API 和当前 docs-site 接入边界。
+- 安装 `mind-elixir@5.11.0`。
+- 在 `prepare:docs` 阶段复制 Mind Elixir JS/CSS 到文档站 vendor assets。
+- 增加从项目 IA tree data 到 Mind Elixir `nodeData` 的 adapter。
+- 保留原生 SVG tree 作为 fallback。
+- 保持 Relationship Graph canvas 路径不变。
+- 在浏览器中验证结果。
+
+输出：
+
+- 更新 [思维导图库选型评估](mind-map-library-evaluation.md)
+- 更新 [英文 Mind Map Library Evaluation](../mind-map-library-evaluation.md)
+- 更新 [任务板](../../TASKS.md)
+- 更新 `.agents/DECISIONS/structure-map.md`
+- 更新 `src/main.js`、`src/styles.css`、`scripts/build-docs-content.mjs`、`package.json` 和 `package-lock.json`
+
+偏离：
+
+- 初始全展开的 Mind Elixir 视图视觉密度过高，因此默认展开深度收敛到 root / module / section 层。
+
+验证：
+
+- `npm run build` 生成 57 份文档和 378 条 graph edges。
+- 浏览器验证确认：
+  - Structure Tree 通过 Mind Elixir 渲染
+  - tree 有 57 个可见文档和 75 个总树节点
+  - 初始 mind map 有 18 个渲染 topic 和 17 个 expander
+  - 中文 scope 可将 tree 收敛到 28 个文档和 40 个总树节点
+  - Relationship Graph 仍通过 canvas 渲染，包含 57 个节点和 247 条可见关系
+  - 切换到 Relationship Graph 后 Mind Elixir host 会被移除
