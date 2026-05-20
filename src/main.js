@@ -208,7 +208,7 @@ function renderNav() {
     ${Object.entries(groups)
     .map(([section, sectionDocs]) => `
       <section class="nav-section">
-        <h2>${escapeHtml(section)}</h2>
+        <h2>${escapeHtml(displaySectionLabel(section))}</h2>
         ${sectionDocs.map((doc) => `
           <button class="nav-item ${state.active?.source === doc.source ? "active" : ""}" type="button" data-source="${escapeHtml(doc.source)}">
             <span>${escapeHtml(doc.title)}</span>
@@ -549,6 +549,22 @@ const structureSectionLabels = {
   "中文模块 Passport": "模块 Passport"
 };
 
+const structureChineseSectionLabels = {
+  中文入口: "入口",
+  中文项目: "项目",
+  中文规划: "规划",
+  中文研究: "研究",
+  中文工作流: "文档运营",
+  "中文模块 Passport": "模块 Passport"
+};
+
+function displaySectionLabel(section) {
+  if (state.lang === "zh-CN" || state.path === "zh") {
+    return structureChineseSectionLabels[section] ?? structureSectionLabels[section] ?? section;
+  }
+  return structureSectionLabels[section] ?? section;
+}
+
 const structureSubgroups = {
   Workflow: [
     {
@@ -680,6 +696,7 @@ const structureDocLabels = {
   "docs/module-passports/documentation-system.md": "Docs Passport",
   "docs/skills-research.md": "Skills",
   "docs/zh-CN/issue-breakdown-draft.md": "Issue 拆分",
+  "docs/zh-CN/index.md": "文档入口",
   "docs/zh-CN/project-management.md": "项目管理",
   "docs/zh-CN/workflow-overview.md": "工作流",
   "docs/zh-CN/existing-tools-and-algorithms.md": "现成工具",
@@ -746,7 +763,7 @@ function structureSectionNode(bucket, section, docs) {
   const groups = structureSubgroups[section];
   return {
     id: `section:${bucket.id}:${section}`,
-    label: structureSectionLabels[section] ?? section,
+    label: displaySectionLabel(section),
     hint: `${docs.length} docs`,
     kind: "section",
     docCount: docs.length,

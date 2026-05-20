@@ -111,6 +111,7 @@ Applied changes:
 - Workflow is split into Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail.
 - Chinese Workflow is split into 阅读系统, 结构视图, Agent 工作流, 复用规则, and 审计线索.
 - Document leaves use short concept labels in the tree while keeping the full document title in node metadata.
+- In the Chinese language view, Chinese prefixes are treated as context rather than content. For example, 中文入口 is displayed as 入口, and 中文项目 is displayed as 项目.
 
 This keeps the tree aligned with the user's goal: make project structure decisions quickly, then open the exact document only when needed.
 

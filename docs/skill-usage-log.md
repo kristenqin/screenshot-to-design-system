@@ -798,3 +798,28 @@ Verification:
   - Full tree renders 57 docs and 85 tree nodes with the new root/module/section/topic names.
   - Chinese filter renders 28 docs and 45 tree nodes with the renamed Chinese topics.
   - Previous topic names such as Map Experience, Collaboration, Governance, 图谱体验, 协作机制, 治理机制, and 执行记录 no longer appear in the rendered tree.
+
+## 2026-05-20 - `information-architecture` + `browser`
+
+Task:
+
+- Remove redundant Chinese prefixes in the Chinese language view.
+
+Reason:
+
+- When the user is already in the Chinese language scope, labels such as 中文入口 and 中文项目 repeat context that is already provided by the active filter.
+
+Workflow steps followed:
+
+- Made Chinese section display labels context-sensitive so the prefix is removed only inside the Chinese language view.
+- Applied the same display labels to both sidebar navigation groups and Structure Tree section nodes.
+- Shortened the Chinese entry document leaf from 中文文档入口 to 文档入口.
+
+Verification:
+
+- `npm run build` generated 57 docs and 380 graph edges.
+- `git diff --check` passed.
+- Browser verification confirmed:
+  - Chinese navigation groups render as 入口, 项目, 规划, 研究, 文档运营, and 模块 Passport.
+  - Chinese Structure Tree renders 28 docs and 45 tree nodes.
+  - 中文入口, 中文项目, 中文规划, 中文研究, 中文工作流, and 中文模块 Passport no longer appear as visible nodes or navigation groups in the Chinese view.
