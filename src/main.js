@@ -11,6 +11,7 @@ const state = {
   lang: "all",
   path: "all",
   view: "doc",
+  mapMode: "tree",
   headings: [],
   graphSettings: {
     mode: "global",
@@ -305,9 +306,11 @@ async function renderConceptMap() {
 
   const content = document.querySelector("#content");
   const graph = visibleGraph();
+  const tree = buildStructureTree();
+  const isTree = state.mapMode === "tree";
 
   document.querySelector("#doc-title").textContent = "Concept Map";
-  document.querySelector("#doc-path").textContent = `${activePathLabel()} relationship graph`;
+  document.querySelector("#doc-path").textContent = `${activePathLabel()} ${isTree ? "structure tree" : "relationship graph"}`;
   document.querySelector("#map-toggle").textContent = "Reading view";
   document.querySelector("#source-link").hidden = true;
 
@@ -316,10 +319,16 @@ async function renderConceptMap() {
     <section class="graph-intro">
       <div>
         <p class="eyebrow">Concept Map</p>
-        <h1>Document Relationship Graph</h1>
+        <h1>${isTree ? "Project Structure Tree" : "Document Relationship Graph"}</h1>
       </div>
-      <p>${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Pan, zoom, hover to focus, select a node, or double-click to open it.</p>
+      <p>${isTree
+    ? `${tree.docCount} visible docs organized by project lifecycle, module, and document. Select a document leaf to open it.`
+    : `${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Pan, zoom, hover to focus, select a node, or double-click to open it.`}</p>
     </section>
+    <div class="graph-view-tabs" aria-label="Concept map mode">
+      ${mapModeButton("tree", "Structure Tree", "Management view")}
+      ${mapModeButton("graph", "Relationship Graph", "Audit view")}
+    </div>
     <div class="graph-controls" aria-label="Graph controls">
       <div class="graph-control-group">
         <p class="filter-title">Scope</p>
@@ -329,6 +338,7 @@ async function renderConceptMap() {
           ${graphScopeButton("all", "All audit", "Coverage")}
         </div>
       </div>
+      ${isTree ? "" : `
       <div class="graph-control-group">
         <p class="filter-title">View</p>
         <div class="graph-button-grid compact">
@@ -342,7 +352,9 @@ async function renderConceptMap() {
           ${[1, 2, 3].map(depthButton).join("")}
         </div>
       </div>
+      `}
     </div>
+    ${isTree ? "" : `
     <details class="graph-settings" ${state.graphSettingsOpen ? "open" : ""}>
       <summary>Graph settings</summary>
       <div class="graph-settings-grid">
@@ -356,21 +368,38 @@ async function renderConceptMap() {
         ${graphSlider("distance", "Link distance", 0.7, 2.2, 0.1)}
       </div>
     </details>
+    `}
     <div class="graph-legend" aria-label="Relationship legend">
-      <span><i class="legend-dot references"></i>Primary reference</span>
-      <span><i class="legend-dot companion"></i>Language companion</span>
-      <span><i class="legend-dot path"></i>Navigation path</span>
+      ${isTree
+    ? `<span><i class="legend-dot root"></i>Project</span>
+        <span><i class="legend-dot module"></i>Module</span>
+        <span><i class="legend-dot doc"></i>Document</span>`
+    : `<span><i class="legend-dot references"></i>Primary reference</span>
+        <span><i class="legend-dot companion"></i>Language companion</span>
+        <span><i class="legend-dot path"></i>Navigation path</span>`}
     </div>
-    <div class="graph-stage">
-      <div id="concept-map" class="concept-map" role="img" aria-label="Interactive documentation concept map"></div>
+    <div class="graph-stage ${isTree ? "structure-stage" : ""}">
+      <div id="concept-map" class="concept-map ${isTree ? "structure-map" : ""}" role="img" aria-label="Interactive documentation concept map"></div>
     </div>
   `;
 
-  renderGraphToc(graph);
+  renderMapToc(isTree ? tree : graph, isTree ? "tree" : "graph");
   bindGraphScopeControls();
-  await mountGraph(graph);
+  bindMapModeControls();
+  if (isTree) mountStructureTree(tree);
+  else await mountGraph(graph);
   content.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function mapModeButton(value, label, hint) {
+  const active = state.mapMode === value ? "active" : "";
+  return `
+    <button class="graph-view-tab ${active}" type="button" data-map-mode="${value}">
+      <span>${escapeHtml(label)}</span>
+      <small>${escapeHtml(hint)}</small>
+    </button>
+  `;
 }
 
 function graphScopeButton(value, label, hint) {
@@ -450,6 +479,212 @@ function bindGraphScopeControls() {
   document.querySelector(".graph-settings")?.addEventListener("toggle", (event) => {
     state.graphSettingsOpen = event.currentTarget.open;
   });
+}
+
+function bindMapModeControls() {
+  document.querySelectorAll("[data-map-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.mapMode = button.dataset.mapMode;
+      renderConceptMap().catch(showGraphError);
+    });
+  });
+}
+
+const structureBuckets = [
+  {
+    id: "start",
+    label: "Start and Resume",
+    hint: "Where a new session regains context",
+    sections: ["Start", "中文入口"]
+  },
+  {
+    id: "definition",
+    label: "Product Definition",
+    hint: "What the project is trying to become",
+    sections: ["Project", "Planning", "中文项目", "中文规划"]
+  },
+  {
+    id: "research",
+    label: "Research and Decisions",
+    hint: "Evidence, options, and unresolved questions",
+    sections: ["Research", "中文研究"]
+  },
+  {
+    id: "operations",
+    label: "Document Operations",
+    hint: "How the documentation system is governed",
+    sections: ["Workflow", "中文工作流"]
+  },
+  {
+    id: "modules",
+    label: "Reusable Modules",
+    hint: "Independent capabilities that can be governed separately",
+    sections: ["Module Passports", "中文模块 Passport"]
+  }
+];
+
+function buildStructureTree() {
+  const docs = filteredDocs().slice().sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
+  const used = new Set();
+  const children = structureBuckets.map((bucket) => {
+    const bucketDocs = docs.filter((doc) => bucket.sections.includes(doc.section));
+    bucketDocs.forEach((doc) => used.add(doc.source));
+    return structureBucketNode(bucket, bucketDocs);
+  }).filter((bucket) => bucket.children.length);
+
+  const otherDocs = docs.filter((doc) => !used.has(doc.source));
+  if (otherDocs.length) {
+    children.push(structureBucketNode({
+      id: "reference",
+      label: "Reference",
+      hint: "Documents outside the primary lifecycle",
+      sections: [...new Set(otherDocs.map((doc) => doc.section))]
+    }, otherDocs));
+  }
+
+  return {
+    id: "root",
+    label: "Screenshot to Design System",
+    hint: activePathLabel(),
+    kind: "root",
+    docCount: docs.length,
+    children
+  };
+}
+
+function structureBucketNode(bucket, docs) {
+  const sectionGroups = groupDocs(docs);
+  return {
+    id: `bucket:${bucket.id}`,
+    label: bucket.label,
+    hint: bucket.hint,
+    kind: "bucket",
+    docCount: docs.length,
+    children: Object.entries(sectionGroups).map(([section, sectionDocs]) => ({
+      id: `section:${bucket.id}:${section}`,
+      label: section,
+      hint: `${sectionDocs.length} docs`,
+      kind: "section",
+      docCount: sectionDocs.length,
+      children: sectionDocs.map((doc) => ({
+        id: doc.source,
+        label: doc.title,
+        hint: doc.source,
+        kind: "doc",
+        doc
+      }))
+    }))
+  };
+}
+
+function mountStructureTree(tree) {
+  const container = document.querySelector("#concept-map");
+  if (!container) return;
+  if (state.graphInstance) {
+    state.graphInstance.destroy();
+    state.graphInstance = null;
+  }
+  if (state.graphCanvas?.destroy) {
+    state.graphCanvas.destroy();
+    state.graphCanvas = null;
+  }
+  delete window.__graphCanvas;
+  delete window.__graphCy;
+
+  const layout = layoutStructureTree(tree);
+  container.innerHTML = renderStructureSvg(layout);
+  container.querySelectorAll("[data-tree-doc]").forEach((node) => {
+    node.addEventListener("click", () => loadDoc(node.dataset.treeDoc));
+  });
+}
+
+function layoutStructureTree(tree) {
+  const nodes = [];
+  const edges = [];
+  const leafGap = 62;
+  const levelGap = 280;
+  const margin = { top: 46, right: 48, bottom: 46, left: 44 };
+  let leafIndex = 0;
+
+  const place = (node, depth = 0, parent = null) => {
+    const children = node.children ?? [];
+    const placedChildren = children.map((child) => place(child, depth + 1, node));
+    const y = depth === 0
+      ? margin.top + 32
+      : placedChildren.length
+      ? placedChildren.reduce((sum, child) => sum + child.y, 0) / placedChildren.length
+      : margin.top + leafIndex++ * leafGap;
+    const width = node.kind === "doc" ? 220 : node.kind === "section" ? 190 : 230;
+    const height = node.kind === "doc" ? 46 : 54;
+    const item = {
+      node,
+      parent,
+      depth,
+      x: margin.left + depth * levelGap,
+      y,
+      width,
+      height
+    };
+    nodes.push(item);
+    for (const child of placedChildren) edges.push({ source: item, target: child });
+    return item;
+  };
+
+  place(tree);
+  const maxDepth = Math.max(0, ...nodes.map((node) => node.depth));
+  const maxY = Math.max(margin.top, ...nodes.map((node) => node.y)) + margin.bottom;
+  return {
+    nodes,
+    edges,
+    width: margin.left + maxDepth * levelGap + 300 + margin.right,
+    height: Math.max(620, maxY),
+    tree
+  };
+}
+
+function renderStructureSvg(layout) {
+  return `
+    <svg class="structure-svg" data-tree-renderer="svg" data-node-count="${layout.nodes.length}" width="${layout.width}" height="${layout.height}" viewBox="0 0 ${layout.width} ${layout.height}" role="img" aria-label="Project documentation structure tree">
+      <g class="structure-links">
+        ${layout.edges.map(renderStructureEdge).join("")}
+      </g>
+      <g class="structure-nodes">
+        ${layout.nodes.map(renderStructureNode).join("")}
+      </g>
+    </svg>
+  `;
+}
+
+function renderStructureEdge(edge) {
+  const sx = edge.source.x + edge.source.width;
+  const sy = edge.source.y;
+  const tx = edge.target.x;
+  const ty = edge.target.y;
+  const mid = sx + Math.max(48, (tx - sx) * 0.45);
+  return `<path class="structure-link" d="M ${sx} ${sy} C ${mid} ${sy}, ${mid} ${ty}, ${tx} ${ty}" />`;
+}
+
+function renderStructureNode(item) {
+  const { node } = item;
+  const x = item.x;
+  const y = item.y - item.height / 2;
+  const title = truncateLabel(node.label, node.kind === "doc" ? 28 : 24);
+  const hint = truncateLabel(node.hint ?? "", node.kind === "doc" ? 32 : 26);
+  const count = node.kind !== "doc" && node.docCount ? `<text class="structure-count" x="${x + item.width - 18}" y="${y + 24}">${node.docCount}</text>` : "";
+  const docAttr = node.kind === "doc" ? `data-tree-doc="${escapeHtml(node.id)}" tabindex="0"` : "";
+  return `
+    <g class="structure-node ${node.kind}" ${docAttr} transform="translate(${x} ${y})">
+      <rect width="${item.width}" height="${item.height}" rx="8" />
+      <text class="structure-title" x="14" y="${node.kind === "doc" ? 20 : 22}">${escapeHtml(title)}</text>
+      <text class="structure-hint" x="14" y="${node.kind === "doc" ? 36 : 40}">${escapeHtml(hint)}</text>
+      ${count}
+    </g>
+  `;
+}
+
+function truncateLabel(value, maxLength) {
+  const text = String(value ?? "");
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}...` : text;
 }
 
 async function loadCytoscape() {
@@ -1287,6 +1522,34 @@ function localGraph(nodes, edges) {
     nodes: nodes.filter((node) => kept.has(node.id)),
     edges: edges.filter((edge) => kept.has(edge.source) && kept.has(edge.target))
   };
+}
+
+function renderMapToc(model, mode) {
+  if (mode === "tree") renderStructureToc(model);
+  else renderGraphToc(model);
+}
+
+function renderStructureToc(tree) {
+  const toc = document.querySelector("#toc");
+  const modules = tree.children ?? [];
+  const sections = modules.flatMap((module) => module.children ?? []);
+  toc.innerHTML = `
+    <p class="toc-title">Structure</p>
+    <div class="toc-stat"><strong>${tree.docCount}</strong><span>visible docs</span></div>
+    <div class="toc-stat"><strong>${modules.length}</strong><span>lifecycle groups</span></div>
+    <div class="toc-stat"><strong>${sections.length}</strong><span>sections</span></div>
+    <div class="toc-detail">
+      <p class="toc-title">Reading Model</p>
+      <strong>Project -> Module -> Section -> Document</strong>
+      <span>This view hides lateral references so the canonical project structure stays readable.</span>
+    </div>
+    <div class="toc-detail">
+      <p class="toc-title">Groups</p>
+      ${modules.map((module) => `
+        <div class="toc-stat"><strong>${module.docCount}</strong><span>${escapeHtml(module.label)}</span></div>
+      `).join("")}
+    </div>
+  `;
 }
 
 function renderGraphToc(graph, selectedNode = null, selectedEdge = null, selectedHtml = "") {

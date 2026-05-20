@@ -460,6 +460,41 @@ h1 {
   margin-bottom: 16px;
 }
 
+.graph-view-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.graph-view-tab {
+  display: grid;
+  gap: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 13px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.graph-view-tab span {
+  font-weight: 850;
+}
+
+.graph-view-tab small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.graph-view-tab.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
 .graph-control-group {
   display: grid;
   align-content: start;
@@ -603,6 +638,18 @@ h1 {
   background: #65727e;
 }
 
+.legend-dot.root {
+  background: #1d4f7a;
+}
+
+.legend-dot.module {
+  background: #cc8b2c;
+}
+
+.legend-dot.doc {
+  background: #5d7590;
+}
+
 .graph-stage {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -611,10 +658,92 @@ h1 {
   overflow: hidden;
 }
 
+.graph-stage.structure-stage {
+  background:
+    linear-gradient(90deg, rgba(23, 105, 170, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(23, 105, 170, 0.05) 1px, transparent 1px),
+    #fbfcfd;
+  background-size: 32px 32px;
+  overflow: auto;
+}
+
 .concept-map {
   height: min(760px, calc(100vh - 180px));
   min-height: 640px;
   width: 100%;
+}
+
+.concept-map.structure-map {
+  min-width: 100%;
+  width: max-content;
+}
+
+.structure-svg {
+  display: block;
+  max-width: none;
+}
+
+.structure-link {
+  fill: none;
+  stroke: rgba(93, 117, 144, 0.34);
+  stroke-width: 1.4;
+}
+
+.structure-node {
+  cursor: default;
+}
+
+.structure-node rect {
+  fill: #ffffff;
+  stroke: #d7e0e8;
+  stroke-width: 1;
+  filter: drop-shadow(0 6px 14px rgba(30, 48, 70, 0.08));
+}
+
+.structure-node.root rect {
+  fill: #e8f2fb;
+  stroke: #1769aa;
+}
+
+.structure-node.bucket rect {
+  fill: #fff7e8;
+  stroke: #d6aa5c;
+}
+
+.structure-node.section rect {
+  fill: #f8fafc;
+}
+
+.structure-node.doc {
+  cursor: pointer;
+}
+
+.structure-node.doc:hover rect,
+.structure-node.doc:focus rect {
+  fill: #edf7ff;
+  stroke: #1769aa;
+  stroke-width: 1.8;
+}
+
+.structure-title {
+  fill: #17202a;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.structure-hint {
+  fill: #667789;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+}
+
+.structure-count {
+  fill: #1769aa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  font-weight: 850;
+  text-anchor: end;
 }
 
 .graph-canvas {
