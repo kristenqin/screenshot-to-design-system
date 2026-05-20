@@ -803,3 +803,50 @@ Skill 来源：
 - 继续复用 Mind Elixir 作为视觉 mind-map 壳。
 - 使用浏览器 History API 处理前进、后退和可恢复 URL 状态。
 - 只实现项目特有的 Navigation Adapter。
+
+## 2026-05-20 - `spec-first` + `information-architecture` + `browser`
+
+任务：
+
+- 为文档站实现两栏式地图导航工作台。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/spec-first/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+原因：
+
+- 用户希望去掉传统目录作为主导航心智，改成左侧持续显示 Structure Tree 地图，右侧阅读文档。
+
+遵循步骤：
+
+- 为 map navigation workbench 新增 spec、TODO 和 decision artifacts。
+- 将 sidebar-first shell 改成 `.map-pane` 和 `.reader-pane` 两栏布局。
+- 默认在左侧地图面板渲染 Structure Tree。
+- 将 Relationship Graph 保留为地图面板里的审计模式。
+- 将旧 section list 转成可折叠 fallback search results。
+- 右侧继续保留文档阅读模块。
+- 用 delegated listener 和直接 topic listener 加固 Mind Elixir 文档节点绑定。
+
+输出：
+
+- 新增 `.agents/SPECS/map-navigation-workbench.md`
+- 新增 `.agents/TODOS/map-navigation-workbench.md`
+- 新增 `.agents/DECISIONS/map-navigation-workbench.md`
+- 更新 [文档站](docs-site.md)
+- 更新 [英文 Docs Site](../docs-site.md)
+- 更新 `src/main.js`
+- 更新 `src/styles.css`
+
+验证：
+
+- `npm run build` 生成 59 份文档和 392 条 graph edges。
+- `git diff --check` 通过。
+- 浏览器验证确认：
+  - desktop 会渲染 `.map-pane` 和 `.reader-pane`。
+  - Mind Elixir 在地图面板中渲染 59 份文档和 87 个树节点。
+  - 右侧 reader pane 打开 `START_HERE.md`。
+  - Relationship Graph 在地图面板中渲染 59 个节点和 254 条可见边。
+  - 中文 scope 渲染 29 份文档和 46 个树节点，并移除了冗余“中文”前缀。

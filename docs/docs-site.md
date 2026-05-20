@@ -65,17 +65,18 @@ package-lock.json
 
 ## Features
 
-- Sidebar grouped by documentation section
+- Two-column workbench: Structure Tree map navigator on the left and document reader on the right
+- Fallback document list for search, small screens, and accessibility
 - Language filter: all, English, Chinese
 - Text search across title, path, section, and summary
 - Markdown rendering for headings, lists, tables, links, code blocks, and blockquotes
 - Right-side table of contents on wide screens
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
-- Concept Map with two modes:
+- Map navigator with two modes:
   - Structure Tree for project lifecycle, module, section, topic, and document hierarchy, rendered with Mind Elixir
   - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
-- Structure Tree is the default management view; Relationship Graph is the audit view
+- Structure Tree is the default navigation view; Relationship Graph is the audit view
 - Structure Tree labels are normalized across root, module, section, topic, and document levels
 - Dense Structure Tree sections are split into topic groups; Workflow is organized into Reading System, Structure Views, Agent Workflow, Reuse Rules, and Audit Trail
 - Document leaves use short concept labels while retaining full document titles in metadata
@@ -97,11 +98,11 @@ Checks performed:
 
 - default document loads as `START_HERE.md`
 - Reading-path filters reduce the navigation to task-focused sets
-- 57 documentation files appear in navigation
-- Concept Map opens Structure Tree by default
-- Structure Tree renders through Mind Elixir with 85 tree nodes, 57 visible docs, and 10 topic groups for dense Workflow sections
-- Chinese Structure Tree scope renders 28 docs and 45 tree nodes, including 5 Chinese Workflow topic groups
-- Relationship Graph view renders with canvas; the default global graph shows 57 document nodes and 247 visible relationships
+- 59 documentation files appear in navigation
+- Two-column workbench renders `.map-pane` and `.reader-pane`
+- Structure Tree renders through Mind Elixir with 87 tree nodes, 59 visible docs, and 10 topic groups for dense Workflow sections
+- Chinese Structure Tree scope renders 29 docs and 46 tree nodes, with redundant Chinese prefixes removed
+- Relationship Graph view renders with canvas; the default global graph shows 59 document nodes and 254 visible relationships
 - Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently
 - Graph settings expose 4 toggles and 4 sliders

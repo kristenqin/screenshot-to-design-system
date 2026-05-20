@@ -12,7 +12,6 @@ const state = {
   search: "",
   lang: "all",
   path: "all",
-  view: "doc",
   mapMode: "tree",
   headings: [],
   graphSettings: {
@@ -95,13 +94,11 @@ function filteredDocs() {
 function renderShell() {
   app.innerHTML = `
     <div class="layout">
-      <aside class="sidebar">
-        <div class="brand">
-          <div>
-            <p class="eyebrow">Docs System</p>
-            <h1>Screenshot to Design System</h1>
-          </div>
-        </div>
+      <aside class="map-pane">
+        <header class="map-header">
+          <p class="eyebrow">Docs Map</p>
+          <h1>Design Recovery</h1>
+        </header>
         <div class="controls">
           <label class="search-label" for="doc-search">Search docs</label>
           <input id="doc-search" class="search" type="search" placeholder="Search title, path, summary" value="${escapeHtml(state.search)}" />
@@ -117,16 +114,27 @@ function renderShell() {
             ${segmentButton("zh-CN", "中文")}
           </div>
         </div>
-        <nav class="nav" aria-label="Documentation"></nav>
+        <div class="map-toolbar">
+          <div class="graph-view-tabs compact" aria-label="Concept map mode">
+            ${mapModeButton("tree", "Structure Tree", "Navigate")}
+            ${mapModeButton("graph", "Relationship Graph", "Audit")}
+          </div>
+          <div class="graph-legend" aria-label="Relationship legend"></div>
+        </div>
+        <div class="map-stage">
+          <div id="concept-map" class="concept-map structure-map" role="img" aria-label="Interactive documentation map"></div>
+        </div>
+        <details class="fallback-nav">
+          <summary>Search results</summary>
+          <nav class="nav" aria-label="Fallback documentation list"></nav>
+        </details>
       </aside>
-      <main class="main">
+      <main class="reader-pane">
         <header class="topbar">
-          <button class="icon-button" id="sidebar-toggle" title="Toggle navigation" aria-label="Toggle navigation">☰</button>
           <div class="topbar-copy">
             <span id="doc-path"></span>
             <strong id="doc-title"></strong>
           </div>
-          <button class="view-button" id="map-toggle" type="button">Concept map</button>
           <a class="source-link" id="source-link" target="_blank" rel="noreferrer">Source</a>
         </header>
         <article class="content" id="content"></article>
@@ -138,14 +146,14 @@ function renderShell() {
   document.querySelector("#doc-search").addEventListener("input", (event) => {
     state.search = event.target.value;
     renderNav();
-    if (state.view === "map") renderConceptMap().catch(showGraphError);
+    renderMapPanel().catch(showGraphError);
   });
 
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.addEventListener("click", () => {
       state.lang = button.dataset.lang;
       renderNav();
-      if (state.view === "map") renderConceptMap().catch(showGraphError);
+      renderMapPanel().catch(showGraphError);
     });
   });
 
@@ -154,21 +162,11 @@ function renderShell() {
       state.path = button.dataset.path;
       if (state.path === "zh") state.lang = "zh-CN";
       renderNav();
-      if (state.view === "map") renderConceptMap().catch(showGraphError);
+      renderMapPanel().catch(showGraphError);
     });
   });
 
-  document.querySelector("#sidebar-toggle").addEventListener("click", () => {
-    document.body.classList.toggle("nav-collapsed");
-  });
-
-  document.querySelector("#map-toggle").addEventListener("click", () => {
-    if (state.view === "map") {
-      loadDoc(state.active?.source ?? "START_HERE.md");
-    } else {
-      renderConceptMap().catch(showGraphError);
-    }
-  });
+  bindMapModeControls();
 }
 
 function segmentButton(value, label) {
@@ -229,17 +227,7 @@ function renderNav() {
 async function loadDoc(source) {
   const doc = state.manifest.find((item) => item.source === source) ?? state.manifest[0];
   if (!doc) return;
-  destroyStructureTree();
-  if (state.graphCanvas?.destroy) {
-    state.graphCanvas.destroy();
-    state.graphCanvas = null;
-  }
-  if (state.graphInstance) {
-    state.graphInstance.destroy();
-    state.graphInstance = null;
-  }
   state.active = doc;
-  state.view = "doc";
   setHashDoc(doc.source);
   renderNav();
 
@@ -256,7 +244,6 @@ async function loadDoc(source) {
   renderMeta(doc);
   renderToc();
   content.scrollTop = 0;
-  window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 function decorateHeadings(content) {
@@ -277,10 +264,8 @@ function bindDocLinks(content) {
 }
 
 function renderMeta(doc) {
-  state.view = "doc";
   document.querySelector("#doc-title").textContent = doc.title;
   document.querySelector("#doc-path").textContent = doc.source;
-  document.querySelector("#map-toggle").textContent = "Concept map";
   const sourceLink = document.querySelector("#source-link");
   sourceLink.href = doc.source;
   sourceLink.textContent = "Open source";
@@ -312,95 +297,53 @@ function renderToc() {
 }
 
 async function renderConceptMap() {
-  state.view = "map";
+  await renderMapPanel();
+}
+
+async function renderMapPanel() {
   renderNav();
 
-  const content = document.querySelector("#content");
   const graph = visibleGraph();
   const tree = buildStructureTree();
   const isTree = state.mapMode === "tree";
+  const container = document.querySelector("#concept-map");
+  const stage = document.querySelector(".map-stage");
+  if (!container || !stage) return;
 
-  document.querySelector("#doc-title").textContent = "Concept Map";
-  document.querySelector("#doc-path").textContent = `${activePathLabel()} ${isTree ? "structure tree" : "relationship graph"}`;
-  document.querySelector("#map-toggle").textContent = "Reading view";
-  document.querySelector("#source-link").hidden = true;
+  stage.classList.toggle("relationship-stage", !isTree);
+  stage.classList.toggle("structure-stage", isTree);
+  container.className = `concept-map ${isTree ? "structure-map" : ""}`;
+  document.querySelector(".graph-legend").innerHTML = isTree
+    ? `<span><i class="legend-dot root"></i>Project</span>
+      <span><i class="legend-dot module"></i>Module</span>
+      <span><i class="legend-dot doc"></i>Document</span>`
+    : `<span><i class="legend-dot references"></i>Primary reference</span>
+      <span><i class="legend-dot companion"></i>Language companion</span>
+      <span><i class="legend-dot path"></i>Navigation path</span>`;
 
-  content.className = "content graph-content";
-  content.innerHTML = `
-    <section class="graph-intro">
-      <div>
-        <p class="eyebrow">Concept Map</p>
-        <h1>${isTree ? "Project Structure Tree" : "Document Relationship Graph"}</h1>
-      </div>
-      <p>${isTree
-    ? `${tree.docCount} visible docs organized by project lifecycle, module, and document. Select a document leaf to open it.`
-    : `${graph.docCount} visible docs, ${graph.edges.length} visible relationships. Pan, zoom, hover to focus, select a node, or double-click to open it.`}</p>
-    </section>
-    <div class="graph-view-tabs" aria-label="Concept map mode">
-      ${mapModeButton("tree", "Structure Tree", "Management view")}
-      ${mapModeButton("graph", "Relationship Graph", "Audit view")}
-    </div>
-    <div class="graph-controls" aria-label="Graph controls">
-      <div class="graph-control-group">
-        <p class="filter-title">Scope</p>
-        <div class="graph-button-grid">
-          ${graphScopeButton("zh-CN", "中文决策图", "Decision")}
-          ${graphScopeButton("en", "English execution", "Agent")}
-          ${graphScopeButton("all", "All audit", "Coverage")}
-        </div>
-      </div>
-      ${isTree ? "" : `
-      <div class="graph-control-group">
+  const graphControls = document.querySelector(".graph-extra-controls");
+  if (graphControls) graphControls.remove();
+  if (!isTree) {
+    document.querySelector(".map-toolbar").insertAdjacentHTML("beforeend", `
+      <div class="graph-extra-controls" aria-label="Graph controls">
         <p class="filter-title">View</p>
         <div class="graph-button-grid compact">
           ${graphModeButton("global", "Global", "All visible")}
           ${graphModeButton("local", "Local", `Depth ${state.graphSettings.depth}`)}
         </div>
-      </div>
-      <div class="graph-control-group">
         <p class="filter-title">Local depth</p>
         <div class="graph-depth-group" aria-label="Local graph depth">
           ${[1, 2, 3].map(depthButton).join("")}
         </div>
       </div>
-      `}
-    </div>
-    ${isTree ? "" : `
-    <details class="graph-settings" ${state.graphSettingsOpen ? "open" : ""}>
-      <summary>Graph settings</summary>
-      <div class="graph-settings-grid">
-        ${graphToggle("showLabels", "Labels")}
-        ${graphToggle("showArrows", "Arrows")}
-        ${graphToggle("showCompanions", "Bilingual links")}
-        ${graphToggle("showPathEdges", "Path links")}
-        ${graphSlider("nodeScale", "Node size", 0.7, 1.8, 0.1)}
-        ${graphSlider("linkScale", "Link thickness", 0.6, 2, 0.1)}
-        ${graphSlider("repel", "Repel force", 0.7, 2.2, 0.1)}
-        ${graphSlider("distance", "Link distance", 0.7, 2.2, 0.1)}
-      </div>
-    </details>
-    `}
-    <div class="graph-legend" aria-label="Relationship legend">
-      ${isTree
-    ? `<span><i class="legend-dot root"></i>Project</span>
-        <span><i class="legend-dot module"></i>Module</span>
-        <span><i class="legend-dot doc"></i>Document</span>`
-    : `<span><i class="legend-dot references"></i>Primary reference</span>
-        <span><i class="legend-dot companion"></i>Language companion</span>
-        <span><i class="legend-dot path"></i>Navigation path</span>`}
-    </div>
-    <div class="graph-stage ${isTree ? "structure-stage" : ""}">
-      <div id="concept-map" class="concept-map ${isTree ? "structure-map" : ""}" role="img" aria-label="Interactive documentation concept map"></div>
-    </div>
-  `;
+    `);
+  }
 
   renderMapToc(isTree ? tree : graph, isTree ? "tree" : "graph");
-  bindGraphScopeControls();
   bindMapModeControls();
+  bindGraphScopeControls();
   if (isTree) await mountStructureTree(tree);
   else await mountGraph(graph);
-  content.scrollTop = 0;
-  window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 function mapModeButton(value, label, hint) {
@@ -902,20 +845,45 @@ async function mountMindElixirTree(tree, container) {
 }
 
 function bindMindElixirDocClicks(host, docSourceByMindId) {
-  const clickListener = (event) => {
-    const topic = event.target.closest?.("me-tpc[data-nodeid]");
-    if (!topic || !host.contains(topic)) return;
+  const directListeners = [];
+  const openTopic = (topic, event) => {
     const source = mindElixirDocSource(docSourceByMindId, topic.dataset.nodeid);
     host.dataset.lastSelectedId = topic.dataset.nodeid;
     host.dataset.lastSelectedSource = source ?? "";
     if (!source) return;
-    event.preventDefault();
-    event.stopPropagation();
+    event?.preventDefault();
+    event?.stopPropagation();
     loadDoc(source);
+  };
+  const clickListener = (event) => {
+    const topic = event.target.closest?.("me-tpc[data-nodeid]");
+    if (!topic || !host.contains(topic)) return;
+    openTopic(topic, event);
   };
   host.dataset.clickAdapter = "doc-open";
   host.addEventListener("click", clickListener, true);
-  return () => host.removeEventListener("click", clickListener, true);
+  const bindDirectTopics = () => host.querySelectorAll("me-tpc[data-nodeid]").forEach((topic) => {
+    if (topic.dataset.docClickBound === "true") return;
+    if (!mindElixirDocSource(docSourceByMindId, topic.dataset.nodeid)) return;
+    const directClick = (event) => openTopic(topic, event);
+    topic.dataset.docClickBound = "true";
+    [topic, ...topic.querySelectorAll("*")].forEach((target) => {
+      target.addEventListener("click", directClick, true);
+      target.addEventListener("pointerup", directClick, true);
+      directListeners.push([target, directClick]);
+    });
+  });
+  bindDirectTopics();
+  const observer = new MutationObserver(bindDirectTopics);
+  observer.observe(host, { childList: true, subtree: true });
+  return () => {
+    host.removeEventListener("click", clickListener, true);
+    observer.disconnect();
+    directListeners.forEach(([topic, listener]) => {
+      topic.removeEventListener("click", listener, true);
+      topic.removeEventListener("pointerup", listener, true);
+    });
+  };
 }
 
 function mindElixirDocSource(docSourceByMindId, id) {
@@ -2092,10 +2060,9 @@ function selectedEdgeDetails(edge) {
 window.__openGraphDoc = (source) => loadDoc(source);
 
 function showGraphError(error) {
-  const content = document.querySelector("#content");
-  if (content) {
-    content.className = "content graph-content";
-    content.innerHTML = `<h1>Unable to load concept map</h1><pre>${escapeHtml(error.stack ?? error.message)}</pre>`;
+  const container = document.querySelector("#concept-map");
+  if (container) {
+    container.innerHTML = `<div class="map-error"><h2>Unable to load map</h2><pre>${escapeHtml(error.stack ?? error.message)}</pre></div>`;
   }
 }
 
@@ -2245,6 +2212,7 @@ async function boot() {
   renderShell();
   const source = getHashDoc();
   await loadDoc(source && state.manifest.some((doc) => doc.source === source) ? source : "START_HERE.md");
+  await renderMapPanel();
 }
 
 boot().catch((error) => {

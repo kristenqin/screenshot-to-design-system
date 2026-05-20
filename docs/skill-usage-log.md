@@ -861,3 +861,50 @@ Decision:
 - Reuse Mind Elixir for the visual mind-map shell.
 - Use the browser History API for back, forward, and reloadable URL state.
 - Build only the project-specific Navigation Adapter.
+
+## 2026-05-20 - `spec-first` + `information-architecture` + `browser`
+
+Task:
+
+- Implement a two-column map navigation workbench for the docs site.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/spec-first/SKILL.md`
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/plugins/cache/openai-bundled/browser/0.1.0-alpha2/skills/browser/SKILL.md`
+
+Reason:
+
+- The user wants to remove the traditional directory as the primary navigation model and use a persistent Structure Tree map beside the document reader.
+
+Workflow steps followed:
+
+- Added spec, TODO, and decision artifacts for the map navigation workbench.
+- Replaced the sidebar-first shell with a two-column layout: `.map-pane` and `.reader-pane`.
+- Rendered Structure Tree in the left map panel by default.
+- Kept Relationship Graph as an audit mode inside the map panel.
+- Converted the old section list into a collapsible fallback search result list.
+- Kept document reading in the right pane.
+- Hardened Mind Elixir document topic binding with delegated and direct topic listeners.
+
+Output artifacts:
+
+- Added `.agents/SPECS/map-navigation-workbench.md`
+- Added `.agents/TODOS/map-navigation-workbench.md`
+- Added `.agents/DECISIONS/map-navigation-workbench.md`
+- Updated [Docs Site](docs-site.md)
+- Updated [Chinese Docs Site](zh-CN/docs-site.md)
+- Updated `src/main.js`
+- Updated `src/styles.css`
+
+Verification:
+
+- `npm run build` generated 59 docs and 392 graph edges.
+- `git diff --check` passed.
+- Browser verification confirmed:
+  - `.map-pane` and `.reader-pane` render on desktop.
+  - Mind Elixir renders in the map pane with 59 docs and 87 tree nodes.
+  - The reader pane opens `START_HERE.md`.
+  - Relationship Graph renders in the map pane with 59 nodes and 254 visible edges.
+  - Chinese scope renders 29 docs and 46 tree nodes with redundant Chinese prefixes removed.
