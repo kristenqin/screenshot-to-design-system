@@ -14,6 +14,21 @@ The current workflow is closer to software development than casual note-taking:
 
 This document adapts Git and software-engineering practices to the project's documentation system.
 
+## Reuse-First Rule
+
+Before self-implementing a non-core capability, run the [Reuse-First Discovery Gate](reuse-first-discovery-gate.md).
+
+Trigger it for:
+
+- third-party UI or graph features
+- documentation-site capabilities
+- workflow automation
+- parsing, OCR, image, or ML infrastructure
+- changes likely to touch more than two or three files
+- unclear build-vs-buy decisions
+
+Do not treat self-implementation as the default. First document reusable tools, libraries, skills, APIs, or product patterns, then decide whether to reuse, adapt, wrap, or build.
+
 ## Skills.sh References
 
 ### commit-work
@@ -267,4 +282,3 @@ docs(project): initialize screenshot-to-design-system documentation
 ```
 
 That commit should include the current README, docs, Chinese companion docs, task board, and workflow rules.
-

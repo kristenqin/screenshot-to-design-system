@@ -16,6 +16,8 @@ screenshot
   -> screenshot diff
 ```
 
+在开始下面任何任务组之前，如果涉及 OCR、UI detection、clustering、token extraction、图谱/文档工具，或其他非核心能力，需要先运行 [复用优先发现门禁](reuse-first-discovery-gate.md)。
+
 ## 任务组
 
 1. 定义中间数据结构
@@ -70,4 +72,3 @@ viewer/
 ```text
 schemas/ui-ast.schema.json
 ```
-

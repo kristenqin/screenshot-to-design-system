@@ -32,9 +32,12 @@ The project now follows a module-governance-first planning model: mature module 
 
 The documentation system itself now has a module passport. It is treated as the first governed module, currently M4 with a target of M5 reusable.
 
+The project now includes a reuse-first discovery gate. Before non-core implementation, agents should research reusable tools, libraries, skills, APIs, or product patterns and record the reuse-vs-self-build decision.
+
 ## Latest Commits
 
 ```text
+docs(workflow): add reuse-first discovery gate
 feat(docs): use cytoscape for concept map
 docs(workflow): apply governance to documentation module
 docs(workflow): add module-governance-first model
@@ -55,6 +58,7 @@ docs(workflow): add module-governance-first model
 - [Information Architecture](../../docs/information-architecture.md)
 - [Concept Map Research](../../docs/concept-map-research.md)
 - [Module Governance First](../../docs/module-governance-first.md)
+- [Reuse-First Discovery Gate](../../docs/reuse-first-discovery-gate.md)
 - [Documentation System Module Passport](../../docs/module-passports/documentation-system.md)
 - [Chinese Docs Index](../../docs/zh-CN/index.md)
 
@@ -72,6 +76,8 @@ docs(workflow): add module-governance-first model
 - Graph rendering uses Cytoscape.js because the custom SVG map did not make document-to-document relationships clear enough.
 - Product MVP should be composed from modules that have explicit readiness levels.
 - The documentation system is a governed module, not only a place where governance is written down.
+- Self-implementation is not the default for non-core capabilities.
+- The reuse-first discovery gate should run before third-party UI/graph work, OCR/image/ML/parsing infrastructure, workflow automation, or any unclear build-vs-buy decision.
 
 ## Current Tasks
 
@@ -99,10 +105,11 @@ Related docs:
 
 1. Read [START_HERE.md](../../START_HERE.md).
 2. Read [TASKS.md](../../TASKS.md).
-3. Install or read the `project-planner` skill before starting T-003.
-4. Create an implementation plan for promoting `UI AST parsing` from M1 to M3.
-5. Record skill usage in [Skill Usage Log](../../docs/skill-usage-log.md).
-6. Update this handoff after completing the plan.
+3. Read [Reuse-First Discovery Gate](../../docs/reuse-first-discovery-gate.md) before selecting any non-core implementation approach.
+4. Install or read the `project-planner` skill before starting T-003.
+5. Create an implementation plan for promoting `UI AST parsing` from M1 to M3.
+6. Record skill usage in [Skill Usage Log](../../docs/skill-usage-log.md).
+7. Update this handoff after completing the plan.
 
 To browse docs locally:
 
@@ -131,7 +138,7 @@ The Concept Map supports zoom, drag, node selection, neighborhood highlighting, 
 Last known clean Git state after commit:
 
 ```text
-docs(workflow): apply governance to documentation module
+docs(workflow): add reuse-first discovery gate
 ```
 
 New session should still run:

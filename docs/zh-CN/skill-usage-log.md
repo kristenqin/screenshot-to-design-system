@@ -418,3 +418,44 @@ Skill 来源：
 - `npm run build` 成功准备 51 份文档和 321 条 graph edges。
 - 浏览器验证确认 Cytoscape 渲染 57 个节点和 321 条边。
 - 选择节点后会高亮邻域，并在右侧显示关系数量。
+
+## 2026-05-20 - `information-architecture` + `commit-work`
+
+任务：
+
+- 在用户指出过早自研带来时间、Token 和维护成本后，加入复用优先发现门禁。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/skills/commit-work/SKILL.md`
+
+原因：
+
+- 项目需要一个结构化流程规则，要求在非核心实现前先调研可复用工具、库、API、产品模式和 Skills.sh 工作流。
+
+遵循步骤：
+
+- 将问题作为文档系统治理规则处理，而不是一次性的备注。
+- 创建中英文发现门禁文档。
+- 将门禁接入项目管理、文档工程、README、中文入口、任务面板和 session handoff。
+- 记录技术评估、spec-first、brainstorm 和 implementation planning 相关 Skills.sh 参考。
+- 按文档工程方式准备为独立提交。
+
+输出：
+
+- [复用优先发现门禁](reuse-first-discovery-gate.md)
+- [项目管理工作流](project-management.md)
+- [文档工程工作流](document-engineering-workflow.md)
+- [任务面板](tasks.md)
+- [.codex/handoffs/current.md](../../.codex/handoffs/current.md)
+
+偏离：
+
+- 外部 Skills.sh 内容作为流程参考采用，没有全部安装成本地 skills。
+- 浏览器验证复用了现有本地文档站。
+
+验证：
+
+- `npm run build` 成功准备 53 份文档和 344 条 graph edges。
+- 浏览器验证确认侧边栏显示 53 份文档，中文复用优先门禁页面可以打开，并显示触发条件、必须遵循的顺序和项目应用示例。

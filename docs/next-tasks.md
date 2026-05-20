@@ -16,6 +16,8 @@ screenshot
   -> screenshot diff
 ```
 
+Before starting any task group below, run the [Reuse-First Discovery Gate](reuse-first-discovery-gate.md) when the work involves OCR, UI detection, clustering, token extraction, graph/document tooling, or any other non-core capability.
+
 ## Task Group 1: Define the Intermediate Data Model
 
 This should be the first implementation task.
@@ -300,4 +302,3 @@ This is the safest starting point because it makes every later tool integration 
 6. Extract basic design tokens.
 7. Generate HTML reconstruction.
 8. Add screenshot diff feedback.
-

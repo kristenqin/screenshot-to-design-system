@@ -25,6 +25,7 @@
 - [信息架构](information-architecture.md)
 - [概念图调研](concept-map-research.md)
 - [模块治理优先](module-governance-first.md)
+- [复用优先发现门禁](reuse-first-discovery-gate.md)
 - [文档系统 Module Passport](module-passports/documentation-system.md)
 - [MVP 路线图](mvp-roadmap.md)
 - [下一步任务](next-tasks.md)

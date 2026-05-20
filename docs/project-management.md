@@ -9,6 +9,7 @@ The project has grown beyond loose research notes. It now needs:
 - a single task board
 - a PRD-to-issue workflow
 - implementation plans for individual slices
+- reuse-first discovery before non-core implementation
 - verification gates before calling work complete
 
 ## Skills.sh Findings
@@ -140,6 +141,67 @@ Decision:
 - Use as a process rule even before installing the skill.
 - Every implementation task should include a verification section.
 
+### evaluating-new-technology
+
+Source:
+
+- <https://skills.sh/refoundai/lenny-skills/evaluating-new-technology>
+
+Why it matters:
+
+- supports structured technology evaluation before adoption
+- helps compare ecosystem fit, maturity, tradeoffs, and implementation risk
+- fits the user's concern that custom implementation can waste time, tokens, and maintenance effort
+
+Fit:
+
+- High
+
+Decision:
+
+- Use as part of the [Reuse-First Discovery Gate](reuse-first-discovery-gate.md).
+- Apply it before adding graph, OCR, image, parsing, workflow, or automation capabilities that are not core differentiators.
+
+### spec-first
+
+Source:
+
+- <https://skills.sh/shipshitdev/library/spec-first>
+
+Why it matters:
+
+- encourages defining behavior and constraints before implementation
+- helps prevent vague execution where the agent starts coding without a reusable path or acceptance boundary
+
+Fit:
+
+- High
+
+Decision:
+
+- Use the workflow idea before non-core implementation tasks.
+- Record expected behavior, reusable candidates, rejection reasons, and acceptance checks before building.
+
+### simple-brainstorm
+
+Source:
+
+- <https://skills.sh/roin-orca/skills/simple-brainstorm>
+
+Why it matters:
+
+- useful when the project is still deciding between options
+- helps separate discussion and exploration from immediate implementation
+
+Fit:
+
+- Medium
+
+Decision:
+
+- Use when the user asks to discuss a workflow, architecture, or tool choice.
+- Do not treat brainstorming turns as permission to implement unless the user later approves a concrete direction.
+
 ## Chosen Workflow
 
 ```text
@@ -147,6 +209,7 @@ Research docs
   -> PRD
   -> vertical issue breakdown
   -> task board
+  -> reuse-first discovery gate
   -> implementation plan for selected task
   -> execution
   -> verification evidence
@@ -158,6 +221,7 @@ Research docs
 - [Task Board](../TASKS.md): day-to-day task status
 - [PRD](prd.md): product requirements
 - [Issue Breakdown Draft](issue-breakdown-draft.md): vertical implementation slices
+- [Reuse-First Discovery Gate](reuse-first-discovery-gate.md): required discovery before non-core implementation
 - `docs/plans/`: future detailed implementation plans
 - `docs/verification/`: future verification notes and reports
 
@@ -170,6 +234,8 @@ The project should use three task levels:
 3. Execution task: task board and implementation plans.
 
 Avoid creating tasks that only say "build schema" or "build UI" without an end-to-end verification artifact. Each implementation slice should produce something inspectable.
+
+Before implementation starts, run the reuse-first discovery gate when the task involves a non-core capability, a third-party UI or graph feature, image/OCR/ML/parsing infrastructure, more than two or three files of likely custom work, or any unclear build-vs-buy decision.
 
 ## Immediate Next Step
 
@@ -185,4 +251,3 @@ That plan should include:
 - verification criteria
 - risks and unknowns
 - acceptance criteria
-

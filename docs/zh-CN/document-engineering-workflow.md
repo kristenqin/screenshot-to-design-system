@@ -17,6 +17,21 @@
 
 所以我们应该用类似 Git 管理代码的方式管理文档。
 
+## 复用优先规则
+
+在自研非核心能力之前，先运行 [复用优先发现门禁](reuse-first-discovery-gate.md)。
+
+触发场景包括：
+
+- 第三方 UI 或图谱能力
+- 文档站功能
+- 工作流自动化
+- 解析、OCR、图像或 ML 基础设施
+- 预计会改动两三个以上文件的实现
+- build-vs-buy 还不明确的任务
+
+不要把自研当成默认选项。应该先记录可复用的工具、库、skills、API 或产品模式，再决定复用、适配、包装，还是自研。
+
 ## 借鉴的 Skills.sh 工作流
 
 ### commit-work
@@ -162,4 +177,3 @@ docs(workflow): define document engineering process
 ```text
 docs(project): initialize screenshot-to-design-system documentation
 ```
-

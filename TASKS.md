@@ -7,6 +7,7 @@ The canonical product inputs are:
 - [PRD](docs/prd.md)
 - [Issue Breakdown Draft](docs/issue-breakdown-draft.md)
 - [Project Management Workflow](docs/project-management.md)
+- [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md)
 
 ## Status Legend
 
@@ -40,6 +41,7 @@ The next concrete implementation task is:
 | T-019 | Maintain documentation concept map and relationship graph | AFK | `information-architecture`, `browser`, `commit-work` | None | [Concept Map Research](docs/concept-map-research.md) |
 | T-020 | Promote UI AST parsing from M1 to M3 | AFK | `project-planner`, `verification-before-completion`, `commit-work` | T-001 approval preferred | [Module Governance First](docs/module-governance-first.md) |
 | T-021 | Promote documentation system from M4 to M5 | AFK | `information-architecture`, `commit-work` | None | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
+| T-022 | Maintain reuse-first discovery gate | AFK | `information-architecture`, `commit-work` | None | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
 
 ## Backlog
 
@@ -75,6 +77,7 @@ The next concrete implementation task is:
 | D-014 | Add concept map research and graph navigation | [Concept Map Research](docs/concept-map-research.md) |
 | D-015 | Add module-governance-first planning model | [Module Governance First](docs/module-governance-first.md) |
 | D-016 | Apply module governance to documentation system | [Documentation System Module Passport](docs/module-passports/documentation-system.md) |
+| D-017 | Add reuse-first discovery gate | [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md) |
 
 ## Operating Rules
 
@@ -88,3 +91,4 @@ The next concrete implementation task is:
 - When ending a meaningful work session, update [.codex/handoffs/current.md](.codex/handoffs/current.md) so a new session can resume quickly.
 - After several rounds of workflow-building or a high-friction interaction, run a retrospective and convert at least one insight into a project change.
 - Do not treat the product MVP as ready until the participating modules have explicit boundaries, contracts, verification, and readiness levels.
+- Before non-core implementation, run the reuse-first discovery gate and record the selected reuse or self-build decision.

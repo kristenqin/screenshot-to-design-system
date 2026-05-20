@@ -60,6 +60,7 @@ Language:
 - Local browser docs site instructions live in [Docs Site](docs/docs-site.md).
 - Concept map research and graph navigation decisions live in [Concept Map Research](docs/concept-map-research.md).
 - Module-first planning rules live in [Module Governance First](docs/module-governance-first.md).
+- Reuse-first implementation rules live in [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md).
 - The documentation system's own module contract lives in [Documentation System Module Passport](docs/module-passports/documentation-system.md).
 
 - [Task Board](TASKS.md)
@@ -70,6 +71,7 @@ Language:
 - [Information Architecture](docs/information-architecture.md)
 - [Concept Map Research](docs/concept-map-research.md)
 - [Module Governance First](docs/module-governance-first.md)
+- [Reuse-First Discovery Gate](docs/reuse-first-discovery-gate.md)
 - [Documentation System Module Passport](docs/module-passports/documentation-system.md)
 - [Workflow Overview](docs/workflow-overview.md)
 - [Existing Tools and Algorithms](docs/existing-tools-and-algorithms.md)

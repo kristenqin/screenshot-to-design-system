@@ -475,3 +475,45 @@ Verification:
 - `npm run build` prepared 51 documentation files and 321 graph edges.
 - Browser verification confirmed Cytoscape renders 57 nodes and 321 edges.
 - Selecting a node highlights its neighborhood and shows relationship counts in the right panel.
+
+## 2026-05-20 - `information-architecture` + `commit-work`
+
+Task:
+
+- Add a reuse-first discovery gate after the user identified high cost from premature custom implementation.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/information-architecture/SKILL.md`
+- `/Users/qyx/.codex/skills/commit-work/SKILL.md`
+
+Reason:
+
+- The project needed a structural workflow rule that forces reusable tool, library, API, product-pattern, and Skills.sh discovery before non-core implementation.
+
+Workflow steps followed:
+
+- Treated the issue as documentation-system governance rather than a one-off note.
+- Created a bilingual discovery gate.
+- Linked the gate from project management, document engineering, README, Chinese index, task board, and session handoff.
+- Added Skills.sh references for technology evaluation, spec-first behavior, brainstorming, and implementation planning.
+- Prepared the change as a scoped documentation commit.
+
+Output artifacts:
+
+- [Reuse-First Discovery Gate](reuse-first-discovery-gate.md)
+- [Chinese Reuse-First Discovery Gate](zh-CN/reuse-first-discovery-gate.md)
+- Updated [Project Management Workflow](project-management.md)
+- Updated [Document Engineering Workflow](document-engineering-workflow.md)
+- Updated [Task Board](../TASKS.md)
+- Updated [Current Handoff](../.codex/handoffs/current.md)
+
+Deviations:
+
+- The external Skills.sh ideas were adopted as workflow references rather than installed as local skills.
+- Browser verification used the existing local docs site.
+
+Verification:
+
+- `npm run build` prepared 53 documentation files and 344 graph edges.
+- Browser verification confirmed the sidebar lists 53 documents and the Chinese reuse-first gate renders with its trigger conditions, required sequence, and project-specific examples.
