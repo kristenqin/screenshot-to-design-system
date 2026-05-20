@@ -579,3 +579,40 @@ Skill 来源：
 验证：
 
 - 文档站构建应包含新的中英文调研文档。
+
+## 2026-05-20 - `evaluating-new-technology` + `spec-first`
+
+任务：
+
+- 修正 Structure Tree 的复用缺口：在继续补自研功能前，先评估成熟 mind-map 和 hierarchy libraries。
+
+Skill 来源：
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/spec-first/SKILL.md`
+
+原因：
+
+- 用户指出 SVG Structure Tree 在调研深度不足时就进入实现；如果后续继续补折叠、缩放、拖拽、搜索等能力，会重新走向高成本自研。
+
+遵循步骤：
+
+- 将问题重新定义成 build / buy / reuse 决策。
+- 检查 Markmap、Mind Elixir、jsMind 和 d3-hierarchy 的包信息与仓库信号。
+- 按当前 manifest 驱动的文档 IA 进行适配度比较。
+- 更新 Structure Map 决策记录，明确当前原生 SVG tree 是原型和 fallback，不是长期默认架构。
+
+输出：
+
+- [思维导图库选型评估](mind-map-library-evaluation.md)
+- [英文 Mind Map Library Evaluation](../mind-map-library-evaluation.md)
+- 更新 [任务板](../../TASKS.md)
+- 更新 `.agents/DECISIONS/structure-map.md`
+
+偏离：
+
+- 本轮没有改实现代码；这是有意的选型与计划纠偏。
+
+验证：
+
+- 新增中英文文档加入 manifest 后，`npm run build` 应生成 57 份文档。

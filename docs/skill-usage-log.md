@@ -637,3 +637,40 @@ Deviations:
 Verification:
 
 - The docs site build should include the new English and Chinese research docs.
+
+## 2026-05-20 - `evaluating-new-technology` + `spec-first`
+
+Task:
+
+- Correct the Structure Tree reuse gap by evaluating mature mind-map and hierarchy libraries before adding more custom features.
+
+Skill sources:
+
+- `/Users/qyx/.codex/skills/evaluating-new-technology/SKILL.md`
+- `/Users/qyx/.codex/skills/spec-first/SKILL.md`
+
+Reason:
+
+- The user pointed out that the SVG Structure Tree was implemented before a sufficiently deep reuse-first evaluation, and future features would otherwise be rebuilt incrementally.
+
+Workflow steps followed:
+
+- Reframed the problem as a build/buy/reuse decision.
+- Checked package and repository signals for Markmap, Mind Elixir, jsMind, and d3-hierarchy.
+- Compared fit against the project's manifest-driven documentation IA.
+- Updated the existing Structure Map decision record so the native SVG tree is treated as a prototype and fallback.
+
+Output artifacts:
+
+- [Mind Map Library Evaluation](mind-map-library-evaluation.md)
+- [Chinese Mind Map Library Evaluation](zh-CN/mind-map-library-evaluation.md)
+- Updated [Task Board](../TASKS.md)
+- Updated `.agents/DECISIONS/structure-map.md`
+
+Deviations:
+
+- No implementation changes were made in this pass. This was intentionally a selection and planning correction.
+
+Verification:
+
+- `npm run build` should include 57 documentation files after the new bilingual docs are added to the manifest.

@@ -72,8 +72,11 @@ package-lock.json
 - Right-side table of contents on wide screens
 - Responsive navigation on smaller screens
 - Internal Markdown links resolve to docs-site navigation where possible
-- Cytoscape-powered Concept Map view for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
-- Node selection highlights relationship neighborhoods and summarizes edge types in the right panel
+- Concept Map with two modes:
+  - Structure Tree for project lifecycle, module, section, and document hierarchy
+  - Relationship Graph for document nodes, reading-path edges, bilingual companion edges, and Markdown reference edges
+- Structure Tree is the default management view; Relationship Graph is the audit view
+- Relationship Graph selection highlights relationship neighborhoods and summarizes edge types in the right panel
 - Concept Map scope switcher: Chinese decision graph, English execution graph, and full audit graph
 - Low-value relationship types are visually downweighted so strong document references are easier to inspect
 - Obsidian-inspired graph rendering: circular nodes, hidden default labels, hover/selection neighborhoods, and quieter canvas density
@@ -90,9 +93,10 @@ http://127.0.0.1:4173
 Checks performed:
 
 - default document loads as `START_HERE.md`
-- 53 documentation files appear in navigation
 - Reading-path filters reduce the navigation to task-focused sets
-- Concept Map view renders with Cytoscape canvas; the default global graph shows 53 document nodes and 227 primary reference edges
+- 57 documentation files appear in navigation
+- Concept Map opens Structure Tree by default with 73 tree nodes and 55 document leaves
+- Relationship Graph view renders with canvas; the default global graph shows 55 document nodes and 240 visible relationships
 - Local graph mode narrows the active document neighborhood to 8 nodes and 20 edges at depth 1
 - Chinese and English graph scopes can be switched independently
 - Graph settings expose 4 toggles and 4 sliders

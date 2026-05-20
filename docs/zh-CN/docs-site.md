@@ -54,8 +54,11 @@ public/vendor/
 - 宽屏右侧目录
 - 移动端响应式导航
 - 内部 Markdown 链接尽量转成站内跳转
-- 基于 Cytoscape 的 Concept Map 视图，用来查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
-- 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
+- Concept Map 支持两种模式：
+  - Structure Tree：查看项目生命周期、模块、section 和文档层级
+  - Relationship Graph：查看文档节点、阅读路径边、中英 companion 边和 Markdown 引用边
+- Structure Tree 是默认管理视图；Relationship Graph 是关系审计视图
+- Relationship Graph 选择节点后会高亮关系邻域，并在右侧面板总结 edge types
 - Concept Map scope 切换：中文决策图、English execution graph、全量审计图
 - 低价值关系会被视觉降权，让强文档引用更容易检查
 - 借鉴 Obsidian 的图谱渲染：圆形节点、默认隐藏标签、hover/selection 邻域，以及更安静的画布密度
@@ -66,9 +69,10 @@ public/vendor/
 已在本地浏览器验证：
 
 - 默认打开 `START_HERE.md`
-- 导航里有 53 份文档
+- 导航里有 57 份文档
 - 阅读路径筛选可以把导航收敛到任务相关文档
-- Concept Map 视图可以用 Cytoscape canvas 渲染；默认 global graph 显示 53 个文档节点和 227 条主要引用边
+- Concept Map 默认打开 Structure Tree，包含 73 个树节点和 55 个文档叶子
+- Relationship Graph 可以用 canvas 渲染；默认 global graph 显示 55 个文档节点和 240 条可见关系
 - Local graph mode 在 depth 1 时可将当前文档邻域收敛到 8 个节点和 20 条边
 - 中文和英文 graph scope 可以独立切换
 - Graph settings 暴露 4 个 toggle 和 4 个 slider
