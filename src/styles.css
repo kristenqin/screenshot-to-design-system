@@ -32,7 +32,7 @@ input {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(420px, 48vw) minmax(0, 1fr) minmax(210px, 250px);
+  grid-template-columns: minmax(420px, 45vw) minmax(520px, 1fr);
   min-height: 100vh;
 }
 
@@ -43,10 +43,10 @@ input {
   border-right: 1px solid var(--line);
   background: var(--panel);
   display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-  gap: 14px;
+  grid-template-rows: auto auto auto minmax(440px, 1fr) auto;
+  gap: 10px;
   padding: 18px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .map-header {
@@ -80,7 +80,7 @@ h1 {
 }
 
 .map-stage {
-  min-height: 0;
+  min-height: 440px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background:
@@ -96,7 +96,7 @@ h1 {
 }
 
 .fallback-nav {
-  max-height: 28vh;
+  max-height: 20vh;
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -178,17 +178,17 @@ h1 {
 
 .path-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .path-card {
   display: grid;
   gap: 2px;
-  min-height: 56px;
+  min-height: 42px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 8px;
+  padding: 6px;
   background: var(--panel);
   color: var(--text);
   text-align: left;
@@ -207,13 +207,13 @@ h1 {
 }
 
 .path-card span {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
 }
 
 .path-card small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.2;
 }
 
@@ -458,7 +458,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 18px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
   color: var(--muted);
   font-size: 13px;
 }
@@ -493,7 +493,7 @@ h1 {
   gap: 3px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 11px 13px;
+  padding: 8px 10px;
   background: #ffffff;
   color: var(--text);
   cursor: pointer;
@@ -506,7 +506,7 @@ h1 {
 
 .graph-view-tab small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -839,13 +839,7 @@ h1 {
 }
 
 .toc {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: auto;
-  border-left: 1px solid var(--line);
-  padding: 86px 22px 24px;
-  background: #fbfcfd;
+  display: none;
 }
 
 .toc-title {
@@ -906,11 +900,7 @@ h1 {
 
 @media (max-width: 1180px) {
   .layout {
-    grid-template-columns: minmax(360px, 44vw) minmax(0, 1fr);
-  }
-
-  .toc {
-    display: none;
+    grid-template-columns: minmax(360px, 44vw) minmax(460px, 1fr);
   }
 }
 
